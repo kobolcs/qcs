@@ -1,0 +1,6 @@
+robotframework
+robotframework-browser
+pytest
+robocop
+rflint
+pytest-cov

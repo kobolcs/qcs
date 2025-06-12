@@ -1,0 +1,10 @@
+# Ignore test outputs
+logs/
+snapshots/
+
+/_build/
+/deps/
+erl_crash.dump
+
+*.swp
+.DS_Store

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3 (Python 3.13.1 on win32)" generated="2025-06-12T12:10:38.802588" rpa="false" schemaversion="5">
+<suite id="s1" name="Tests" source="C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests">
+<suite id="s1-s1" name="Api Tests" source="C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\api_tests">
+<suite id="s1-s1-s1" name="Data Driven Launch Tests" source="C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\api_tests\data_driven_launch_tests.robot">
+<test id="s1-s1-s1-t1" name="Validate Multiple Past Launches" line="8">
+<kw name="Read CSV File To List">
+<msg time="2025-06-12T12:10:38.846690" level="FAIL">No keyword with name 'Read CSV File To List' found.</msg>
+<var>${launches}</var>
+<arg>${CSV_PATH}</arg>
+<status status="FAIL" start="2025-06-12T12:10:38.846412" elapsed="0.000376">No keyword with name 'Read CSV File To List' found.</status>
+</kw>
+<for flavor="IN">
+<iter>
+<kw name="Get Launch By ID">
+<var>${response}</var>
+<arg>${launch}[id]</arg>
+<status status="NOT RUN" start="2025-06-12T12:10:38.847599" elapsed="0.000065"/>
+</kw>
+<kw name="Validate Launch Details">
+<arg>${response}</arg>
+<arg>${launch}</arg>
+<status status="NOT RUN" start="2025-06-12T12:10:38.847759" elapsed="0.000050"/>
+</kw>
+<var name="${launch}"/>
+<status status="NOT RUN" start="2025-06-12T12:10:38.847423" elapsed="0.000419"/>
+</iter>
+<var>${launch}</var>
+<value>@{launches}</value>
+<status status="NOT RUN" start="2025-06-12T12:10:38.847075" elapsed="0.000816"/>
+</for>
+<doc>This test reads launch data from a CSV and validates it.</doc>
+<status status="FAIL" start="2025-06-12T12:10:38.844447" elapsed="0.003593">No keyword with name 'Read CSV File To List' found.</status>
+</test>
+<status status="FAIL" start="2025-06-12T12:10:38.840710" elapsed="0.007661"/>
+</suite>
+<status status="FAIL" start="2025-06-12T12:10:38.839289" elapsed="0.009436"/>
+</suite>
+<status status="FAIL" start="2025-06-12T12:10:38.828869" elapsed="0.020146"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Tests" id="s1" pass="0" fail="1" skip="0">Tests</stat>
+<stat name="Api Tests" id="s1-s1" pass="0" fail="1" skip="0">Tests.Api Tests</stat>
+<stat name="Data Driven Launch Tests" id="s1-s1-s1" pass="0" fail="1" skip="0">Tests.Api Tests.Data Driven Launch Tests</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2025-06-12T12:10:38.843647" level="ERROR">Error in file 'C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\api_tests\data_driven_launch_tests.robot' on line 2: Resource file '..\..\keywords.robot' does not exist.</msg>
+</errors>
+</robot>

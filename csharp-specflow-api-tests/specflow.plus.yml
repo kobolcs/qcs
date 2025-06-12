@@ -1,0 +1,6 @@
+profiles:
+  default:
+    testFramework: NUnit
+    report:
+      format: LivingDoc
+      output: SpecFlowApiTests/Reports/LivingDoc.html

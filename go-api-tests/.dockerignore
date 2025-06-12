@@ -1,0 +1,5 @@
+.git
+node_modules
+coverage/
+*.log
+weather_test_report.json

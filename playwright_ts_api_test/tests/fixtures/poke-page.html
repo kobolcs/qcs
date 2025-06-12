@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pokémon Display</title>
+</head>
+<body>
+    <input id="search" type="text" />
+    <button id="search-btn">Search</button>
+    <h2 id="name"></h2>
+    <img id="sprite" src="" alt="sprite" />
+    <script>
+        document.getElementById("search-btn").onclick = async () => {
+            const name = document.getElementById("search").value.toLowerCase();
+            // Fetch from Playwright intercepted endpoint or fallback
+            const response = await fetch("/api/pokemon/" + name);
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById("name").textContent = data.name;
+                document.getElementById("sprite").src = data.sprite;
+            } else {
+                document.getElementById("name").textContent = "Not found";
+                document.getElementById("sprite").src = "";
+            }
+        };
+    </script>
+</body>
+</html>

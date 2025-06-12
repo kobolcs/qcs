@@ -1,0 +1,68 @@
+name: Go CI with Security Scans (SAST & DAST)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-sast:
+    name: Build & SAST Scan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: go-api-tests
+
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: go
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.24.4'
+
+    - name: Check Formatting
+      run: |
+        if [ "$(gofmt -l . | wc -l)" -gt 0 ]; then
+          echo "Go code is not formatted:"
+          gofmt -l .
+          exit 1
+        fi
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      env:
+        OWM_API_KEY: ${{ secrets.OWM_API_KEY || 'dummy-api-key' }}
+      run: go test -v ./...
+
+    - name: Perform CodeQL Analysis (SAST)
+      uses: github/codeql-action/analyze@v3
+
+  dast-scan:
+    name: DAST Scan
+    # This job runs in parallel to the build and SAST scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: OWASP ZAP Baseline Scan (DAST)
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          target: 'https://www.zaproxy.org/'
+          # You can specify rules to ignore if needed, e.g., 'rules_file_name: .zap/rules.tsv'
+          cmd_options: '-a' # Include alpha rules

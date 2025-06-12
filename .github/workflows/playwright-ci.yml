@@ -1,0 +1,41 @@
+name: Playwright TS CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # This path has been updated
+        working-directory: playwright_ts_api_test
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint Code
+        run: npm run lint
+
+      - name: Run Playwright tests
+        run: npx playwright test --reporter=json,html
+
+      - name: Upload Test Report (HTML)
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright_ts_api_test/playwright-report

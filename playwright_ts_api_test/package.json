@@ -1,0 +1,24 @@
+{
+  "name": "playwright-ts-api-demo",
+  "version": "1.0.0",
+  "description": "Playwright + TypeScript demo with API intercept (PokeAPI example)",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write ."
+  },
+  "author": "Csaba Köböl",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.15.3",
+    "@typescript-eslint/eslint-plugin": "^8.33.1",
+    "@typescript-eslint/parser": "^8.33.1",
+    "eslint": "^9.28.0",
+    "nyc": "^17.1.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3",
+    "@axe-core/playwright": "^4.7.0"
+  }
+}

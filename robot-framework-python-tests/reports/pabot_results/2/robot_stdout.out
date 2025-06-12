@@ -1,0 +1,29 @@
+==============================================================================
+Tests                                                                         
+==============================================================================
+Tests.Gui Tests                                                               
+==============================================================================
+Tests.Gui Tests.Launch Page Playwright                                        
+==============================================================================
+Open Latest Launch Page Using Playwright                                
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\launch_page_playwright.robot:10
+    T:  Open Latest Launch Page Using Playwright    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\launch_page_playwright.robot:11
+      New Browser    chromium
+______________________________________________________________________________
+| FAIL |
+No keyword with name 'New Browser' found.
+------------------------------------------------------------------------------
+Tests.Gui Tests.Launch Page Playwright                                | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests.Gui Tests                                                       | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests                                                                 | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\pabot_results\2\output.xml

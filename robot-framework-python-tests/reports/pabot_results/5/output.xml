@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3 (Python 3.13.1 on win32)" generated="2025-06-12T12:10:39.565828" rpa="false" schemaversion="5">
+<suite id="s1" name="Tests" source="C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests">
+<suite id="s1-s1" name="Ui Demo" source="C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\ui_demo.robot">
+<test id="s1-s1-t1" name="Click In Iframe And Shadow DOM" line="6">
+<kw name="New Browser" owner="Browser">
+<msg time="2025-06-12T12:10:39.783999" level="INFO">{"browser": "chromium", "headless": true, "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "C:\\Users\\csaba\\Documents\\Projects\\qa-suite-rec\\robot-framework-python-tests\\reports\\pabot_results\\5\\browser\\traces\\temp\\217aec19-4f8d-4476-acdc-d79299f3880f"}</msg>
+<msg time="2025-06-12T12:10:39.817675" level="FAIL">
+#############################################################
+#                                                           #
+#  RF-Browser dependencies not found in installation path!  #
+#           Run `rfbrowser init` to install.                #
+#                                                           #
+#############################################################
+Installation path: C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages\Browser\wrapper</msg>
+<arg>chromium</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="FAIL" start="2025-06-12T12:10:39.783270" elapsed="0.037558">
+#############################################################
+#                                                           #
+#  RF-Browser dependencies not found in installation path!  #
+#           Run `rfbrowser init` to install.                #
+#                                                           #
+#############################################################
+Installation path: C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages\Browser\wrapper</status>
+</kw>
+<kw name="New Page" owner="Browser">
+<arg>https://demo.playwright.dev/shadow-dom</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Open a new Page.</doc>
+<status status="NOT RUN" start="2025-06-12T12:10:39.821062" elapsed="0.000209"/>
+</kw>
+<kw name="Click With Fallback" owner="self_heal">
+<var>${sel}</var>
+<arg>css=span &gt;&gt; shadow=button</arg>
+<arg>css=button.shadow-btn</arg>
+<status status="NOT RUN" start="2025-06-12T12:10:39.821399" elapsed="0.000142"/>
+</kw>
+<kw name="Capture Page Screenshot">
+<status status="NOT RUN" start="2025-06-12T12:10:39.821673" elapsed="0.000131"/>
+</kw>
+<kw name="Close Browser" owner="Browser">
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Closes the current browser.</doc>
+<status status="NOT RUN" start="2025-06-12T12:10:39.821885" elapsed="0.000115"/>
+</kw>
+<status status="FAIL" start="2025-06-12T12:10:39.782582" elapsed="0.039562">
+#############################################################
+#                                                           #
+#  RF-Browser dependencies not found in installation path!  #
+#           Run `rfbrowser init` to install.                #
+#                                                           #
+#############################################################
+Installation path: C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages\Browser\wrapper</status>
+</test>
+<test id="s1-s1-t2" name="Data Driven Example" line="17">
+<kw name="Add Numbers Should Work">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-06-12T12:10:39.846715" level="INFO">${result} = 5</msg>
+<var>${result}</var>
+<arg>${a} + ${b}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-06-12T12:10:39.846100" elapsed="0.000663"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<msg time="2025-06-12T12:10:39.847388" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<msg time="2025-06-12T12:10:39.847568" level="FAIL">5 (integer) != 5 (string)</msg>
+<arg>${result}</arg>
+<arg>${expected}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="FAIL" start="2025-06-12T12:10:39.846933" elapsed="0.000747">5 (integer) != 5 (string)</status>
+</kw>
+<arg>2</arg>
+<arg>3</arg>
+<arg>5</arg>
+<status status="FAIL" start="2025-06-12T12:10:39.845463" elapsed="0.002525">5 (integer) != 5 (string)</status>
+</kw>
+<kw name="Add Numbers Should Work">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-06-12T12:10:39.849472" level="INFO">${result} = 15</msg>
+<var>${result}</var>
+<arg>${a} + ${b}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-06-12T12:10:39.848844" elapsed="0.000675"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<msg time="2025-06-12T12:10:39.850100" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<msg time="2025-06-12T12:10:39.850222" level="FAIL">15 (integer) != 15 (string)</msg>
+<arg>${result}</arg>
+<arg>${expected}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="FAIL" start="2025-06-12T12:10:39.849678" elapsed="0.000626">15 (integer) != 15 (string)</status>
+</kw>
+<arg>10</arg>
+<arg>5</arg>
+<arg>15</arg>
+<status status="FAIL" start="2025-06-12T12:10:39.848234" elapsed="0.002308">15 (integer) != 15 (string)</status>
+</kw>
+<status status="FAIL" start="2025-06-12T12:10:39.845067" elapsed="0.005700">Several failures occurred:
+
+1) 5 (integer) != 5 (string)
+
+2) 15 (integer) != 15 (string)</status>
+</test>
+<status status="FAIL" start="2025-06-12T12:10:39.604151" elapsed="0.272022"/>
+</suite>
+<status status="FAIL" start="2025-06-12T12:10:39.593591" elapsed="0.308285"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="2" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Tests" id="s1" pass="0" fail="2" skip="0">Tests</stat>
+<stat name="Ui Demo" id="s1-s1" pass="0" fail="2" skip="0">Tests.Ui Demo</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2025-06-12T12:10:39.844293" level="ERROR">Calling method '_end_test' of listener 'Browser' failed: 
+#############################################################
+#                                                           #
+#  RF-Browser dependencies not found in installation path!  #
+#           Run `rfbrowser init` to install.                #
+#                                                           #
+#############################################################
+Installation path: C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages\Browser\wrapper</msg>
+<msg time="2025-06-12T12:10:39.875376" level="ERROR">Calling method '_end_test' of listener 'Browser' failed: 
+#############################################################
+#                                                           #
+#  RF-Browser dependencies not found in installation path!  #
+#           Run `rfbrowser init` to install.                #
+#                                                           #
+#############################################################
+Installation path: C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages\Browser\wrapper</msg>
+<msg time="2025-06-12T12:10:39.901509" level="ERROR">Calling method '_end_suite' of listener 'Browser' failed: 
+#############################################################
+#                                                           #
+#  RF-Browser dependencies not found in installation path!  #
+#           Run `rfbrowser init` to install.                #
+#                                                           #
+#############################################################
+Installation path: C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages\Browser\wrapper</msg>
+</errors>
+</robot>

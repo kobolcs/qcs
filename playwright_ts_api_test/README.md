@@ -1,0 +1,61 @@
+# Playwright + TypeScript: Hybrid API & UI Automation
+
+Modern API and UI test suite for a React/PokeDemo app. Showcases Playwright's advanced patterns and consultant-level automation practices.
+
+---
+
+### When to Use Playwright with TypeScript
+
+Playwright is a top-tier framework for testing modern web applications, particularly Single-Page Applications (SPAs) built with frameworks like React, Angular, or Vue.
+
+* **Modern Web Features**: It has best-in-class support for handling dynamic content, network interception, and shadowing DOM.
+* **Hybrid Testing**: As demonstrated here, Playwright excels at testing the intersection of the UI and APIs. By intercepting and mocking API calls (`page.route`), you can create fast, reliable, and isolated UI tests.
+* **Developer-Friendly**: The API is intuitive, and features like auto-waits, tracing, and code generation significantly improve the developer experience.
+* **TypeScript Support**: Provides strong type-checking for building more robust and maintainable test suites.
+
+### Similar Tooling in Other Languages
+
+Playwright is a leader in a competitive space for modern web testing.
+* **Cypress**: The most direct competitor, also using JavaScript/TypeScript, with a strong focus on developer experience.
+* **Selenium**: The classic standard, available for all major languages (Java, Python, C#, etc.). It is highly flexible but often requires more setup for modern SPAs.
+* **Puppeteer**: The Google-maintained library that Playwright was forked from, primarily focused on programmatic control of Chrome/Chromium.
+
+### Installation and Running
+
+**Prerequisites:**
+* Node.js (version 18.x or later)
+* (Optional) Docker
+
+#### 1. Local Machine (Windows/macOS/Linux)
+
+1.  **Navigate to the project directory**:
+    ```bash
+    cd playwright_ts_api_test
+    ```
+2.  **Install dependencies**:
+    ```bash
+    npm ci
+    ```
+3.  **Install Playwright browsers**:
+    ```bash
+    npx playwright install
+    ```
+4.  **Run the tests**:
+    ```bash
+    npx playwright test --reporter=html
+    ```
+5.  **View the report**:
+    ```bash
+    npx playwright show-report
+    ```
+
+#### 2. Docker
+
+1.  **Build the Docker image**:
+    ```bash
+    docker build -t playwright-ts-tests .
+    ```
+2.  **Run the tests inside the container**:
+    ```bash
+    docker run --rm --ipc=host playwright-ts-tests
+    ```

@@ -1,0 +1,464 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-8.2.2, pluggy-1.6.0
+rootdir: C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests
+configfile: pytest.ini
+testpaths: pytest_unit, tests
+plugins: anyio-4.9.0, cov-6.1.1, html-4.1.1, metadata-3.1.1
+collected 6 items
+
+pytest_unit\test_extended_spacex_helpers.py ..                           [ 33%]
+pytest_unit\test_spacex_api.py ..                                        [ 66%]
+tests\test_self_heal.py ..                                               [100%]
+
+============================== 6 passed in 2.69s ==============================
+2025-06-12 11:58:09.459938 [PID:13976] [0] [ID:0] EXECUTING Api Tests.Data Driven Launch Tests
+2025-06-12 11:58:10.698499 [PID:13976] [0] [ID:0] Execution failed in Api Tests.Data Driven Launch Tests with 1 failing test(s)
+==============================================================================
+Api Tests                                                                     
+==============================================================================
+Api Tests.Data Driven Launch Tests                                            
+==============================================================================
+Validate Multiple Past Launches                                         
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\api_tests\data_driven_launch_tests.robot:10
+    T:  Validate Multiple Past Launches    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\api_tests\data_driven_launch_tests.robot:11
+      Read CSV File    ${CSV_PATH}
+      |  ${CSV_PATH} = tests/api_tests/last_5_launches.csv (str)
+______________________________________________________________________________
+| FAIL |
+No keyword with name 'Read CSV File' found.
+------------------------------------------------------------------------------
+Api Tests.Data Driven Launch Tests                                    | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Api Tests                                                             | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\pabot_results\0\output.xml
+
+C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages\flex\__init__.py:6: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+
+1 tests, 0 passed, 1 failed, 0 skipped.
+===================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\output.xml
+Log:     C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\log.html
+Report:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\report.html
+Stopping PabotLib process
+Robot Framework remote server at 127.0.0.1:8270 started.
+Robot Framework remote server at 127.0.0.1:8270 stopped.
+PabotLib process stopped
+Total testing: 1.20 seconds
+Elapsed time:  1.99 seconds
+Storing .pabotsuitenames file
+2025-06-12 12:04:25.380441 [PID:6192] [0] [ID:0] EXECUTING Api Tests.Data Driven Launch Tests
+2025-06-12 12:04:25.921383 [PID:6192] [0] [ID:0] Execution failed in Api Tests.Data Driven Launch Tests with 1 failing test(s)
+==============================================================================
+Api Tests                                                                     
+==============================================================================
+Api Tests.Data Driven Launch Tests                                            
+==============================================================================
+Validate Multiple Past Launches :: This test reads launch data fro...   
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\api_tests\data_driven_launch_tests.robot:8
+    T:  Validate Multiple Past Launches    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\api_tests\data_driven_launch_tests.robot:10
+      Read CSV File To List    ${CSV_PATH}
+      |  ${CSV_PATH} = tests/api_tests/last_5_launches.csv (str)
+______________________________________________________________________________
+| FAIL |
+No keyword with name 'Read CSV File To List' found.
+------------------------------------------------------------------------------
+Api Tests.Data Driven Launch Tests                                    | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Api Tests                                                             | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\pabot_results\0\output.xml
+
+[ ERROR ] Error in file 'C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\api_tests\data_driven_launch_tests.robot' on line 2: Resource file '..\keywords.robot' does not exist.
+
+1 tests, 0 passed, 1 failed, 0 skipped.
+===================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\output.xml
+Log:     C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\log.html
+Report:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\report.html
+Stopping PabotLib process
+Robot Framework remote server at 127.0.0.1:8270 started.
+Robot Framework remote server at 127.0.0.1:8270 stopped.
+PabotLib process stopped
+Total testing: 0.50 seconds
+Elapsed time:  1.28 seconds
+Storing .pabotsuitenames file
+2025-06-12 12:10:38.321082 [PID:22344] [0] [ID:1] EXECUTING Tests.Gui Tests.Iframe Launch Tests
+2025-06-12 12:10:38.321814 [PID:26080] [3] [ID:2] EXECUTING Tests.Gui Tests.Launch Page Playwright
+2025-06-12 12:10:38.321857 [PID:25476] [1] [ID:0] EXECUTING Tests.Api Tests.Data Driven Launch Tests
+2025-06-12 12:10:38.321930 [PID:13052] [2] [ID:3] EXECUTING Tests.Gui Tests.Launch Page Tests
+2025-06-12 12:10:39.081716 [PID:26080] [3] [ID:2] Execution failed in Tests.Gui Tests.Launch Page Playwright with 1 failing test(s)
+==============================================================================
+Tests                                                                         
+==============================================================================
+Tests.Gui Tests                                                               
+==============================================================================
+Tests.Gui Tests.Launch Page Playwright                                        
+==============================================================================
+Open Latest Launch Page Using Playwright                                
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\launch_page_playwright.robot:10
+    T:  Open Latest Launch Page Using Playwright    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\launch_page_playwright.robot:11
+      New Browser    chromium
+______________________________________________________________________________
+| FAIL |
+No keyword with name 'New Browser' found.
+------------------------------------------------------------------------------
+Tests.Gui Tests.Launch Page Playwright                                | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests.Gui Tests                                                       | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests                                                                 | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\pabot_results\2\output.xml
+
+[ ERROR ] Error in file 'C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\launch_page_playwright.robot' on line 2: Importing library 'BrowserLibrary' failed: ModuleNotFoundError: No module named 'BrowserLibrary'
+Traceback (most recent call last):
+  None
+PYTHONPATH:
+  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Scripts\robot.exe
+  C:\Users\csaba\AppData\Local\Programs\Python\Python313\python313.zip
+  C:\Users\csaba\AppData\Local\Programs\Python\Python313\DLLs
+  C:\Users\csaba\AppData\Local\Programs\Python\Python313\Lib
+  C:\Users\csaba\AppData\Local\Programs\Python\Python313
+  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv
+  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages
+
+2025-06-12 12:10:39.090834 [PID:25476] [1] [ID:0] Execution failed in Tests.Api Tests.Data Driven Launch Tests with 1 failing test(s)
+==============================================================================
+Tests                                                                         
+==============================================================================
+Tests.Api Tests                                                               
+==============================================================================
+Tests.Api Tests.Data Driven Launch Tests                                      
+==============================================================================
+Validate Multiple Past Launches :: This test reads launch data fro...   
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\api_tests\data_driven_launch_tests.robot:8
+    T:  Validate Multiple Past Launches    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\api_tests\data_driven_launch_tests.robot:10
+      Read CSV File To List    ${CSV_PATH}
+      |  ${CSV_PATH} = tests/api_tests/last_5_launches.csv (str)
+______________________________________________________________________________
+| FAIL |
+No keyword with name 'Read CSV File To List' found.
+------------------------------------------------------------------------------
+Tests.Api Tests.Data Driven Launch Tests                              | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests.Api Tests                                                       | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests                                                                 | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\pabot_results\0\output.xml
+
+[ ERROR ] Error in file 'C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\api_tests\data_driven_launch_tests.robot' on line 2: Resource file '..\..\keywords.robot' does not exist.
+
+2025-06-12 12:10:39.084103 [PID:2832] [3] [ID:4] EXECUTING Tests.Gui Tests.Shadow Dom Tests
+2025-06-12 12:10:39.092245 [PID:24020] [1] [ID:5] EXECUTING Tests.Ui Demo
+2025-06-12 12:10:39.815527 [PID:2832] [3] [ID:4] Execution failed in Tests.Gui Tests.Shadow Dom Tests with 1 failing test(s)
+==============================================================================
+Tests                                                                         
+==============================================================================
+Tests.Gui Tests                                                               
+==============================================================================
+Tests.Gui Tests.Shadow Dom Tests                                              
+==============================================================================
+Click Button Inside Shadow DOM                                          
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\shadow_dom_tests.robot:10
+    T:  Click Button Inside Shadow DOM    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\shadow_dom_tests.robot:11
+      Click Shadow Button    ${HOST}    ${BTN}
+      |  ${HOST} = css=custom-element-host (str)
+      |  ${BTN} = css=custom-element-host >> shadow=button (str)
+______________________________________________________________________________
+| FAIL |
+No keyword with name 'Click Shadow Button' found.
+------------------------------------------------------------------------------
+Tests.Gui Tests.Shadow Dom Tests                                      | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests.Gui Tests                                                       | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests                                                                 | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\pabot_results\4\output.xml
+
+[ ERROR ] Error in file 'C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\shadow_dom_tests.robot' on line 2: Importing library 'C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\resources\keywords\custom_playwright.py' failed: ModuleNotFoundError: No module named 'BrowserLibrary'
+Traceback (most recent call last):
+  File "C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\resources\keywords\custom_playwright.py", line 1, in <module>
+    from BrowserLibrary import Browser
+PYTHONPATH:
+  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\resources\keywords
+  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Scripts\robot.exe
+  C:\Users\csaba\AppData\Local\Programs\Python\Python313\python313.zip
+  C:\Users\csaba\AppData\Local\Programs\Python\Python313\DLLs
+  C:\Users\csaba\AppData\Local\Programs\Python\Python313\Lib
+  C:\Users\csaba\AppData\Local\Programs\Python\Python313
+  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv
+  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages
+
+2025-06-12 12:10:39.817321 [PID:15016] [3] [ID:6] EXECUTING Tests.Visual Tests.Launch Image Comparison
+2025-06-12 12:10:40.121556 [PID:24020] [1] [ID:5] Execution failed in Tests.Ui Demo with 2 failing test(s)
+==============================================================================
+Tests                                                                         
+==============================================================================
+Tests.Ui Demo                                                                 
+==============================================================================
+Click In Iframe And Shadow DOM                                          
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\ui_demo.robot:6
+    T:  Click In Iframe And Shadow DOM    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\ui_demo.robot:7
+      New Browser    chromium
+______________________________________________________________________________
+| FAIL |
+#############################################################
+#                                                           #
+#  RF-Browser dependencies not found in installation path!  #
+#           Run `rfbrowser init` to install.                #
+#                                                           #
+#############################################################
+Installation path: C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages\Browser\wrapper
+------------------------------------------------------------------------------
+Data Driven Example                                                     
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\ui_demo.robot:17
+    T:  Data Driven Example    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\ui_demo.robot:19
+      Add Numbers Should Work    2    3    5
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\ui_demo.robot:26
+      Should Be Equal    ${result}    ${expected}
+      |  ${result} = 5 (int)
+      |  ${expected} = 5 (str)
+______________________________________________________________________________
+  
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\ui_demo.robot:17
+    T:  Data Driven Example    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\ui_demo.robot:20
+      Add Numbers Should Work    10    5    15
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\ui_demo.robot:26
+      Should Be Equal    ${result}    ${expected}
+      |  ${result} = 15 (int)
+      |  ${expected} = 15 (str)
+______________________________________________________________________________
+| FAIL |
+Several failures occurred:
+
+1) 5 (integer) != 5 (string)
+
+2) 15 (integer) != 15 (string)
+------------------------------------------------------------------------------
+Tests.Ui Demo                                                         | FAIL |
+2 tests, 0 passed, 2 failed
+==============================================================================
+Tests                                                                 | FAIL |
+2 tests, 0 passed, 2 failed
+==============================================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\pabot_results\5\output.xml
+
+[ ERROR ] Calling method '_end_test' of listener 'Browser' failed: 
+#############################################################
+#                                                           #
+#  RF-Browser dependencies not found in installation path!  #
+#           Run `rfbrowser init` to install.                #
+#                                                           #
+#############################################################
+Installation path: C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages\Browser\wrapper
+[ ERROR ] Calling method '_end_test' of listener 'Browser' failed: 
+#############################################################
+#                                                           #
+#  RF-Browser dependencies not found in installation path!  #
+#           Run `rfbrowser init` to install.                #
+#                                                           #
+#############################################################
+Installation path: C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages\Browser\wrapper
+[ ERROR ] Calling method '_end_suite' of listener 'Browser' failed: 
+#############################################################
+#                                                           #
+#  RF-Browser dependencies not found in installation path!  #
+#           Run `rfbrowser init` to install.                #
+#                                                           #
+#############################################################
+Installation path: C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages\Browser\wrapper
+
+2025-06-12 12:10:51.752598 [PID:15016] [3] [ID:6] Execution failed in Tests.Visual Tests.Launch Image Comparison with 1 failing test(s)
+==============================================================================
+Tests                                                                         
+==============================================================================
+Tests.Visual Tests                                                            
+==============================================================================
+Tests.Visual Tests.Launch Image Comparison                                    
+==============================================================================
+Homepage Launch Patch Visual Comparison                                 
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\visual_tests\launch_image_comparison.robot:14
+    T:  Homepage Launch Patch Visual Comparison    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\visual_tests\launch_image_comparison.robot:16
+      Compare With Baseline    ${BASELINE}    ${CURRENT}    ${TOL}
+      |  ${BASELINE} = baselines/latest_launch_baseline.png (str)
+      |  ${CURRENT} = results/latest_launch_current.png (str)
+      |  ${TOL} = 5 (str)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\resources\keywords\visual_keywords.robot:8
+      Compare Images    ${baseline}    ${current}    ${tolerance}
+      |  ${baseline} = baselines/latest_launch_baseline.png (str)
+      |  ${current} = results/latest_launch_current.png (str)
+      |  ${tolerance} = 5 (str)
+______________________________________________________________________________
+| FAIL |
+No keyword with name 'Compare Images' found.
+------------------------------------------------------------------------------
+Tests.Visual Tests.Launch Image Comparison                            | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests.Visual Tests                                                    | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests                                                                 | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\pabot_results\6\output.xml
+
+
+2025-06-12 12:10:53.447804 [PID:13052] [2] [ID:3] still running Tests.Gui Tests.Launch Page Tests after 15.0 seconds
+2025-06-12 12:10:53.735683 [PID:22344] [0] [ID:1] still running Tests.Gui Tests.Iframe Launch Tests after 15.0 seconds
+2025-06-12 12:11:03.616899 [PID:22344] [0] [ID:1] Execution failed in Tests.Gui Tests.Iframe Launch Tests with 1 failing test(s)
+==============================================================================
+Tests                                                                         
+==============================================================================
+Tests.Gui Tests                                                               
+==============================================================================
+Tests.Gui Tests.Iframe Launch Tests                                           
+==============================================================================
+Verify Latest Launch Info Inside Iframe                                 
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\iframe_launch_tests.robot:9
+    T:  Verify Latest Launch Info Inside Iframe    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\iframe_launch_tests.robot:10
+      Switch To Launch Details Iframe    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\resources\keywords\spacex_ui_keywords.robot:16
+      Wait Until Element Is Visible    ${IFRAME_FRAME}
+      |  ${IFRAME_FRAME} = xpath=//iframe[@id="launch-details-frame"] (str)
+______________________________________________________________________________
+| FAIL |
+Element 'xpath=//iframe[@id="launch-details-frame"]' not visible after 10 seconds.
+------------------------------------------------------------------------------
+Tests.Gui Tests.Iframe Launch Tests                                   | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests.Gui Tests                                                       | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests                                                                 | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\pabot_results\1\output.xml
+
+
+2025-06-12 12:11:13.363671 [PID:13052] [2] [ID:3] Execution failed in Tests.Gui Tests.Launch Page Tests with 2 failing test(s)
+==============================================================================
+Tests                                                                         
+==============================================================================
+Tests.Gui Tests                                                               
+==============================================================================
+Tests.Gui Tests.Launch Page Tests                                             
+==============================================================================
+Verify Latest Launch Section Present                                    
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\launch_page_tests.robot:9
+    T:  Verify Latest Launch Section Present    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\launch_page_tests.robot:10
+      Verify Latest Launch Section Visible    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\resources\keywords\spacex_ui_keywords.robot:12
+      Wait Until Element Is Visible    ${LAUNCH_SECTION}
+      |  ${LAUNCH_SECTION} = xpath=//section[contains(., 'Latest Launch')] (str)
+______________________________________________________________________________
+| FAIL |
+Element 'xpath=//section[contains(., 'Latest Launch')]' not visible after 10 seconds.
+------------------------------------------------------------------------------
+Capture Launch Patch Image                                              
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\launch_page_tests.robot:12
+    T:  Capture Launch Patch Image    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\launch_page_tests.robot:14
+      Capture Launch Patch Image    ${current_screenshot}
+      |  ${current_screenshot} = <Unable to define variable value>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\resources\keywords\spacex_ui_keywords.robot:25
+      Wait Until Element Is Visible    ${LAUNCH_IMG}
+      |  ${LAUNCH_IMG} = xpath=//img[@class="rocket-patch"] (str)
+______________________________________________________________________________
+| FAIL |
+Element 'xpath=//img[@class="rocket-patch"]' not visible after 10 seconds.
+------------------------------------------------------------------------------
+Tests.Gui Tests.Launch Page Tests                                     | FAIL |
+2 tests, 0 passed, 2 failed
+==============================================================================
+Tests.Gui Tests                                                       | FAIL |
+2 tests, 0 passed, 2 failed
+==============================================================================
+Tests                                                                 | FAIL |
+2 tests, 0 passed, 2 failed
+==============================================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\pabot_results\3\output.xml
+
+
+9 tests, 0 passed, 9 failed, 0 skipped.
+===================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\output.xml
+Log:     C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\log.html
+Report:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\report.html
+Stopping PabotLib process
+Robot Framework remote server at 127.0.0.1:8270 started.
+Robot Framework remote server at 127.0.0.1:8270 stopped.
+PabotLib process stopped
+Total testing: 1 minute 14.20 seconds
+Elapsed time:  36.0 seconds

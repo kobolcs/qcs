@@ -1,0 +1,9 @@
+{
+  "api_key_env": "OWM_API_KEY",
+  "cities": [
+    "London",
+    "New York",
+    "Tokyo",
+    "Bratislava"
+  ]
+}

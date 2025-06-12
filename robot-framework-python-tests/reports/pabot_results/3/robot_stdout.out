@@ -1,0 +1,50 @@
+==============================================================================
+Tests                                                                         
+==============================================================================
+Tests.Gui Tests                                                               
+==============================================================================
+Tests.Gui Tests.Launch Page Tests                                             
+==============================================================================
+Verify Latest Launch Section Present                                    
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\launch_page_tests.robot:9
+    T:  Verify Latest Launch Section Present    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\launch_page_tests.robot:10
+      Verify Latest Launch Section Visible    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\resources\keywords\spacex_ui_keywords.robot:12
+      Wait Until Element Is Visible    ${LAUNCH_SECTION}
+      |  ${LAUNCH_SECTION} = xpath=//section[contains(., 'Latest Launch')] (str)
+______________________________________________________________________________
+| FAIL |
+Element 'xpath=//section[contains(., 'Latest Launch')]' not visible after 10 seconds.
+------------------------------------------------------------------------------
+Capture Launch Patch Image                                              
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\launch_page_tests.robot:12
+    T:  Capture Launch Patch Image    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\launch_page_tests.robot:14
+      Capture Launch Patch Image    ${current_screenshot}
+      |  ${current_screenshot} = <Unable to define variable value>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\resources\keywords\spacex_ui_keywords.robot:25
+      Wait Until Element Is Visible    ${LAUNCH_IMG}
+      |  ${LAUNCH_IMG} = xpath=//img[@class="rocket-patch"] (str)
+______________________________________________________________________________
+| FAIL |
+Element 'xpath=//img[@class="rocket-patch"]' not visible after 10 seconds.
+------------------------------------------------------------------------------
+Tests.Gui Tests.Launch Page Tests                                     | FAIL |
+2 tests, 0 passed, 2 failed
+==============================================================================
+Tests.Gui Tests                                                       | FAIL |
+2 tests, 0 passed, 2 failed
+==============================================================================
+Tests                                                                 | FAIL |
+2 tests, 0 passed, 2 failed
+==============================================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\pabot_results\3\output.xml

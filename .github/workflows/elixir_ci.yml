@@ -1,0 +1,51 @@
+name: Elixir API Tests - CI & Report
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test_and_report:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Elixir
+      uses: actions/setup-elixir@v1
+      with:
+        elixir-version: "1.18.4"
+        otp-version: "27"
+
+    - name: Install dependencies
+      working-directory: ./elixir-api-tests
+      run: |
+        mix local.hex --force
+        mix local.rebar --force
+        mix deps.get
+
+    - name: Run tests
+      working-directory: ./elixir-api-tests
+      env:
+        API_URL: https://restcountries.com/v3.1/region/asia
+      run: |
+        mix test --trace
+
+    - name: Generate HTML Report
+      working-directory: ./elixir-api-tests
+      run: |
+        mix run -e "Mix.Task.run(\"run\", [\"lib/test_report_generator.ex\", \"\" ])" || true
+
+    - name: Upload logs and reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: elixir-reports
+        path: |
+          elixir-api-tests/logs/
+          elixir-api-tests/snapshots/
+          elixir-api-tests/reports/

@@ -1,0 +1,9 @@
+.git
+node_modules
+dist/
+build/
+playwright-report/
+playwright/.cache/
+coverage/
+test-results/
+*.log

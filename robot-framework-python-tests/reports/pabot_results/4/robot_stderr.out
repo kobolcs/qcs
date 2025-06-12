@@ -1,0 +1,13 @@
+[ ERROR ] Error in file 'C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\gui_tests\shadow_dom_tests.robot' on line 2: Importing library 'C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\resources\keywords\custom_playwright.py' failed: ModuleNotFoundError: No module named 'BrowserLibrary'
+Traceback (most recent call last):
+  File "C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\resources\keywords\custom_playwright.py", line 1, in <module>
+    from BrowserLibrary import Browser
+PYTHONPATH:
+  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\resources\keywords
+  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Scripts\robot.exe
+  C:\Users\csaba\AppData\Local\Programs\Python\Python313\python313.zip
+  C:\Users\csaba\AppData\Local\Programs\Python\Python313\DLLs
+  C:\Users\csaba\AppData\Local\Programs\Python\Python313\Lib
+  C:\Users\csaba\AppData\Local\Programs\Python\Python313
+  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv
+  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\.venv\Lib\site-packages

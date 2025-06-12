@@ -1,0 +1,38 @@
+version: 2
+updates:
+  # Enable version updates for npm (Playwright project)
+  - package-ecosystem: "npm"
+    directory: "/playwright_ts_api_test"
+    schedule:
+      interval: "weekly"
+
+  # Enable version updates for Maven (Java project)
+  - package-ecosystem: "maven"
+    directory: "/java-event-driven-tests"
+    schedule:
+      interval: "weekly"
+
+  # Enable version updates for pip (Python/Robot Framework project)
+  - package-ecosystem: "pip"
+    directory: "/robot-framework-python-tests"
+    schedule:
+      interval: "weekly"
+
+  # Enable version updates for Go modules (Go project)
+  - package-ecosystem: "gomod"
+    directory: "/go-api-tests"
+    schedule:
+      interval: "weekly"
+
+  # Enable version updates for NuGet (C# project)
+  - package-ecosystem: "nuget"
+    # FIX: Corrected the directory path from "c#-..." to "csharp..."
+    directory: "/csharp-specflow-api-tests"
+    schedule:
+      interval: "weekly"
+
+  # Enable version updates for GitHub Actions workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

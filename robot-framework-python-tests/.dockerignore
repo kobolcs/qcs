@@ -1,0 +1,9 @@
+.git
+node_modules
+__pycache__/
+pytest_report.html
+reports/
+output.xml
+log.html
+report.html
+*.log

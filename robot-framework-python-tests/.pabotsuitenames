@@ -1,0 +1,11 @@
+datasources:c37f6fb8ae1518724e3795b2a97651df84689d1b
+commandlineoptions:97d170e1550eee4afc0af065b78cda302a97674c
+suitesfrom:no-suites-from-option
+file:f112e716a5002a83f9e9e7f8f0cfa6762517e355
+--suite Tests.Api Tests.Data Driven Launch Tests
+--suite Tests.Gui Tests.Iframe Launch Tests
+--suite Tests.Gui Tests.Launch Page Playwright
+--suite Tests.Gui Tests.Launch Page Tests
+--suite Tests.Gui Tests.Shadow Dom Tests
+--suite Tests.Ui Demo
+--suite Tests.Visual Tests.Launch Image Comparison

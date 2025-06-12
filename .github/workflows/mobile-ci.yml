@@ -1,0 +1,83 @@
+name: Mobile CI (Appium)
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'mobile-appium-tests/**'
+      - '.github/workflows/mobile-ci.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'mobile-appium-tests/**'
+      - '.github/workflows/mobile-ci.yml'
+
+jobs:
+  android-test:
+    runs-on: macos-latest # Emulators run best on macOS runners
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Python dependencies
+        working-directory: ./mobile-appium-tests
+        run: pip install -r requirements.txt
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }} # Although no package-lock, this is good practice
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Appium and Wait-On
+        run: npm install -g appium wait-on
+
+      - name: Start Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: echo "Emulator is ready."
+
+      - name: Run Appium Tests
+        working-directory: ./mobile-appium-tests
+        run: |
+          # Start Appium server in the background and log its output
+          appium > appium.log 2>&1 &
+
+          # Use wait-on to poll the Appium server until it is ready
+          # This is more robust than a fixed 'sleep'
+          wait-on --timeout 60000 http-get://127.0.0.1:4723/status
+
+          # Run the tests and generate a JUnit XML report
+          pytest --junitxml=report.xml
+
+      - name: Upload Test Report and Appium Logs
+        # This step will run even if the tests fail, which is crucial for debugging
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-test-artifacts
+          path: |
+            mobile-appium-tests/report.xml
+            mobile-appium-tests/appium.log

@@ -1,0 +1,11 @@
+# Core libraries for data handling, machine learning, and plotting
+pandas==2.2.2
+scikit-learn==1.7.0
+plotly==6.1.2
+
+# Library for creating the web-based interactive dashboard
+streamlit==1.45.1
+
+# Libraries for testing and code coverage
+pytest==8.4.0
+pytest-cov==6.1.1

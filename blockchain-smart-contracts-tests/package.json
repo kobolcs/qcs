@@ -1,0 +1,11 @@
+{
+  "name": "blockchain-smart-contracts-tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "npx hardhat test"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.0"
+  }
+}

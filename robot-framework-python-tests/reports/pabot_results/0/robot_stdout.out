@@ -1,0 +1,30 @@
+==============================================================================
+Tests                                                                         
+==============================================================================
+Tests.Api Tests                                                               
+==============================================================================
+Tests.Api Tests.Data Driven Launch Tests                                      
+==============================================================================
+Validate Multiple Past Launches :: This test reads launch data fro...   
+  Traceback (most recent call last):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\api_tests\data_driven_launch_tests.robot:8
+    T:  Validate Multiple Past Launches    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    File  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\api_tests\data_driven_launch_tests.robot:10
+      Read CSV File To List    ${CSV_PATH}
+      |  ${CSV_PATH} = tests/api_tests/last_5_launches.csv (str)
+______________________________________________________________________________
+| FAIL |
+No keyword with name 'Read CSV File To List' found.
+------------------------------------------------------------------------------
+Tests.Api Tests.Data Driven Launch Tests                              | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests.Api Tests                                                       | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Tests                                                                 | FAIL |
+1 test, 0 passed, 1 failed
+==============================================================================
+Output:  C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\reports\pabot_results\0\output.xml

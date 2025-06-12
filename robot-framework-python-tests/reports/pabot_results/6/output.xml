@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3 (Python 3.13.1 on win32)" generated="2025-06-12T12:10:40.282065" rpa="false" schemaversion="5">
+<suite id="s1" name="Tests" source="C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests">
+<suite id="s1-s1" name="Visual Tests" source="C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\visual_tests">
+<suite id="s1-s1-s1" name="Launch Image Comparison" source="C:\Users\csaba\Documents\Projects\qa-suite-rec\robot-framework-python-tests\tests\visual_tests\launch_image_comparison.robot">
+<kw name="Open Launch Page" owner="spacex_ui_keywords" type="SETUP">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-06-12T12:10:42.532976" level="INFO">Opening browser 'Chrome' to base url 'https://www.spacex.com/launches/latest'.</msg>
+<arg>${url}</arg>
+<arg>${browser}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-06-12T12:10:42.532731" elapsed="6.540284"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-06-12T12:10:49.073270" elapsed="0.105335"/>
+</kw>
+<kw name="Set Selenium Timeout" owner="SeleniumLibrary">
+<arg>${timeout}</arg>
+<doc>Sets the timeout that is used by various keywords.</doc>
+<status status="PASS" start="2025-06-12T12:10:49.178780" elapsed="0.015272"/>
+</kw>
+<arg>${LAUNCH_PAGE_URL}</arg>
+<arg>${BROWSER}</arg>
+<arg>${TIMEOUT}</arg>
+<status status="PASS" start="2025-06-12T12:10:42.532065" elapsed="6.662103"/>
+</kw>
+<test id="s1-s1-s1-t1" name="Homepage Launch Patch Visual Comparison" line="14">
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2025-06-12T12:10:49.308833" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="results/latest_launch_current.png"&gt;&lt;img src="results/latest_launch_current.png" width="800px"&gt;&lt;/a&gt;</msg>
+<arg>${CURRENT}</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2025-06-12T12:10:49.195514" elapsed="0.113419"/>
+</kw>
+<kw name="Compare With Baseline" owner="visual_keywords">
+<kw name="Compare Images">
+<msg time="2025-06-12T12:10:49.311370" level="FAIL">No keyword with name 'Compare Images' found.</msg>
+<var>${result}</var>
+<arg>${baseline}</arg>
+<arg>${current}</arg>
+<arg>${tolerance}</arg>
+<status status="FAIL" start="2025-06-12T12:10:49.311057" elapsed="0.000406">No keyword with name 'Compare Images' found.</status>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>'${result}' != 'PASS'</arg>
+<arg>Fail</arg>
+<arg>Visual comparison failed: ${result}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="NOT RUN" start="2025-06-12T12:10:49.312018" elapsed="0.000193"/>
+</kw>
+<arg>${BASELINE}</arg>
+<arg>${CURRENT}</arg>
+<arg>${TOL}</arg>
+<status status="FAIL" start="2025-06-12T12:10:49.309133" elapsed="0.003336">No keyword with name 'Compare Images' found.</status>
+</kw>
+<status status="FAIL" start="2025-06-12T12:10:49.194254" elapsed="0.118559">No keyword with name 'Compare Images' found.</status>
+</test>
+<kw name="Close Launch Browser" owner="spacex_ui_keywords" type="TEARDOWN">
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2025-06-12T12:10:49.314372" elapsed="2.117785"/>
+</kw>
+<status status="PASS" start="2025-06-12T12:10:49.313817" elapsed="2.118462"/>
+</kw>
+<status status="FAIL" start="2025-06-12T12:10:40.313111" elapsed="11.119213"/>
+</suite>
+<status status="FAIL" start="2025-06-12T12:10:40.312026" elapsed="11.121036"/>
+</suite>
+<status status="FAIL" start="2025-06-12T12:10:40.300878" elapsed="11.132559"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Tests" id="s1" pass="0" fail="1" skip="0">Tests</stat>
+<stat name="Visual Tests" id="s1-s1" pass="0" fail="1" skip="0">Tests.Visual Tests</stat>
+<stat name="Launch Image Comparison" id="s1-s1-s1" pass="0" fail="1" skip="0">Tests.Visual Tests.Launch Image Comparison</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

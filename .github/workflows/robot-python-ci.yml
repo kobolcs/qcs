@@ -1,0 +1,73 @@
+name: SpaceX Suite CI with Allure and Quality Gates
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  run-spacex-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        working-directory: ./robot-framework-python-tests
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+          pip install allure-pytest
+
+      - name: Run Code Quality and Linting Gate
+        # This new step will fail the build if code is not formatted correctly
+        # or if it violates linting rules. It also runs in the project directory.
+        working-directory: ./robot-framework-python-tests
+        run: |
+          robocop .
+          black --check .
+
+      - name: Run API tests with Allure
+        # This step, and all subsequent steps, will only run if the quality gate passes.
+        working-directory: ./robot-framework-python-tests
+        run: >
+          pabot --processes 4
+          --listener allure_robotframework
+          --alluredir allure-results
+          --outputdir reports/api_pabot
+          tests/api_tests
+
+      - name: Run GUI and Visual tests with Allure
+        working-directory: ./robot-framework-python-tests
+        run: >
+          robot --listener allure_robotframework
+          --alluredir allure-results
+          --outputdir reports/gui_visual_results
+          tests/gui_tests tests/visual_tests
+
+      - name: Run Pytest unit tests with Allure
+        working-directory: ./robot-framework-python-tests
+        run: pytest --alluredir=allure-results pytest_unit
+
+      - name: Generate Allure Report
+        if: always() # This ensures the report is generated even if tests fail
+        uses: allure-framework/allure-action@v3
+        with:
+          # The paths for the report are now correctly relative to the root
+          report_path: robot-framework-python-tests/allure-report
+          results_path: robot-framework-python-tests/allure-results
+
+      - name: Upload Allure Report Artifact
+        if: always() # Upload the report even on failure for debugging
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: robot-framework-python-tests/allure-report

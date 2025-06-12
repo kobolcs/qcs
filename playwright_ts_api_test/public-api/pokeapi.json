@@ -1,0 +1,15 @@
+{
+  "name": "pikachu",
+  "sprites": {
+    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
+  },
+  "types": [
+    {
+      "slot": 1,
+      "type": {
+        "name": "electric",
+        "url": "https://pokeapi.co/api/v2/type/13/"
+      }
+    }
+  ]
+}

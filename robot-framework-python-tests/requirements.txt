@@ -1,0 +1,13 @@
+robotframework==7.3
+RESTinstance==1.5.2
+robotframework-seleniumlibrary==6.7.1
+robotframework-browser==19.5.1
+robotframework-imagehorizonlibrary==1.0.0
+Pillow==11.2.1
+allure-robotframework==2.14.2
+robotframework-pabot==4.2.0
+robotframework-dashboard==0.9.4
+pytest==8.2.2
+pytest-html==4.1.1
+requests==2.32.3
+pytest-cov==6.1.1

@@ -1,0 +1,35 @@
+name: Pact Contract Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  contract-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install consumer dependencies
+        run: npm install
+        working-directory: pact-contract-testing/consumer-frontend
+
+      - name: Run consumer tests (generates pact)
+        run: npm test
+        working-directory: pact-contract-testing/consumer-frontend
+
+      - name: Install provider dependencies
+        run: npm install
+        working-directory: pact-contract-testing/provider-api
+
+      - name: Run provider verification
+        run: npm test
+        working-directory: pact-contract-testing/provider-api
