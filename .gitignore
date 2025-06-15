@@ -124,3 +124,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 !elixir-api-tests/lib/test_report_generator.ex
+
+# Robot Framework generated files
+robot-framework-python-tests/reports/
+robot-framework-python-tests/output.txt
+robot-framework-python-tests/*.log
+robot-framework-python-tests/*.xml
