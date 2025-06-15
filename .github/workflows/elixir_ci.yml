@@ -19,8 +19,8 @@ jobs:
     - name: Setup Elixir
       uses: actions/setup-elixir@v1
       with:
-        elixir-version: "1.18.4"
-        otp-version: "27"
+        elixir-version: "1.16.2"
+        otp-version: "26"
 
     - name: Install dependencies
       working-directory: ./elixir-api-tests
