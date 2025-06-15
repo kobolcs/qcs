@@ -43,7 +43,9 @@ The concepts demonstrated here can be found in other ecosystems:
     ```bash
     mix test
     ```
-    A `test_report.html` file will be generated in the `reports` directory.
+    A `test_report.html` file will be generated in the `reports` directory. By
+    default the tests mock the Rest Countries API. Set
+    `USE_LIVE_REST_COUNTRIES=1` to exercise the real service.
 
 #### 2. Docker
 

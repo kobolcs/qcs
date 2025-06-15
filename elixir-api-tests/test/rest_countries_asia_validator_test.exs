@@ -2,13 +2,37 @@ defmodule RestCountriesAsiaValidatorTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
   alias TestReportGenerator
+  alias Plug.Conn
 
   @moduletag timeout: 30000
+  @default_endpoint "https://restcountries.com/v3.1/region/asia"
 
-  @endpoint "https://restcountries.com/v3.1/region/asia"
+  setup do
+    if System.get_env("USE_LIVE_REST_COUNTRIES") == "1" do
+      {:ok, endpoint: @default_endpoint}
+    else
+      bypass = Bypass.open()
+      json = Jason.encode!([
+        %{"name" => %{"common" => "Mock"}, "region" => "Asia", "area" => 1000}
+      ])
 
-  test "fetches Asia countries and validates structure" do
-    {:ok, resp} = HTTPoison.get(@endpoint, [], recv_timeout: 8000)
+      Bypass.stub(bypass, "GET", "/v3.1/region/asia", fn conn ->
+        Conn.put_resp_header(conn, "content-type", "application/json")
+        |> Conn.resp(200, json)
+      end)
+
+      Bypass.stub(bypass, "GET", "/v3.1/region/doesnotexist", fn conn ->
+        Conn.resp(conn, 404, "[]")
+      end)
+
+      on_exit(fn -> Bypass.close(bypass) end)
+
+      {:ok, endpoint: "http://localhost:#{bypass.port}/v3.1/region/asia"}
+    end
+  end
+
+  test "fetches Asia countries and validates structure", %{endpoint: endpoint} do
+    {:ok, resp} = HTTPoison.get(endpoint, [], recv_timeout: 8000)
     assert resp.status_code == 200
 
     {:ok, countries} = Jason.decode(resp.body)
@@ -29,8 +53,8 @@ defmodule RestCountriesAsiaValidatorTest do
     })
   end
 
-  property "country area is non-negative and reasonable" do
-    {:ok, resp} = HTTPoison.get(@endpoint, [], recv_timeout: 8000)
+  property "country area is non-negative and reasonable", %{endpoint: endpoint} do
+    {:ok, resp} = HTTPoison.get(endpoint, [], recv_timeout: 8000)
     {:ok, countries} = Jason.decode(resp.body)
     check all country <- StreamData.member_of(countries) do
       area = country["area"]
@@ -43,8 +67,9 @@ defmodule RestCountriesAsiaValidatorTest do
     })
   end
 
-  test "handles API error gracefully" do
-    {:ok, resp} = HTTPoison.get("https://restcountries.com/v3.1/region/doesnotexist", [], recv_timeout: 8000)
+  test "handles API error gracefully", %{endpoint: endpoint} do
+    error_endpoint = String.replace(endpoint, "asia", "doesnotexist")
+    {:ok, resp} = HTTPoison.get(error_endpoint, [], recv_timeout: 8000)
     assert resp.status_code in [404, 400]
     TestReportGenerator.append_result(%{
       name: "handles API error gracefully",

@@ -1,11 +1,12 @@
 package main
 
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"time"
+    "context"
+    "encoding/json"
+    "fmt"
+    "net/http"
+    "os"
+    "time"
 )
 
 const (
@@ -40,10 +41,16 @@ func GetWithRetry(ctx context.Context, url string) (*http.Response, error) {
     return nil, fmt.Errorf("request failed after %d attempts: %w", maxRetries, err)
 }
 
-// FetchWeatherData encapsulates fetching and decoding the weather data for a city.
+func getBaseURL() string {
+    if v := os.Getenv("OWM_BASE_URL"); v != "" {
+        return v
+    }
+    return "https://api.openweathermap.org"
+}
+
 func FetchWeatherData(ctx context.Context, apiKey, city string) (*WeatherResponse, time.Duration, error) {
-	start := time.Now()
-	url := fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s&units=metric", city, apiKey)
+        start := time.Now()
+        url := fmt.Sprintf("%s/data/2.5/weather?q=%s&appid=%s&units=metric", getBaseURL(), city, apiKey)
 
 	resp, err := GetWithRetry(ctx, url)
 	duration := time.Since(start)
