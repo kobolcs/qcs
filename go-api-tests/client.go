@@ -1,12 +1,13 @@
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    "net/http"
-    "os"
-    "time"
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/url"
+	"os"
+	"time"
 )
 
 const (
@@ -14,45 +15,61 @@ const (
 	retryDelay = 500 * time.Millisecond
 )
 
+// HTTPClient defines the minimal interface GetWithRetry needs from an HTTP client.
+type HTTPClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
 // GetWithRetry performs a GET request with a simple backoff retry mechanism.
-func GetWithRetry(ctx context.Context, url string) (*http.Response, error) {
-    var resp *http.Response
-    var err error
+func GetWithRetry(ctx context.Context, client HTTPClient, url string) (*http.Response, error) {
+	var resp *http.Response
+	var err error
 
-    for i := 0; i < maxRetries; i++ {
-        req, reqErr := http.NewRequestWithContext(ctx, "GET", url, nil)
-        if reqErr != nil {
-            return nil, fmt.Errorf("failed to create request: %w", reqErr)
-        }
+	for i := 0; i < maxRetries; i++ {
+		req, reqErr := http.NewRequestWithContext(ctx, "GET", url, nil)
+		if reqErr != nil {
+			return nil, fmt.Errorf("failed to create request: %w", reqErr)
+		}
 
-        resp, err = http.DefaultClient.Do(req)
-        if err == nil && resp.StatusCode == http.StatusOK {
-            return resp, nil // Success
-        }
+		resp, err = client.Do(req)
+		if err == nil && resp.StatusCode == http.StatusOK {
+			return resp, nil // Success
+		}
 
-        // If there's an error or a non-200 status, wait before retrying.
-        time.Sleep(retryDelay * time.Duration(i+1))
-    }
+		// Close body before retrying to avoid leaking resources
+		if resp != nil && i < maxRetries-1 {
+			resp.Body.Close()
+		}
 
-    // Return the last response and error after all attempts.
-    if resp != nil {
-         return resp, fmt.Errorf("request failed after %d attempts with status %s", maxRetries, resp.Status)
-    }
-    return nil, fmt.Errorf("request failed after %d attempts: %w", maxRetries, err)
+		// If there's an error or a non-200 status, wait before retrying.
+		time.Sleep(retryDelay * time.Duration(i+1))
+	}
+
+	// Return the last response and error after all attempts.
+	if resp != nil && err != nil {
+		return resp, fmt.Errorf("request failed after %d attempts with status %s: %w", maxRetries, resp.Status, err)
+	}
+	if resp != nil {
+		return resp, fmt.Errorf("request failed after %d attempts with status %s", maxRetries, resp.Status)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("request failed after %d attempts: %w", maxRetries, err)
+	}
+	return nil, fmt.Errorf("request failed after %d attempts", maxRetries)
 }
 
 func getBaseURL() string {
-    if v := os.Getenv("OWM_BASE_URL"); v != "" {
-        return v
-    }
-    return "https://api.openweathermap.org"
+	if v := os.Getenv("OWM_BASE_URL"); v != "" {
+		return v
+	}
+	return "https://api.openweathermap.org"
 }
 
 func FetchWeatherData(ctx context.Context, apiKey, city string) (*WeatherResponse, time.Duration, error) {
-        start := time.Now()
-        url := fmt.Sprintf("%s/data/2.5/weather?q=%s&appid=%s&units=metric", getBaseURL(), city, apiKey)
+	start := time.Now()
+	url := fmt.Sprintf("%s/data/2.5/weather?q=%s&appid=%s&units=metric", getBaseURL(), url.QueryEscape(city), apiKey)
 
-	resp, err := GetWithRetry(ctx, url)
+	resp, err := GetWithRetry(ctx, http.DefaultClient, url)
 	duration := time.Since(start)
 	if err != nil {
 		return nil, duration, err
