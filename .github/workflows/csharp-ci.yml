@@ -33,7 +33,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4 # Use v4 for the latest version
         with:
-          dotnet-version: '9.x'
+          dotnet-version: '8.x'
 
       - name: Install dependencies
         run: dotnet restore
@@ -55,9 +55,9 @@ jobs:
 
       - name: Generate LivingDoc HTML
         # This now uses the output path from specflow.plus.yml
-        # Note: Your original path pointed to net6.0, but your TargetFramework is net9.0.
+        # Note: Your original path pointed to net6.0, but your TargetFramework is net8.0.
         # This has been corrected to use the correct path for your project.
-        run: livingdoc test-assembly bin/Debug/net9.0/SpecFlowApiTests.dll -t TestExecution.json
+        run: livingdoc test-assembly bin/Debug/net8.0/SpecFlowApiTests.dll -t TestExecution.json
 
       - name: Upload LivingDoc artifact
         uses: actions/upload-artifact@v4 # Use v4 for the latest version
