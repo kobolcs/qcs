@@ -38,11 +38,16 @@ This pattern of a BDD/keyword-driven layer on top of a general-purpose programmi
     pip install -r requirements.txt
     pip install -r requirements-dev.txt
     ```
-3.  **Run the tests using `pabot`** (for parallel execution):
+3.  **Custom CSV Keyword**: The suite uses a small helper library
+    `helpers/csv_keywords.py` that provides the `Read CSV File To List`
+    keyword. No additional packages are required.
+4.  **Run the tests using `pabot`** (for parallel execution):
     ```bash
     pabot --processes 4 --outputdir reports tests/api_tests
     ```
-4.  **View the generated report**: Open `robot-framework-python-tests/reports/log.html` in your browser.
+    The unit tests default to mocked HTTP responses. Set `USE_LIVE_SPACEX=1` to
+    hit the real SpaceX API when running `pytest`.
+5.  **View the generated report**: Open `robot-framework-python-tests/reports/log.html` in your browser.
 
 #### 2. Docker
 

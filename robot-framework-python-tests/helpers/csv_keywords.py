@@ -9,3 +9,4 @@ class CSVKeywords:
         with open(csv_path, newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             return [row for row in reader]
+

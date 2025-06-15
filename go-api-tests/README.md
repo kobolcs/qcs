@@ -22,6 +22,8 @@
     ```bash
     export OWM_API_KEY="your-api-key-here"
     ```
+    To run tests without an API key, set `USE_LIVE_OWM=0` (default) and a mock
+    server will be used.
 2.  **Run tests**:
     ```bash
     go test -v ./...

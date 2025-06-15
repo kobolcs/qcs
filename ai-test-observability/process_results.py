@@ -2,6 +2,9 @@ import json
 import csv
 import argparse
 import os
+from typing import Dict
+
+import pandas as pd
 
 
 def parse_go_api_report(path: str):
@@ -25,6 +28,57 @@ def parse_go_api_report(path: str):
             "failure_message": failure_message,
         })
     return rows
+
+
+def load_data(path: str) -> Dict:
+    """Load a JSON file containing k6 results.
+
+    Parameters
+    ----------
+    path: str
+        Path to the JSON results file.
+
+    Returns
+    -------
+    dict
+        Parsed JSON data.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the file does not exist.
+    ValueError
+        If the file contents are not valid JSON.
+    """
+
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        # Let the caller handle missing files
+        raise
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Invalid JSON in {path}") from exc
+
+
+def process_k6_results(data: Dict) -> pd.DataFrame:
+    """Convert k6 summary JSON into a DataFrame of key metrics."""
+
+    metrics = data.get("metrics", {})
+    duration_values = metrics.get("http_req_duration", {}).get("values", {})
+    failed_values = metrics.get("http_req_failed", {}).get("values", {})
+
+    avg_duration = duration_values.get("avg", 0)
+    p95_duration = duration_values.get("p(95)", 0)
+    fail_rate = failed_values.get("rate", 0)
+
+    return pd.DataFrame([
+        {
+            "avg_duration": avg_duration,
+            "p95_duration": p95_duration,
+            "fail_rate": fail_rate,
+        }
+    ])
 
 
 def main():

@@ -16,6 +16,7 @@ eggs/
 .eggs/
 lib/
 lib64/
+!elixir-api-tests/lib/**
 parts/
 sdist/
 var/
@@ -122,3 +123,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+!elixir-api-tests/lib/test_report_generator.ex
