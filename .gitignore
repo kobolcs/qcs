@@ -130,3 +130,25 @@ robot-framework-python-tests/reports/
 robot-framework-python-tests/output.txt
 robot-framework-python-tests/*.log
 robot-framework-python-tests/*.xml
+
+# Node.js dependencies
+node_modules/
+
+# Playwright build outputs
+playwright_ts_api_test/playwright-report/
+
+# Coverage directories
+coverage/
+
+# Compiled binaries
+*.class
+*.jar
+*.dll
+*.exe
+*.out
+*.o
+bin/
+
+# Generic log and output directories
+logs/
+output/
