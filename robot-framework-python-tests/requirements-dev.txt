@@ -4,3 +4,4 @@ pytest
 robocop
 rflint
 pytest-cov
+responses

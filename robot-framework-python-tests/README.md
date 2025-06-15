@@ -45,6 +45,8 @@ This pattern of a BDD/keyword-driven layer on top of a general-purpose programmi
     ```bash
     pabot --processes 4 --outputdir reports tests/api_tests
     ```
+    The unit tests default to mocked HTTP responses. Set `USE_LIVE_SPACEX=1` to
+    hit the real SpaceX API when running `pytest`.
 5.  **View the generated report**: Open `robot-framework-python-tests/reports/log.html` in your browser.
 
 #### 2. Docker

@@ -28,6 +28,7 @@ defmodule ElixirApiTests.MixProject do
     [
       {:httpoison, "~> 2.0"},
       {:jason, "~> 1.4"},
+      {:bypass, "~> 2.1", only: :test},
       {:ex_doc, "~> 0.28", only: :dev, runtime: false}
     ]
   end
