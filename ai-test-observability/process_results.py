@@ -4,7 +4,7 @@ import argparse
 import os
 from typing import Dict
 
-import pandas as pd
+import demo_pandas as pd
 
 
 def parse_go_api_report(path: str):
