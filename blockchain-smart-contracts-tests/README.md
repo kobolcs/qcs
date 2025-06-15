@@ -60,3 +60,8 @@ This stack (`Solidity`, `Hardhat`, `Ethers.js`) is the industry standard for dev
 
 
 
+
+### Vulnerability & Gas Usage Testing
+
+The test suite includes examples for reentrancy and integer overflow to illustrate common security flaws. Gas consumption is tracked with `hardhat-gas-reporter`, and key operations assert that gas usage stays within reasonable limits.
+
