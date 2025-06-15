@@ -1,6 +1,6 @@
 *** Settings ***
-Resource          ../../resources/keywords/spacex_api_keywords.robot
-Library           ../helpers/csv_keywords.py    CSVKeywords
+Resource          ../../keywords.robot
+Library           ../../helpers/csv_keywords.py
 
 *** Variables ***
 ${CSV_PATH}       tests/api_tests/last_5_launches.csv
