@@ -15,3 +15,5 @@ cd java-event-driven-tests && mvn clean test -DsuiteXmlFile=testng-integration-s
 [ERROR] For more information about the errors and possible solutions, please read the following articles:
 [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/ProjectBuildingException
 [ERROR] [Help 2] http://cwiki.apache.org/confluence/display/MAVEN/ModelParseException
+\n--- Re-running Maven Build ---
+bash: mvn: command not found
