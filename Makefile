@@ -84,14 +84,11 @@ install-csharp:
 	cd csharp-specflow-api-tests && dotnet restore
 	cd csharp-specflow-api-tests && dotnet user-secrets init > /dev/null 2>&1 && dotnet user-secrets set "ApiSettings:Password" "password123"
 	@if ! dotnet tool list --global | grep -q specflow.plus.livingdoc.cli; then \
-		echo "Installing SpecFlow+ LivingDoc CLI (global tool)..."; \
-		dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI; \
+	echo "Installing SpecFlow+ LivingDoc CLI (global tool)..."; \
+	dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI; \
 	else \
-		read -p "SpecFlow+ LivingDoc CLI is already installed. Update to the latest version? (y/n) " -n 1 -r; \
-		echo; \
-		if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
-			dotnet tool update --global SpecFlow.Plus.LivingDoc.CLI; \
-		fi; \
+	echo "SpecFlow+ LivingDoc CLI already installed. Updating to the latest version..."; \
+	dotnet tool update --global SpecFlow.Plus.LivingDoc.CLI; \
 	fi
 
 .PHONY: install-java
@@ -172,14 +169,11 @@ install-mobile:
 	$(MOBILE_VENV)/bin/pip install --upgrade pip
 	$(MOBILE_VENV)/bin/pip install -r mobile-appium-tests/requirements.txt
 	@if ! npm list -g | grep -q appium; then \
-		echo "Installing Appium Server globally (this might take a moment)..."; \
-		npm install -g appium; \
+	echo "Installing Appium Server globally (this might take a moment)..."; \
+	npm install -g appium; \
 	else \
-		read -p "Appium is already installed globally. Re-install/update to the latest version? (y/n) " -n 1 -r; \
-		echo; \
-		if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
-			npm install -g appium; \
-		fi; \
+	echo "Appium is already installed globally. Updating to the latest version..."; \
+	npm install -g appium; \
 	fi
 	@echo "--- Installing Appium UIAutomator2 driver ---"
 	appium driver install uiautomator2
