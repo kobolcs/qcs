@@ -30,7 +30,7 @@ Playwright is a leader in a competitive space for modern web testing.
 
 1.  **Navigate to the project directory**:
     ```bash
-    cd playwright_ts_api_test
+    cd playwright-ts-api-test
     ```
 2.  **Install dependencies**:
     ```bash

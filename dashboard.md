@@ -12,7 +12,7 @@ Welcome to the at-a-glance view of this cross-language test automation consultan
 
 * ![Java Event-Driven CI](https://github.com/kobolcs/qcs/actions/workflows/java-ci.yml/badge.svg) **Java Event-Driven**: [README](java-event-driven-tests/README.md) | **Report:** See Surefire reports artifact from CI run.
 
-* ![Playwright TS CI](https://github.com/kobolcs/qcs/actions/workflows/playwright-ci.yml/badge.svg) **Playwright+TS**: [README](playwright_ts_api_test/README.md) | **Report:** See `playwright-report` artifact from CI run.
+* ![Playwright TS CI](https://github.com/kobolcs/qcs/actions/workflows/playwright-ci.yml/badge.svg) **Playwright+TS**: [README](playwright-ts-api-test/README.md) | **Report:** See `playwright-report` artifact from CI run.
 
 * ![Pact Contract Test](https://github.com/kobolcs/qcs/actions/workflows/pact-ci.yml/badge.svg) **Pact Contract-Testing**: [README](pact-contract-testing/README.md)
 
@@ -32,7 +32,7 @@ Welcome to the at-a-glance view of this cross-language test automation consultan
 
 ### Playwright HTML Report
 *A rich, interactive report showing test steps, traces, and screenshots for easy debugging of UI tests.*
-![Playwright Report Screenshot](playwright_ts_api_test/playwright_report_screenshot.png)
+![Playwright Report Screenshot](playwright-ts-api-test/playwright_report_screenshot.png)
 
 ### Robot Framework / Allure Report
 *The Allure report provides powerful analytics and a detailed, categorized view of test results from multiple test runs (API, GUI, Visual).*

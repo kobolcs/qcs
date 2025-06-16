@@ -2,7 +2,7 @@ version: 2
 updates:
   # Enable version updates for npm (Playwright project)
   - package-ecosystem: "npm"
-    directory: "/playwright_ts_api_test"
+    directory: "/playwright-ts-api-test"
     schedule:
       interval: "weekly"
 
