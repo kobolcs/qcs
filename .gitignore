@@ -135,7 +135,7 @@ robot-framework-python-tests/*.xml
 node_modules/
 
 # Playwright build outputs
-playwright_ts_api_test/playwright-report/
+playwright-ts-api-test/playwright-report/
 
 # Coverage directories
 coverage/

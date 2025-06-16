@@ -111,9 +111,9 @@ install-robot:
 .PHONY: install-playwright
 install-playwright:
 	@echo "\n--- Installing Playwright dependencies (npm) ---"
-	cd playwright_ts_api_test && npm ci
+	cd playwright-ts-api-test && npm ci
 	@echo "--- Installing Playwright browsers (this might take a moment) ---"
-	cd playwright_ts_api_test && npx playwright install
+	cd playwright-ts-api-test && npx playwright install
 
 .PHONY: install-go
 install-go:
@@ -281,12 +281,12 @@ test-robot-coverage: install-robot
 .PHONY: test-playwright
 test-playwright:
 	@echo "\n--- Running Playwright TS API Tests ---"
-	cd playwright_ts_api_test && npx playwright test
+	cd playwright-ts-api-test && npx playwright test
 
 .PHONY: test-playwright-security
 test-playwright-security: install-playwright
 	@echo "\n--- Running Playwright Dependency Security Scan (npm audit) ---"
-	cd playwright_ts_api_test && npm audit
+	cd playwright-ts-api-test && npm audit
 
 # --- Go ---
 .PHONY: test-go
@@ -372,7 +372,7 @@ lint-robot: install-robot
 .PHONY: lint-playwright
 lint-playwright:
 	@echo "\n--- Running Playwright Linter (eslint) ---"
-	cd playwright_ts_api_test && npm run lint
+	cd playwright-ts-api-test && npm run lint
 
 .PHONY: lint-go
 lint-go:
@@ -398,7 +398,7 @@ clean:
 	rm -rf robot-framework-python-tests/reports
 	# Node.js
 	find . -type d -name "node_modules" -exec rm -r {} +
-	rm -rf playwright_ts_api_test/test-results playwright_ts_api_test/playwright-report
+	rm -rf playwright-ts-api-test/test-results playwright-ts-api-test/playwright-report
 	rm -rf pact-contract-testing/consumer-frontend/pacts
 	rm -rf prototypes/blockchain-smart-contracts-tests/artifacts prototypes/blockchain-smart-contracts-tests/cache
 		# Go
