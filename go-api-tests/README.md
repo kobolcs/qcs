@@ -53,6 +53,13 @@
 - See `.github/workflows/go-ci.yml` for the complete GitHub Actions workflow.
 - The CI pipeline runs tests, checks formatting, and performs a CodeQL security scan.
 
+### 🤝 Integration with Pact Contract Tests
+
+The root `scripts/run_go_to_pact.js` script demonstrates using the generated
+`weather_test_report.json` to trigger the Pact consumer and provider tests.
+Because it's written in Node.js, the flow works on Windows as well as macOS/Linux.
+This mirrors a pipeline step where functional API checks gate contract verification.
+
 ---
 
 ### 📄 License
