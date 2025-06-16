@@ -55,3 +55,13 @@ make lint-all
 ```
 
 Refer to `make help` for a full list of supported targets.
+
+## Docker Usage
+
+A `Dockerfile` and `docker-compose.yml` are provided to run the entire suite in a consistent environment. Build the image and execute all tests with:
+
+```bash
+docker-compose up --build
+```
+
+This will run `make install-all` followed by `make test-all` inside the container.

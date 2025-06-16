@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  qcs:
+    build: .
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: bash -c "make install-all && make test-all"
