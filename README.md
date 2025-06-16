@@ -27,8 +27,8 @@ The following table serves as a guide to the skills and technologies demonstrate
 | `pact-contract-testing`                    | Node.js, Pact, Jest, Express       | Consumer-Driven Contract Testing, CI/CD integration for contract verification, API mocking, and provider state management.          |
 | `k6-performance-tests`                          | k6, JavaScript                          | Performance Testing as Code, Service Level Objectives (SLOs), Thresholds, CI/CD-integrated performance checks.                   |
 | `elixir-api-tests`                                 | Elixir, ExUnit, StreamData | Property-Based Testing, Concurrency with the BEAM VM, Pattern Matching for concise assertions, Custom HTML Reporting. |
-| `ai-test-observability`                             | Python, Scikit-learn, Streamlit         | *(Proposed)* Applying AI/ML to QA, Flaky Test Detection (Classification), Failure Clustering (NLP), Building Data-Driven Dashboards.       |
-| `blockchain-smart-contracts-tests` | Solidity, Hardhat, Ethers.js            | *(Proposed)* Web3 Quality, Smart Contract Auditing, Security Vulnerability Testing (Reentrancy & Overflow), Gas Usage Assertions with Hardhat Gas Reporter, Testing on a Local Blockchain. |
+| `prototypes/ai-test-observability`                             | Python, Scikit-learn, Streamlit         | *(Experimental)* Applying AI/ML to QA, Flaky Test Detection (Classification), Failure Clustering (NLP), Building Data-Driven Dashboards.       |
+| `prototypes/blockchain-smart-contracts-tests` | Solidity, Hardhat, Ethers.js            | *(Experimental)* Web3 Quality, Smart Contract Auditing, Security Vulnerability Testing (Reentrancy & Overflow), Gas Usage Assertions with Hardhat Gas Reporter, Testing on a Local Blockchain. |
 
 ## Makefile Usage
 

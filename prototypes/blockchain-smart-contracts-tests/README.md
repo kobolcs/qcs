@@ -1,6 +1,6 @@
 # Project Vision: Web3 & Smart Contract Quality Assurance
 
-**Status: Proposed**
+**Status: Experimental – Work in Progress**
 
 This project demonstrates advanced testing techniques for Web3 applications, focusing on the unique quality assurance challenges presented by blockchain and smart contracts.
 
@@ -28,7 +28,7 @@ This stack (`Solidity`, `Hardhat`, `Ethers.js`) is the industry standard for dev
 
 1.  **Navigate to the project directory**:
     ```bash
-    cd blockchain-smart-contracts-tests
+    cd prototypes/blockchain-smart-contracts-tests
     ```
 2.  **Install dependencies**:
     ```bash
