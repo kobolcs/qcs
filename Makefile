@@ -1,4 +1,4 @@
-# Makefile for the QA Consultant Suite
+	# Makefile for the QA Consultant Suite
 # This Makefile provides a unified interface to install, test, and lint all projects.
 # It uses virtual environments for Python projects and includes targets for
 # code coverage, security scanning, and comprehensive reporting.
@@ -300,6 +300,12 @@ test-pact:
 	@echo "\n--- Running Pact Contract Tests ---"
 	cd pact-contract-testing/consumer-frontend && npm test
 	cd pact-contract-testing/provider-api && npm test
+
+# Run Go API tests and then Pact tests as an integration scenario
+.PHONY: test-go-pact
+test-go-pact:
+	@echo "\n--- Running Go API Tests followed by Pact Contract Tests ---"
+	node scripts/run_go_to_pact.js
 
 .PHONY: test-pact-security
 test-pact-security: install-pact

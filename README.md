@@ -65,3 +65,12 @@ docker-compose up --build
 ```
 
 This will run `make install-all` followed by `make test-all` inside the container.
+
+## Cross-Project Integration Example
+
+An example workflow ties the Go API tests to the Pact contract suite. Running
+the `test-go-pact` Makefile target executes the Go tests first and, if they
+produce the `weather_test_report.json` artifact, automatically kicks off the
+consumer and provider Pact tests. A Node.js helper script is used so the flow
+works the same on Windows and Unix systems. This demonstrates how functional
+checks can gate contract verification in a real CI/CD pipeline.

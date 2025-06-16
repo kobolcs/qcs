@@ -41,3 +41,11 @@ Pact is essential for teams building systems with a microservices architecture. 
 #### 2. Docker
 
 The entire workflow can be simulated via the CI pipeline configuration. The `pact-ci.yml` workflow automates the steps of running the consumer tests first, followed by the provider verification.
+
+### 🤝 Integration with Go API Tests
+
+The repository root includes a `test-go-pact` Makefile target (and accompanying
+`scripts/run_go_to_pact.js`) that runs the Go API tests and then triggers these
+Pact tests. Using Node.js ensures the same workflow works on Windows as well as
+macOS/Linux systems. This example illustrates how contract verification can be
+gated by prior functional testing.
