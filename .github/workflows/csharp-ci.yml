@@ -14,7 +14,6 @@ jobs:
       run:
         working-directory: csharp-specflow-api-tests
 
-    # Add permissions for CodeQL to read code and write results
     permissions:
       security-events: write
       actions: read
@@ -22,16 +21,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4 # Use v4 for the latest version
+        uses: actions/checkout@v4
 
       - name: Initialize CodeQL
-        # This step sets up the CodeQL scanner
         uses: github/codeql-action/init@v3
         with:
           languages: csharp
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4 # Use v4 for the latest version
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
 
@@ -39,34 +37,27 @@ jobs:
         run: dotnet restore
 
       - name: Build project
-        # A dedicated build step is needed for CodeQL to analyze the compiled code
         run: dotnet build --configuration Release --no-restore
 
       - name: Perform CodeQL Analysis
-        # This step runs the security scan
         uses: github/codeql-action/analyze@v3
 
       - name: Run tests with JSON logger
-        # --no-build is added because the project was already built in the previous step
         run: dotnet test --no-build --logger "json;LogFileName=TestExecution.json"
 
       - name: Install SpecFlow+ LivingDoc CLI
         run: dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
 
       - name: Generate LivingDoc HTML
-        # This now uses the output path from specflow.plus.yml
-        # Note: Your original path pointed to net6.0, but your TargetFramework is net8.0.
-        # This has been corrected to use the correct path for your project.
         run: livingdoc test-assembly bin/Debug/net8.0/SpecFlowApiTests.dll -t TestExecution.json
 
       - name: Upload LivingDoc artifact
-        uses: actions/upload-artifact@v4 # Use v4 for the latest version
+        uses: actions/upload-artifact@v4
         with:
           name: living-doc
-          path: csharp-specflow-api-tests/SpecFlowApiTests/Reports/LivingDoc.html
+          path: csharp-specflow-api-tests/LivingDoc.html # Corrected path to the generated file
 
   deploy_living_doc:
-    # This job will only run if the build_and_test job completes successfully
     needs: build_and_test
     runs-on: ubuntu-latest
     permissions:
@@ -76,22 +67,21 @@ jobs:
 
     steps:
       - name: Setup Pages
-        uses: actions/configure-pages@v5 # Use v5 for the latest version
+        uses: actions/configure-pages@v5
 
       - name: Download LivingDoc artifact
-        uses: actions/download-artifact@v4 # Use v4 for the latest version
+        uses: actions/download-artifact@v4
         with:
           name: living-doc
-          path: ./living-doc-report
 
-      - name: Rename report for GitHub Pages
-        run: mv ./living-doc-report/LivingDoc.html ./living-doc-report/index.html
+      - name: Prepare artifact for GitHub Pages
+        run: mv LivingDoc.html index.html
 
       - name: Upload artifact for GitHub Pages
-        uses: actions/upload-pages-artifact@v3 # Use v3 for the latest version
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: ./living-doc-report
+          path: '.'
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4 # Use v4 for the latest version
+        uses: actions/deploy-pages@v4

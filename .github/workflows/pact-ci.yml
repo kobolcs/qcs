@@ -19,17 +19,17 @@ jobs:
           node-version: '18'
 
       - name: Install consumer dependencies
-        run: npm install
         working-directory: pact-contract-testing/consumer-frontend
+        run: npm ci
 
       - name: Run consumer tests (generates pact)
-        run: npm test
         working-directory: pact-contract-testing/consumer-frontend
+        run: npm test
 
       - name: Install provider dependencies
-        run: npm install
         working-directory: pact-contract-testing/provider-api
+        run: npm ci
 
       - name: Run provider verification
-        run: npm test
         working-directory: pact-contract-testing/provider-api
+        run: npm test

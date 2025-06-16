@@ -28,15 +28,12 @@ jobs:
           pip install allure-pytest
 
       - name: Run Code Quality and Linting Gate
-        # This new step will fail the build if code is not formatted correctly
-        # or if it violates linting rules. It also runs in the project directory.
         working-directory: ./robot-framework-python-tests
         run: |
           robocop .
           black --check .
 
       - name: Run API tests with Allure
-        # This step, and all subsequent steps, will only run if the quality gate passes.
         working-directory: ./robot-framework-python-tests
         run: >
           pabot --processes 4
@@ -58,15 +55,15 @@ jobs:
         run: pytest --alluredir=allure-results pytest_unit
 
       - name: Generate Allure Report
-        if: always() # This ensures the report is generated even if tests fail
+        if: always()
         uses: allure-framework/allure-action@v3
         with:
-          # The paths for the report are now correctly relative to the root
-          report_path: robot-framework-python-tests/allure-report
-          results_path: robot-framework-python-tests/allure-results
+          report_path: allure-report
+          results_path: allure-results
+        working-directory: ./robot-framework-python-tests
 
       - name: Upload Allure Report Artifact
-        if: always() # Upload the report even on failure for debugging
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: allure-report

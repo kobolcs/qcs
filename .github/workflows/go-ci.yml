@@ -1,4 +1,4 @@
-name: Go CI with Security Scans (SAST & DAST)
+name: Go CI with Security Scans (SAST)
 
 on:
   push:
@@ -51,18 +51,3 @@ jobs:
 
     - name: Perform CodeQL Analysis (SAST)
       uses: github/codeql-action/analyze@v3
-
-  dast-scan:
-    name: DAST Scan
-    # This job runs in parallel to the build and SAST scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: OWASP ZAP Baseline Scan (DAST)
-        uses: zaproxy/action-baseline@v0.12.0
-        with:
-          target: 'https://www.zaproxy.org/'
-          # You can specify rules to ignore if needed, e.g., 'rules_file_name: .zap/rules.tsv'
-          cmd_options: '-a' # Include alpha rules
