@@ -18,6 +18,12 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Cache npm
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ hashFiles('**/package-lock.json') }}
+
       - name: Install consumer dependencies
         working-directory: pact-contract-testing/consumer-frontend
         run: npm ci
