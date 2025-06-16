@@ -1,6 +1,6 @@
 # Project Vision: AI for Test Observability
 
-**Status: Proposed**
+**Status: Experimental – Work in Progress**
 
 This project aims to demonstrate the application of AI and Machine Learning techniques to solve common, difficult problems in QA and test automation, transforming raw test output into actionable insights.
 
@@ -44,7 +44,7 @@ This project demonstrates the core principles behind commercial AI-in-testing pl
     ```
 3.  **Convert a raw test report to CSV** (pointing to a `weather_test_report.json` file from the Go tests):
     ```bash
-    python process_results.py --input-file ../go-api-tests/weather_test_report.json --output-file processed_results.csv
+    python process_results.py --input-file ../../go-api-tests/weather_test_report.json --output-file processed_results.csv
     ```
 4.  **Launch the interactive dashboard**:
     ```bash
