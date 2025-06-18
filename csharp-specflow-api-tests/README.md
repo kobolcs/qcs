@@ -19,6 +19,7 @@ The BDD-style of testing shown here is a popular, cross-language pattern.
 * **Java**: `Java + Cucumber` is the direct equivalent. `Serenity BDD` is a higher-level framework that often uses Cucumber for its core functionality.
 * **Python**: `Python + Behave` or `Python + pytest-bdd`.
 * **JavaScript/TypeScript**: `JavaScript/TypeScript + Cucumber.js`.
+  
 ### Strategic Advantage
 - Bridges communication gaps between developers and business teams.
 - Fits seamlessly into existing .NET pipelines for rapid feedback.
