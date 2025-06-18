@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Configuration;
-using SpecFlowApiTests.Configuration;
+using Azure.Identity;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using System;
+using SpecFlowApiTests.Configuration;
 
 namespace SpecFlowApiTests.Helpers
 {
@@ -8,12 +10,19 @@ namespace SpecFlowApiTests.Helpers
     {
         private static readonly Lazy<ApiSettings> _apiSettings = new Lazy<ApiSettings>(() =>
         {
-            var configuration = new ConfigurationBuilder()
+            var builder = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddUserSecrets<ApiSettings>()
-                .AddEnvironmentVariables()
-                .Build();
+                .AddEnvironmentVariables();
+
+            var keyVaultUri = Environment.GetEnvironmentVariable("KEY_VAULT_URI");
+            if (!string.IsNullOrWhiteSpace(keyVaultUri))
+            {
+                builder.AddAzureKeyVault(new Uri(keyVaultUri), new DefaultAzureCredential());
+            }
+
+            var configuration = builder.Build();
 
             var settings = new ApiSettings();
             configuration.GetSection("ApiSettings").Bind(settings);

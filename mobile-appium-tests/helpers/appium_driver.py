@@ -26,6 +26,9 @@ def create_driver():
     # The Appium server URL. This is the default.
     appium_server_url = 'http://localhost:4723'
 
-    # Create and return the WebDriver instance.
-    return webdriver.Remote(appium_server_url, options=options)
+    # Create and return the WebDriver instance with simple error handling.
+    try:
+        return webdriver.Remote(appium_server_url, options=options)
+    except Exception as exc:
+        raise RuntimeError(f"Failed to start Appium session: {exc}") from exc
 
