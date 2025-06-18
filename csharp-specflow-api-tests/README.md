@@ -54,6 +54,8 @@ In any professional project, it is crucial to **never** hardcode sensitive infor
 
 To solve this for local development, this project uses the **.NET Secret Manager**. This tool stores sensitive data in a separate JSON file on your local machine, completely outside of the project directory, ensuring it is never accidentally committed to Git. The application's configuration will automatically read from these User Secrets and merge them with the non-sensitive settings from `appsettings.json`.
 
+For client or production scenarios, consider integrating with a secure vault such as **Azure Key Vault** or **HashiCorp Vault**. These services provide centralized secret management and auditing capabilities that go beyond the basic User Secrets mechanism.
+
 * **Initialize the secret store** for this project (a one-time command):
     ```bash
     dotnet user-secrets init
