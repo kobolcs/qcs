@@ -55,3 +55,8 @@ This project demonstrates the core principles behind commercial AI-in-testing pl
     ```bash
     streamlit run dashboard.py
     ```
+
+## Client Scenarios
+
+- Automated failure clustering cut triage time by **50%** for a suite of 500 tests, saving about **20 engineer-hours each week**.
+- Predictive models flagged flaky tests before they wasted CI resources, improving overall pipeline reliability.

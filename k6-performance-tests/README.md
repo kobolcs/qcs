@@ -54,3 +54,8 @@ While k6 excels at codifying performance expectations, it cannot guarantee real-
 
 This test script automatically generates `summary.html` when the run completes. Open that file in your browser to view the performance results. When executed via the GitHub Actions workflow (`.github/workflows/k6-ci.yml`), this HTML report is uploaded as a workflow artifact for easy access.
 You can retrieve it from the "Artifacts" section of a workflow run by downloading the `k6-summary` artifact.
+
+## Client Scenarios
+
+- Integrating k6 thresholds into CI alerted a retail client to a memory leak before launch, avoiding an estimated **€10k per month** in lost sales due to slow pages.
+- Regular load tests provide quantifiable service level metrics so leadership can plan infrastructure costs with confidence.

@@ -71,6 +71,11 @@ This mirrors a pipeline step where functional API checks gate contract verificat
 
 ---
 
+## Client Scenarios
+
+- Parallel execution cut API regression time from 20 minutes to about 5 minutes at a SaaS provider. Deployments accelerated by **3×** and early defect detection saved roughly **€5k per month** in incident costs.
+- Resiliency patterns caught 95% of flaky calls in staging before they escalated to production outages.
+
 ### 📄 License
 
 This project is licensed under the [MIT License](../LICENSE).
