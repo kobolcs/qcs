@@ -58,7 +58,7 @@ Refer to `make help` for a full list of supported targets.
 
 ## Docker Usage
 
-A `Dockerfile` and `docker-compose.yml` are provided to run the entire suite in a consistent environment. Build the image and execute all tests with:
+Docker is **the recommended way** to run this repository. A `Dockerfile` and `docker-compose.yml` are provided so you can execute the entire suite in a consistent environment without installing every tool locally. Build the image and execute all tests with:
 
 ```bash
 docker-compose up --build

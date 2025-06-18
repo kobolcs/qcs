@@ -37,6 +37,9 @@ The BDD-style of testing shown here is a popular, cross-language pattern.
 * **.NET 9.0 SDK** (Download from [microsoft.com/net/download](https://dotnet.microsoft.com/download))
 * **(Optional) Docker** for running tests in a containerized environment.
 
+The .NET SDK is only required if you run the tests outside of Docker. The
+repository's Docker image includes everything preinstalled.
+
 ### Method 1: Running on Your Local Machine
 
 Follow these steps to configure and run the tests directly on your machine.
