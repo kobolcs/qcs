@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    - cron: "0 */12 * * *"
+    - cron: "0 */12 * * *" # Runs every 12 hours
   workflow_dispatch:
 
 jobs:
@@ -14,8 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: csharp-specflow-api-tests
-
+        working-directory: csharp-specflow-api-tests # All commands within this job will run in this directory by default
     permissions:
       security-events: write
       actions: read
@@ -51,28 +50,31 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
 
-      - name: Run tests with JSON logger
-        run: dotnet test --configuration Release --no-build --logger "json;LogFileName=TestExecution.json"
+      - name: Run tests with TRX logger
+        # Using the TRX logger which is a standard format understood by VSTest and SpecFlow+ LivingDoc CLI.
+        run: dotnet test --configuration Release --no-build --logger:"trx;LogFileName=TestResults.trx"
 
       - name: Install SpecFlow+ LivingDoc CLI
         run: dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
 
       - name: Generate LivingDoc HTML
-        run: livingdoc test-assembly bin/Release/net8.0/SpecFlowApiTests.dll -t TestExecution.json
+        # Uses the generated TRX file as input for test execution results.
+        run: livingdoc test-assembly bin/Release/net8.0/SpecFlowApiTests.dll -t TestResults.trx
 
       - name: Upload LivingDoc artifact
         uses: actions/upload-artifact@v4
         with:
           name: living-doc
-          path: csharp-specflow-api-tests/LivingDoc.html # Corrected path to the generated file
+          # The path to the generated LivingDoc HTML file, relative to the working directory.
+          path: csharp-specflow-api-tests/LivingDoc.html
 
   deploy_living_doc:
-    needs: build_and_test
+    needs: build_and_test # This job depends on the successful completion of the 'build_and_test' job
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pages: write
-      id-token: write
+      contents: write # To write to the gh-pages branch
+      pages: write    # To deploy to GitHub Pages
+      id-token: write # Required for OIDC authentication with GitHub Pages
 
     steps:
       - name: Setup Pages
@@ -84,11 +86,13 @@ jobs:
           name: living-doc
 
       - name: Prepare artifact for GitHub Pages
+        # GitHub Pages typically serves 'index.html' as the default page.
         run: mv LivingDoc.html index.html
 
       - name: Upload artifact for GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
+          # Uploads the current directory (which now contains index.html) as the artifact for GitHub Pages.
           path: '.'
 
       - name: Deploy to GitHub Pages
