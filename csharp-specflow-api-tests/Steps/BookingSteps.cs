@@ -81,7 +81,7 @@ namespace SpecFlowApiTests.Steps
             bookingData.Bookingdates.Checkout.Should().Be(originalDetails.Bookingdates.Checkout);
         }
 
-        [When(@"I update the booking with new checkin \"(.*)\", checkout \"(.*)\", and price (\d+)")]
+        [When("I update the booking with new checkin \"(.*)\", checkout \"(.*)\", and price (\\d+)")]
         public void WhenIUpdateTheBooking(string newCheckin, string newCheckout, int newPrice)
         {
             var bookingId = (int)_context["bookingId"];
@@ -107,7 +107,7 @@ namespace SpecFlowApiTests.Steps
             bookingData.Bookingdates.Checkout.Should().Be(_updatedDetails.Bookingdates.Checkout);
         }
 
-        [When(@"I attempt to update a booking with a non-existent ID (\d+) using new checkin \"(.*)\" and checkout \"(.*)\" and price (\d+)")]
+        [When("I attempt to update a booking with a non-existent ID (\\d+) using new checkin \"(.*)\" and checkout \"(.*)\" and price (\\d+)")]
         public void WhenIAttemptToUpdateANonExistentBooking(int bookingId, string checkin, string checkout, int price)
         {
             var payload = TestDataBuilder.CreateCustomBookingDetails(
@@ -130,13 +130,13 @@ namespace SpecFlowApiTests.Steps
             ((int)_caughtException!.StatusCode).Should().Be(statusCode);
         }
 
-        [Given(@"a booking is created with default valid details and its ID stored")]
+        [Given("a booking is created with default valid details and its ID stored")]
         public void GivenABookingIsCreatedWithDefaultValidDetailsAndItsIdStored()
         {
             WhenICreateANewBookingWithDefaultValidDetails();
         }
 
-        [When(@"I attempt to partially update the booking with firstname \"(.*)\" and lastname \"(.*)\"")]
+        [When("I attempt to partially update the booking with firstname \"(.*)\" and lastname \"(.*)\"")]
         public void WhenIAttemptToPartiallyUpdateTheBooking(string firstname, string lastname)
         {
             var bookingId = (int)_context["bookingId"];
@@ -150,7 +150,7 @@ namespace SpecFlowApiTests.Steps
             _updatedDetails.Should().NotBeNull();
         }
 
-        [Then(@"the booking retrieved by its stored ID should have firstname \"(.*)\" and lastname \"(.*)\"")]
+        [Then("the booking retrieved by its stored ID should have firstname \"(.*)\" and lastname \"(.*)\"")]
         public void ThenTheBookingRetrievedByItsStoredIdShouldHaveFirstnameAndLastname(string firstname, string lastname)
         {
             var bookingId = (int)_context["bookingId"];
