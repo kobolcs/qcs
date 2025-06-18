@@ -7,11 +7,6 @@ process.on('unhandledRejection', err => {
   process.exit(1)
 })
 
-process.on('unhandledRejection', err => {
-  console.error('Unhandled promise rejection:', err);
-  process.exit(1);
-});
-
 // Our "database"
 const users = {
   1: { id: 1, name: 'Leanne Graham', username: 'Bret', email: 'Sincere@april.biz' }
