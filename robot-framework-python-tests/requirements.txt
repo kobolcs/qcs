@@ -9,5 +9,5 @@ robotframework-pabot==4.2.0
 robotframework-dashboard==0.9.4
 pytest==8.2.2
 pytest-html==4.1.1
-requests==2.32.3
+requests==2.32.4
 pytest-cov==6.1.1
