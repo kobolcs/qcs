@@ -7,6 +7,11 @@ process.on('unhandledRejection', err => {
   process.exit(1)
 })
 
+process.on('unhandledRejection', err => {
+  console.error('Unhandled promise rejection:', err);
+  process.exit(1);
+});
+
 // Our "database"
 const users = {
   1: { id: 1, name: 'Leanne Graham', username: 'Bret', email: 'Sincere@april.biz' }
@@ -25,6 +30,7 @@ app.get('/users/:id', (req, res) => {
 // Start the server and export it for the test
 const server = app
   .listen(port, () => {
+
     console.log(`Provider API listening on http://localhost:${port}`)
   })
   .on('error', err => {
