@@ -25,6 +25,8 @@ The BDD-style of testing shown here is a popular, cross-language pattern.
 - Fits seamlessly into existing .NET pipelines for rapid feedback.
 - See [Architectural Principles](../ARCHITECTURAL_PRINCIPLES.md) for cross-project design guidelines.
 
+**Note on Generated Code:** SpecFlow creates `*.feature.cs` files (e.g., `BookingLifecycle.feature.cs`). These are regenerated on build and should not be edited by hand.
+
 
 ---
 

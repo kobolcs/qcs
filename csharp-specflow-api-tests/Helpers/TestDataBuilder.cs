@@ -1,4 +1,4 @@
-using Bogus; // Bogus is a library for generating fake data.
+using Bogus; // NOTE: Bogus generates realistic random values for independence
 using SpecFlowApiTests.Models;
 using System;
 
@@ -8,8 +8,7 @@ namespace SpecFlowApiTests.Helpers
     {
         public static BookingDetails CreateDefaultBookingDetails()
         {
-            // Use Bogus to generate realistic fake data for a booking.
-            // This will create different data every time the test runs.
+            // NOTE: Generate unique booking data so tests do not share state
             var bookingFaker = new Faker<BookingDetails>()
                 .RuleFor(b => b.Firstname, f => f.Name.FirstName())
                 .RuleFor(b => b.Lastname, f => f.Name.LastName())
