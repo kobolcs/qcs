@@ -25,6 +25,6 @@ type WeatherResponse struct {
 
 // Report is the structure for the final JSON report
 type Report struct {
-    Timestamp string       `json:"timestamp"`
-    Results   []TestResult `json:"results"`
+	Timestamp string       `json:"timestamp"`
+	Results   []TestResult `json:"results"`
 }

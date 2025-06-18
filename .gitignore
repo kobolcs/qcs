@@ -146,3 +146,4 @@ bin/
 # Generic log and output directories
 logs/
 output/
+go-api-tests/weather_test_report.json
