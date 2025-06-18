@@ -15,14 +15,30 @@ This hybrid approach is particularly effective in environments with mixed-skill 
 * **Separation of Concerns**: This model creates a clean separation between the "what" (the test case steps in `.robot` files) and the "how" (the implementation details in `.py` files).
 * **Extensible Ecosystem**: Leverages Robot Framework's rich ecosystem of existing libraries (SeleniumLibrary, Browser, etc.) while allowing for limitless custom extension through Python.
 
-### Similar Tooling in Other Languages
 ### Strategic Advantage
 - Keeps test steps business readable while Python handles the heavy lifting.
 - Modular keywords and helpers grow with your application over time.
 - For design patterns see [Architectural Principles](../ARCHITECTURAL_PRINCIPLES.md).
 
+### Similar Tooling in Other Languages
 
-This pattern of a BDD/keyword-driven layer on top of a general-purpose programming language is common.
+### Testing Paradigms: Keyword-Driven vs. Layered BDD
+
+Pure keyword-driven tests often appear "robotic" due to their rigid, step-by-step nature, characteristic of tools like RPA. In contrast, a common and flexible approach is to combine a BDD or keyword-driven syntax with the full power of a general-purpose programming language.
+
+### Pure Keyword-Driven Tools (like Robot Framework)
+These tools enable test creation primarily by assembling predefined keywords or visual components, minimizing or removing direct code writing for test logic:
+
+* HP UFT (Unified Functional Testing) / Micro Focus UFT One
+* TestComplete (SmartBear) visual
+* Leapwork 
+* WorkFusion (RPA)
+* UiPath (RPA)
+* Automation Anywhere (RPA)
+* Testsigma (scriptless modes)
+
+### Behavior-driven development/keyword-driven
+The pure keyword driven tests are Robotic are mainly RPA or visual tools, but the pattern of a BDD/keyword-driven layer on top of a general-purpose programming language is common:
 * **C#**: `SpecFlow` or `BDDfy` on top of C#.
 * **Java**: `Cucumber` or `JBehave` on top of Java.
 * **JavaScript/TypeScript**: `Cucumber.js` or `Gauge` on top of Node.js.
