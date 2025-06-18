@@ -35,7 +35,7 @@ jobs:
         run: npm ci
 
       - name: Lint Code
-        run: npm run lint -fix
+        run: npm run lint --fix
 
       - name: Run Playwright tests
         run: npx playwright test --reporter=json,html
