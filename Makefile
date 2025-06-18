@@ -1,4 +1,4 @@
-# Makefile for the QA Consultant Suite
+		# Makefile for the QA Consultant Suite
 # This Makefile provides a unified interface to install, test, and lint all projects.
 # It uses virtual environments for Python projects and includes targets for
 # code coverage, security scanning, and comprehensive reporting.
@@ -7,7 +7,7 @@ SHELL := /bin/bash
 
 # Define paths for Python virtual environments
 ROBOT_VENV := robot-framework-python-tests/venv
-AI_VENV := ai-test-observability/venv
+AI_VENV := prototypes/ai-test-observability/venv
 MOBILE_VENV := mobile-appium-tests/venv
 
 # ==============================================================================
@@ -111,9 +111,9 @@ install-robot:
 .PHONY: install-playwright
 install-playwright:
 	@echo "\n--- Installing Playwright dependencies (npm) ---"
-	cd playwright_ts_api_test && npm ci
+	cd playwright-ts-api-test && npm ci
 	@echo "--- Installing Playwright browsers (this might take a moment) ---"
-	cd playwright_ts_api_test && npx playwright install
+	cd playwright-ts-api-test && npx playwright install
 
 .PHONY: install-go
 install-go:
@@ -151,12 +151,12 @@ install-ai:
 	fi
 	@echo "Installing/updating dependencies into $(AI_VENV)..."
 	$(AI_VENV)/bin/pip install --upgrade pip
-	$(AI_VENV)/bin/pip install -r ai-test-observability/requirements.txt
+	$(AI_VENV)/bin/pip install -r prototypes/ai-test-observability/requirements.txt
 
 .PHONY: install-blockchain
 install-blockchain:
 	@echo "\n--- Installing Blockchain project dependencies (npm) ---"
-	cd blockchain-smart-contracts-tests && npm install
+	cd prototypes/blockchain-smart-contracts-tests && npm install
 
 .PHONY: install-mobile
 install-mobile:
@@ -281,12 +281,12 @@ test-robot-coverage: install-robot
 .PHONY: test-playwright
 test-playwright:
 	@echo "\n--- Running Playwright TS API Tests ---"
-	cd playwright_ts_api_test && npx playwright test
+	cd playwright-ts-api-test && npx playwright test
 
 .PHONY: test-playwright-security
 test-playwright-security: install-playwright
 	@echo "\n--- Running Playwright Dependency Security Scan (npm audit) ---"
-	cd playwright_ts_api_test && npm audit
+	cd playwright-ts-api-test && npm audit
 
 # --- Go ---
 .PHONY: test-go
@@ -300,6 +300,12 @@ test-pact:
 	@echo "\n--- Running Pact Contract Tests ---"
 	cd pact-contract-testing/consumer-frontend && npm test
 	cd pact-contract-testing/provider-api && npm test
+
+# Run Go API tests and then Pact tests as an integration scenario
+.PHONY: test-go-pact
+test-go-pact:
+	@echo "\n--- Running Go API Tests followed by Pact Contract Tests ---"
+	node scripts/run_go_to_pact.js
 
 .PHONY: test-pact-security
 test-pact-security: install-pact
@@ -324,23 +330,23 @@ test-elixir:
 .PHONY: test-ai-unit
 test-ai-unit: install-ai
 	@echo "\n--- Running AI Script Unit Tests (pytest) ---"
-	$(AI_VENV)/bin/pytest ai-test-observability/tests/
+	$(AI_VENV)/bin/pytest prototypes/ai-test-observability/tests/
 
 .PHONY: test-ai-coverage
 test-ai-coverage: install-ai
 	@echo "\n--- Running AI Script Code Coverage ---"
-	$(AI_VENV)/bin/pytest --cov=ai-test-observability ai-test-observability/tests/
+	$(AI_VENV)/bin/pytest --cov=prototypes/ai-test-observability prototypes/ai-test-observability/tests/
 
 # --- Blockchain / Node.js ---
 .PHONY: test-blockchain
 test-blockchain:
 	@echo "\n--- Running Blockchain Contract Tests ---"
-	cd blockchain-smart-contracts-tests && npx hardhat test
+	cd prototypes/blockchain-smart-contracts-tests && npx hardhat test
 
 .PHONY: test-blockchain-security
 test-blockchain-security: install-blockchain
 	@echo "\n--- Running Blockchain Dependency Security Scan (npm audit) ---"
-	cd blockchain-smart-contracts-tests && npm audit
+	cd prototypes/blockchain-smart-contracts-tests && npm audit
 
 # --- Mobile / Python ---
 .PHONY: test-mobile
@@ -366,7 +372,7 @@ lint-robot: install-robot
 .PHONY: lint-playwright
 lint-playwright:
 	@echo "\n--- Running Playwright Linter (eslint) ---"
-	cd playwright_ts_api_test && npm run lint
+	cd playwright-ts-api-test && npm run lint
 
 .PHONY: lint-go
 lint-go:
@@ -392,9 +398,9 @@ clean:
 	rm -rf robot-framework-python-tests/reports
 	# Node.js
 	find . -type d -name "node_modules" -exec rm -r {} +
-	rm -rf playwright_ts_api_test/test-results playwright_ts_api_test/playwright-report
+	rm -rf playwright-ts-api-test/test-results playwright-ts-api-test/playwright-report
 	rm -rf pact-contract-testing/consumer-frontend/pacts
-	rm -rf blockchain-smart-contracts-tests/artifacts blockchain-smart-contracts-tests/cache
-	# Go
+	rm -rf prototypes/blockchain-smart-contracts-tests/artifacts prototypes/blockchain-smart-contracts-tests/cache
+		# Go
 	cd go-api-tests && go clean
 	@echo "Cleanup complete."

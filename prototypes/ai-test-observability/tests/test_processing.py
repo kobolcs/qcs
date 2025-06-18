@@ -3,7 +3,7 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 
-import demo_pandas as pd
+import pandas as pd
 import pytest
 from unittest.mock import patch, mock_open
 from ai_test_observability.process_results import process_k6_results, load_data

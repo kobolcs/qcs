@@ -12,3 +12,7 @@ Please provide as much context as possible, including:
 * Steps to reproduce (if it's a bug).
 
 Your feedback is valuable in helping to keep this showcase modern and accurate.
+
+## Share New Techniques
+
+If you have an approach that challenges the patterns used here or leverages emerging tools, open an issue or pull request. Thoughtful discussions around alternative solutions are welcome and help advance the craft for everyone.

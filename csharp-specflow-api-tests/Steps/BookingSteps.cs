@@ -4,7 +4,7 @@ using FluentAssertions;
 using SpecFlowApiTests.Clients;
 using SpecFlowApiTests.Models;
 using SpecFlowApiTests.Helpers;
-using SpecFlowApiTests.Exceptions; // Import the custom exception
+using SpecFlowApiTests.Exceptions; // NOTE: custom exception exposes status code for API failures
 
 namespace SpecFlowApiTests.Steps
 {
@@ -35,7 +35,6 @@ namespace SpecFlowApiTests.Steps
         public void WhenICreateANewBookingWithValidDetails()
         {
             _originalDetails = TestDataBuilder.CreateDefaultBookingDetails();
-            // The CreateBooking method now returns the BookingResponse object directly.
             var bookingResponseData = _bookingClient.CreateBooking(_originalDetails);
 
             bookingResponseData.Should().NotBeNull("CreateBooking response data is null.");
@@ -53,7 +52,6 @@ namespace SpecFlowApiTests.Steps
 
             originalDetails.Should().NotBeNull("Original booking details should be in the context.");
 
-            // The GetBooking method now returns the BookingDetails object directly.
             var bookingData = _bookingClient.GetBooking(bookingId);
 
             bookingData.Should().NotBeNull();
@@ -65,7 +63,6 @@ namespace SpecFlowApiTests.Steps
         public void WhenIDeleteTheBooking()
         {
             var bookingId = (int)_context["bookingId"];
-            // DeleteBooking now returns void on success or throws an exception on failure.
             _bookingClient.DeleteBooking(bookingId);
         }
 
@@ -74,14 +71,9 @@ namespace SpecFlowApiTests.Steps
         {
             var bookingId = (int)_context["bookingId"];
 
-            // This is the new pattern for testing expected errors.
-            // We define the action that should fail.
+            // NOTE: capturing the failing action lets us assert on ApiException details
             Action act = () => _bookingClient.GetBooking(bookingId);
-
-            // Assert that the action throws our custom exception.
             var exception = act.Should().Throw<ApiException>("getting a deleted booking should fail").And;
-
-            // We can now assert on the details of the exception itself.
             exception.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }

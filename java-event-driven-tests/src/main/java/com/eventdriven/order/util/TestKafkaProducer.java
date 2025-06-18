@@ -28,7 +28,7 @@ public class TestKafkaProducer implements AutoCloseable {
         String orderJson = objectMapper.writeValueAsString(order);
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, order.getId(), orderJson);
         try {
-            producer.send(record).get(); // Wait for acknowledgement
+            producer.send(record).get(); // NOTE: wait for ack so tests know the send succeeded
             System.out.println("Sent order to Kafka: " + order.getId());
         } catch (Exception e) {
             System.err.println("Failed to send order to Kafka: " + order.getId());
@@ -47,7 +47,7 @@ public class TestKafkaProducer implements AutoCloseable {
     public void sendRawJson(String key, String jsonValue) {
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, jsonValue);
         try {
-            producer.send(record).get(); // Wait for acknowledgement
+            producer.send(record).get(); // NOTE: wait for ack so tests know the send succeeded
             System.out.println("Sent raw JSON to Kafka with key: " + key);
         } catch (Exception e) {
             System.err.println("Failed to send raw JSON to Kafka with key: " + key);

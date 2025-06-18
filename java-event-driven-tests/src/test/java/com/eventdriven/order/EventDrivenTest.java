@@ -153,7 +153,7 @@ public class EventDrivenTest {
                     .untilAsserted(() -> {
                         Optional<String> receivedMessage = dlqConsumer.pollForMessageWithKey();
                         assertTrue(receivedMessage.isPresent(), "Message for order " + orderId + " should be in DLQ");
-                        // Optionally, assert the content of the received message
+                        // Optionally assert the message content for extra safety
                         assertTrue(receivedMessage.get().contains(orderId));
                     });
 
@@ -161,7 +161,7 @@ public class EventDrivenTest {
         }
     }
 
-    // CLASS to consume from Kafka topics within tests
+    // NOTE: lightweight Kafka consumer used only for test assertions
     private static class TestKafkaConsumer implements AutoCloseable {
         private final KafkaConsumer<String, String> consumer;
         private final String messageKeyToFind;
