@@ -49,6 +49,8 @@ The pure keyword driven tests are Robotic are mainly RPA or visual tools, but th
 * Python (version 3.10 or later)
 * (Optional) Docker
 
+Install Python only if you plan to run the suite locally without Docker.
+
 #### 1. Local Machine (Windows/macOS/Linux)
 
 1.  **Navigate to the project directory**:

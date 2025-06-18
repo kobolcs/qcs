@@ -30,6 +30,9 @@ The concepts demonstrated here can be found in other ecosystems:
 * [Install Elixir](https://elixir-lang.org/install.html) (version 1.15+ with OTP 26+)
 * (Optional) Docker
 
+You only need the Elixir toolchain when running the tests outside of Docker. The
+provided Docker image already includes it.
+
 #### 1. Local Machine (Windows/macOS/Linux)
 
 1.  **Navigate to the project directory**:

@@ -33,6 +33,8 @@ Appium is the de-facto open-source standard for mobile test automation. It is th
 4.  **Android Studio** installed with the Android SDK and an Android Virtual Device (Emulator) created.
 5.  **Set `ANDROID_HOME` environment variable** pointing to your Android SDK location.
 
+These tools are only required locally if you aren't running the Docker image.
+
 **Steps:**
 
 1.  **Install Appium Server**:

@@ -27,6 +27,9 @@ Parallel tests bring speed, but they can mask data races or shared state issues 
 
 ### 🚀 How to Run Locally
 
+Requires **Go 1.20+** if you run the tests outside of Docker. The root Docker
+image already contains Go preinstalled.
+
 1.  **Set your API key** from a service like [OpenWeatherMap](https://openweathermap.org/api):
     ```bash
     export OWM_API_KEY="your-api-key-here"

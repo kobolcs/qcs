@@ -30,6 +30,9 @@ This project demonstrates the core principles behind commercial AI-in-testing pl
 * Python (version 3.10 or later)
 * Git
 
+Python only needs to be available locally if you don't use the Docker image from
+the repository root.
+
 #### 1. Local Machine (Windows/macOS/Linux)
 
 1.  **Set up a Python virtual environment**:

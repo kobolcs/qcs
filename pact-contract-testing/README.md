@@ -28,6 +28,9 @@ Pact is essential for teams building systems with a microservices architecture. 
 * Node.js (version 18.x or later)
 * (Optional) Docker with Docker Compose
 
+Node.js only needs to be installed if you plan to run the tests outside of the
+Docker setup.
+
 #### 1. Local Machine (Windows/macOS/Linux)
 
 1.  **Navigate to the consumer directory and run its tests**. This step generates the pact file (the contract).

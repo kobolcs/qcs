@@ -31,6 +31,8 @@ Playwright is a leader in a competitive space for modern web testing.
 * Node.js (version 18.x or later)
 * (Optional) Docker
 
+Install Node.js only if you plan to run the suite outside of the Docker image.
+
 #### 1. Local Machine (Windows/macOS/Linux)
 
 1.  **Navigate to the project directory**:

@@ -29,6 +29,8 @@ This stack (`Solidity`, `Hardhat`, `Ethers.js`) is the industry standard for dev
 * Node.js (version 18.x or later)
 * (Optional) Docker
 
+Node.js is only necessary locally when you are not relying on Docker.
+
 #### 1. Local Machine (Windows/macOS/Linux)
 
 1.  **Navigate to the project directory**:

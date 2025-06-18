@@ -32,6 +32,9 @@ The **Testcontainers** pattern of managing ephemeral test dependencies in code i
 * Apache Maven
 * Docker Desktop (for Testcontainers)
 
+The JDK and Maven are only necessary when not using the Docker image provided in
+this repository.
+
 #### 1. Local Machine (Windows/macOS/Linux)
 
 This project uses Testcontainers, which will automatically start and manage the required Docker containers (Kafka, Redis) for you.

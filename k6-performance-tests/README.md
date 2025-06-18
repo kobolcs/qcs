@@ -32,6 +32,9 @@ While k6 excels at codifying performance expectations, it cannot guarantee real-
 * [Install k6](https://k6.io/docs/getting-started/installation/)
 * (Optional) Docker
 
+k6 only needs to be installed locally if you choose not to use Docker. The
+container image contains the k6 runtime.
+
 #### 1. Local Machine (Windows/macOS/Linux)
 
 1.  **Navigate to the project directory**:
