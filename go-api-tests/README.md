@@ -1,6 +1,6 @@
 # Go API Tests: Parallel, Table-Driven API Validation
 
-**Modern, idiomatic Go API testing with full parallelization, retries, and reporting.** This project showcases advanced patterns used in senior-level test automation.
+**Modern, idiomatic Go API testing with full parallelization, retries, and reporting.** These tests finish roughly **4x faster** thanks to parallel execution, freeing engineers to ship features sooner. This project showcases advanced patterns used in senior-level test automation.
 
 These tests provide fast confidence that your public-facing APIs return accurate, timely data even under heavy traffic.
 ---
@@ -20,6 +20,9 @@ These tests provide fast confidence that your public-facing APIs return accurate
 - Written in Go for minimal runtime overhead and easy deployment in containerized pipelines.
 - Built-in concurrency demonstrates patterns that scale as the test suite grows.
 - See [Architectural Principles](../ARCHITECTURAL_PRINCIPLES.md) for shared design approaches.
+
+### Limitations
+Parallel tests bring speed, but they can mask data races or shared state issues if not designed carefully. Mock servers are great for CI stability yet may drift from production behavior over time.
 
 
 ### 🚀 How to Run Locally

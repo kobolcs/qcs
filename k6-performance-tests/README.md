@@ -18,6 +18,9 @@ k6 is a powerful tool for performance testing that is designed with developers a
 - Thresholds turn performance metrics into go/no-go business decisions.
 - Additional context in [Architectural Principles](../ARCHITECTURAL_PRINCIPLES.md).
 
+### Limitations
+While k6 excels at codifying performance expectations, it cannot guarantee real-user conditions. Metrics should be tied to SLOs to avoid chasing unrealistic numbers, and very high loads may require distributed runners.
+
 ### Similar Tooling in Other Languages
 * **JMeter**: A long-standing, powerful, UI-driven tool from Apache. It is written in Java and is excellent for complex protocols but can be more difficult to integrate into a "performance-as-code" workflow.
 * **Gatling**: A strong, code-based competitor written in Scala. It is known for its high performance and detailed HTML reports.
