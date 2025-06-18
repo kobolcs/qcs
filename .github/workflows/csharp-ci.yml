@@ -52,7 +52,7 @@ jobs:
         uses: github/codeql-action/analyze@v3
 
       - name: Run tests with JSON logger
-        run: dotnet test --configuration Release --no-build --logger "json;LogFileName=TestExecution.json"
+        run: dotnet test --configuration Release --no-build --logger:"json;LogFileName=TestExecution.json"
 
       - name: Install SpecFlow+ LivingDoc CLI
         run: dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
