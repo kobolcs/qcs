@@ -42,7 +42,7 @@ jobs:
         mix run -e "Mix.Task.run(\"run\", [\"lib/test_report_generator.ex\", \"\" ])" || true
 
     - name: Upload logs and reports
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: elixir-reports
         path: |
