@@ -2,6 +2,7 @@
 
 **Modern, idiomatic Go API testing with full parallelization, retries, and reporting.** This project showcases advanced patterns used in senior-level test automation.
 
+These tests provide fast confidence that your public-facing APIs return accurate, timely data even under heavy traffic.
 ---
 
 ### 🗝️ Key Features & Concepts Demonstrated
@@ -15,6 +16,11 @@
 - **Docker & CI Integration**: Runs seamlessly both locally and within a containerized CI environment.
 
 ---
+### Strategic Advantage
+- Written in Go for minimal runtime overhead and easy deployment in containerized pipelines.
+- Built-in concurrency demonstrates patterns that scale as the test suite grows.
+- See [Architectural Principles](../ARCHITECTURAL_PRINCIPLES.md) for shared design approaches.
+
 
 ### 🚀 How to Run Locally
 

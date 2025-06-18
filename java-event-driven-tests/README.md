@@ -2,6 +2,7 @@
 
 Integration suite for event-driven systems with full containerized infrastructure. Demonstrates advanced Java testing practices.
 
+By recreating realistic infrastructure on demand, this project proves your services integrate correctly before they hit staging.
 ---
 
 ### When to Use Java and Testcontainers
@@ -13,6 +14,11 @@ This stack is ideal for testing complex, enterprise-grade backend systems, espec
 * **Enterprise Ecosystem**: Java, combined with frameworks like Spring Boot, remains a dominant force in large-scale enterprise applications, making this a critical skill for testing in that domain.
 
 ### Similar Tooling in Other Languages
+### Strategic Advantage
+- Validates message flows end-to-end without a costly staging environment.
+- Containers spin up on demand, keeping pipelines both fast and isolated.
+- See [Architectural Principles](../ARCHITECTURAL_PRINCIPLES.md) for the patterns reused across the suite.
+
 
 The **Testcontainers** pattern of managing ephemeral test dependencies in code is a cross-language standard.
 * **.NET (C#)**: `Testcontainers for .NET` provides the exact same functionality.

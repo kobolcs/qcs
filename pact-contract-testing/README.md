@@ -2,6 +2,7 @@
 
 This project demonstrates consumer-driven contract testing using **Pact**. It ensures that a service consumer (the `consumer-frontend`) and a service provider (the `provider-api`) can evolve independently without breaking their integration contract.
 
+By validating expectations early, teams avoid expensive integration bugs and accelerate independent deployments.
 ---
 
 ### When to Use Pact for Contract Testing
@@ -13,6 +14,11 @@ Pact is essential for teams building systems with a microservices architecture. 
 * **Preventing Integration Failures**: By catching breaking changes in the CI/CD pipeline before they are deployed, Pact prevents common and costly integration failures in production environments.
 
 ### Similar Tooling in Other Languages
+### Strategic Advantage
+- Allows services to deploy independently with confidence.
+- Mocked interactions make regression checks lightning fast.
+- Shared best practices listed in [Architectural Principles](../ARCHITECTURAL_PRINCIPLES.md).
+
 
 * **Pact is Polyglot**: The primary strength of Pact is that it is the industry standard and has client libraries for nearly every major language (Java, .NET, JS/TS, Go, Python, Ruby, etc.). The "similar pairing" is simply `Pact + [Your Language]`.
 * **Schema-Based Testing**: The main alternative to consumer-driven contract testing is schema-based testing (e.g., using Avro, Protobuf, or OpenAPI/Swagger schemas). This is a different philosophy where a central schema defines the contract, rather than the consumer's expectations.

@@ -2,6 +2,7 @@
 
 This project demonstrates how to build a powerful, maintainable, and modern test automation framework by combining the declarative, keyword-driven syntax of Robot Framework with the flexibility and power of Python. It specifically showcases how to overcome common criticisms of Robot Framework by moving complex logic into Python helper libraries and API clients.
 
+The goal is to let business analysts define tests in plain language while engineers maintain reusable Python utilities behind the scenes.
 ---
 
 ### When to Use Robot Framework with Python
@@ -15,6 +16,11 @@ This hybrid approach is particularly effective in environments with mixed-skill 
 * **Extensible Ecosystem**: Leverages Robot Framework's rich ecosystem of existing libraries (SeleniumLibrary, Browser, etc.) while allowing for limitless custom extension through Python.
 
 ### Similar Tooling in Other Languages
+### Strategic Advantage
+- Keeps test steps business readable while Python handles the heavy lifting.
+- Modular keywords and helpers grow with your application over time.
+- For design patterns see [Architectural Principles](../ARCHITECTURAL_PRINCIPLES.md).
+
 
 This pattern of a BDD/keyword-driven layer on top of a general-purpose programming language is common.
 * **C#**: `SpecFlow` or `BDDfy` on top of C#.

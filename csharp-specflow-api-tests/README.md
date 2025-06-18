@@ -2,6 +2,7 @@
 
 This project demonstrates a professional, BDD-style API testing framework using C#, SpecFlow, and NUnit. It is designed to showcase best practices in .NET test automation, including dependency injection, structured logging, and CI/CD integration using the modern .NET 9 framework.
 
+This suite turns business requirements into executable specifications, ensuring everyone shares the same understanding of the API contract.
 ---
 
 ### When to Use C# and SpecFlow
@@ -18,6 +19,11 @@ The BDD-style of testing shown here is a popular, cross-language pattern.
 * **Java**: `Java + Cucumber` is the direct equivalent. `Serenity BDD` is a higher-level framework that often uses Cucumber for its core functionality.
 * **Python**: `Python + Behave` or `Python + pytest-bdd`.
 * **JavaScript/TypeScript**: `JavaScript/TypeScript + Cucumber.js`.
+### Strategic Advantage
+- Bridges communication gaps between developers and business teams.
+- Fits seamlessly into existing .NET pipelines for rapid feedback.
+- See [Architectural Principles](../ARCHITECTURAL_PRINCIPLES.md) for cross-project design guidelines.
+
 
 ---
 

@@ -2,6 +2,7 @@
 
 Modern Elixir suite for validating API data with property-based and pattern-matching tests, async-safe.
 
+Use this project when reliability is paramount and outages directly impact revenue.
 ---
 ### When to Use Elixir for Testing
 
@@ -13,6 +14,11 @@ Elixir, running on the Erlang VM (BEAM), is exceptionally suited for testing sys
 * **Pattern Matching**: Elixir's pattern matching allows for incredibly concise and expressive assertions, especially when validating complex JSON response structures.
 
 ### Similar Tooling in Other Languages
+### Strategic Advantage
+- Ideal for back-end systems where concurrency and fault tolerance are non-negotiable.
+- Property-based tests uncover edge cases that traditional scripts miss.
+- Architectural guidance is summarized in [ARCHITECTURAL_PRINCIPLES.md](../ARCHITECTURAL_PRINCIPLES.md).
+
 
 The concepts demonstrated here can be found in other ecosystems:
 * **Property-Based Testing**: `Hypothesis` in Python, `FsCheck` in C#/.NET, and `QuickCheck` in Haskell pioneered this testing style.
