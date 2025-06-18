@@ -28,15 +28,15 @@ Welcome to the at-a-glance view of this cross-language test automation consultan
 
 ### C# SpecFlow - Living Documentation
 *This report translates BDD scenarios into a human-readable document, perfect for sharing with business stakeholders.*
-![C# LivingDoc Screenshot](csharp-specflow-api-tests/livingdoc_screenshot.png)
+[View the latest LivingDoc report](https://kobolcs.github.io/qcs/reports/csharp/)
 
 ### Playwright HTML Report
 *A rich, interactive report showing test steps, traces, and screenshots for easy debugging of UI tests.*
-![Playwright Report Screenshot](playwright-ts-api-test/playwright_report_screenshot.png)
+[View the latest Playwright report](https://kobolcs.github.io/qcs/reports/playwright/)
 
 ### Robot Framework / Allure Report
 *The Allure report provides powerful analytics and a detailed, categorized view of test results from multiple test runs (API, GUI, Visual).*
-![Allure Report Screenshot](robot-framework-python-tests/allure_report_screenshot.png)
+[View the latest Allure report](https://kobolcs.github.io/qcs/reports/allure/)
 
 
 ---
