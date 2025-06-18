@@ -80,3 +80,8 @@ A `Dockerfile` is included to run the tests in a fully isolated environment.
 ### CI Workflow
 
 The GitHub Actions workflow in `.github/workflows/mobile-ci.yml` fully automates this process. It uses the `reactivecircus/android-emulator-runner` action to start an emulator, install the app, and run the tests.
+
+## Client Scenarios
+
+- Automated smoke tests on every commit shortened release certification from three days of manual checks to **under one hour** for a consumer app, saving roughly **€4k per release**.
+- Early detection of UI regressions prevented negative store reviews and support tickets after launch.

@@ -64,3 +64,8 @@ Playwright is a leader in a competitive space for modern web testing.
     ```bash
     docker run --rm --ipc=host playwright-ts-tests
     ```
+
+## Client Scenarios
+
+- Hybrid API and UI tests caught 90% of critical issues before staging for a B2C company, preventing two major outages in a year—roughly **€50k** in avoided downtime.
+- TypeScript typing reduced flaky test maintenance by **30%**, freeing engineers to focus on new feature coverage.

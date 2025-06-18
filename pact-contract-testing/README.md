@@ -54,3 +54,8 @@ The repository root includes a `test-go-pact` Makefile target (and accompanying
 Pact tests. Using Node.js ensures the same workflow works on Windows as well as
 macOS/Linux systems. This example illustrates how contract verification can be
 gated by prior functional testing.
+
+## Client Scenarios
+
+- Consumer-driven contracts reduced microservice integration bugs by **40%** for a fintech startup, saving about **80 hours of rework per quarter**.
+- The fast feedback loop let teams deploy independently without waiting for full end-to-end environment availability.

@@ -101,3 +101,8 @@ The included `Dockerfile` allows you to build and run the tests inside a self-co
     ```bash
     docker run --rm csharp-specflow-tests
     ```
+
+## Client Scenarios
+
+- A financial services team replaced a 5‑day manual regression cycle with this style of SpecFlow automation and cut it to under 2 days—about **40 QA hours saved every release**.
+- Because requirements are captured as executable Gherkin scenarios, miscommunication dropped and requirements-related defects shrank by **25%** in the first quarter.

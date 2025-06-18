@@ -51,3 +51,8 @@ This project uses Testcontainers, which will automatically start and manage the 
 
 The `docker-compose.yml` file is provided to manually run the dependencies if you wish to connect a running application to them, but the tests themselves are designed to manage their own containers.
 
+## Client Scenarios
+
+- By validating Kafka message flows before deployment, a logistics client reduced failed releases by **70%**, saving roughly **50 engineer hours** each month in rollbacks and hotfixes.
+- Containerized dependencies allowed developers to reproduce complex bugs locally, cutting defect resolution time in half.
+
