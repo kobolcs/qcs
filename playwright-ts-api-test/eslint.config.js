@@ -1,6 +1,6 @@
 export default [
   {
-    files: ['**/*.ts'],
+    files: ['**/*.{ts,js}'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module'

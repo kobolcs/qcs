@@ -1,15 +1,15 @@
 package main
 
 import (
-        "context"
-        "encoding/json"
-        "fmt"
-        "net/http"
-        "net/http/httptest"
-        "os"
-        "sync"
-        "testing"
-        "time"
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"sync"
+	"testing"
+	"time"
 )
 
 // loadConfig loads the configuration from config.json
@@ -34,26 +34,26 @@ func TestWeatherAPI(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
 	}
-        useMock := os.Getenv("USE_LIVE_OWM") != "1"
+	useMock := os.Getenv("USE_LIVE_OWM") != "1"
 
-        apiKey := getAPIKey(cfg.APIKeyEnv)
-        if apiKey == "" && !useMock {
-                t.Skipf("API key environment variable '%s' not set, skipping integration test", cfg.APIKeyEnv)
-        }
+	apiKey := getAPIKey(cfg.APIKeyEnv)
+	if apiKey == "" && !useMock {
+		t.Skipf("API key environment variable '%s' not set, skipping integration test", cfg.APIKeyEnv)
+	}
 
-        var server *httptest.Server
-        if useMock {
-                server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-                        city := r.URL.Query().Get("q")
-                        w.Header().Set("Content-Type", "application/json")
-                        fmt.Fprintf(w, `{"name":"%s","main":{"temp":15}}`, city)
-                }))
-                os.Setenv("OWM_BASE_URL", server.URL)
-                t.Cleanup(func() {
-                        server.Close()
-                        os.Unsetenv("OWM_BASE_URL")
-                })
-        }
+	var server *httptest.Server
+	if useMock {
+		server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			city := r.URL.Query().Get("q")
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Fprintf(w, `{"name":"%s","main":{"temp":15}}`, city)
+		}))
+		os.Setenv("OWM_BASE_URL", server.URL)
+		t.Cleanup(func() {
+			server.Close()
+			os.Unsetenv("OWM_BASE_URL")
+		})
+	}
 
 	// Use a slice protected by a mutex for concurrent test appends.
 	var results []TestResult
