@@ -1,6 +1,14 @@
 # The QA Consultant Suite
 
-The QA Consultant Suite demonstrates how disciplined automation directly impacts the bottom line. By applying scalable patterns across multiple technologies, these examples typically reduce manual regression effort by **50% or more** and surface defects before they become costly production issues. Parallel execution further shortens feedback loops—what once took hours now finishes in minutes. For a high-level snapshot of every project and its CI status, see the **[Portfolio Dashboard](dashboard.md)**.
+The QA Consultant Suite demonstrates how disciplined automation drives measurable value for stakeholders. By applying scalable patterns across multiple technologies, the examples reduce manual regression effort by **50% or more** and surface defects before they become costly production issues. Parallel execution shortens feedback loops from hours to minutes, delivering faster releases with less risk. For a high-level snapshot of every project and its CI status, see the **[Portfolio Dashboard](dashboard.md)**.
+
+## How I Can Help Your Business
+
+The suite demonstrates a consulting approach that ties technical excellence directly to business outcomes. Whether you need faster feedback cycles, reduced cloud spend, or improved customer satisfaction, these patterns scale to meet those goals.
+
+- **Unified Quality Strategy**: By leveraging the right tool for each layer of the testing pyramid, clients typically reduce regression costs by 50% or more.
+- **Actionable Metrics**: Every project generates machine-readable reports so leadership can see return on investment after each run.
+- **Proactive Risk Reduction**: Integrating security, performance, and contract checks prevents issues that can result in thousands of euros in lost revenue or engineer rework.
 
 ## Guiding Principles
 
@@ -81,14 +89,6 @@ Refer to [CODE_STYLE.md](CODE_STYLE.md) for the coding conventions used across
 this repository. Following consistent style guides helps maintain readability
 as projects span multiple languages.
 For an overview of design patterns used across all projects, see [ARCHITECTURAL_PRINCIPLES.md](ARCHITECTURAL_PRINCIPLES.md).
-
-## How I Can Help Your Business
-
-The suite demonstrates a consulting approach that ties technical excellence directly to business outcomes. Whether you need faster feedback cycles, reduced cloud spend, or improved customer satisfaction, these patterns scale to meet those goals.
-
-- **Unified Quality Strategy**: By leveraging the right tool for each layer of the testing pyramid, clients typically reduce regression costs by 50% or more.
-- **Actionable Metrics**: Every project generates machine-readable reports so leadership can see return on investment after each run.
-- **Proactive Risk Reduction**: Integrating security, performance, and contract checks prevents issues that can result in thousands of euros in lost revenue or engineer rework.
 
 ## Engage with Me
 
