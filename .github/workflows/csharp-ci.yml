@@ -3,6 +3,8 @@ name: C# Build, Test, and Deploy LivingDoc
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
   schedule:
     - cron: "0 */12 * * *"
   workflow_dispatch:
@@ -33,6 +35,13 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
       - name: Install dependencies
         run: dotnet restore
 
@@ -43,13 +52,13 @@ jobs:
         uses: github/codeql-action/analyze@v3
 
       - name: Run tests with JSON logger
-        run: dotnet test --no-build --logger "json;LogFileName=TestExecution.json"
+        run: dotnet test --configuration Release --no-build --logger "json;LogFileName=TestExecution.json"
 
       - name: Install SpecFlow+ LivingDoc CLI
         run: dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
 
       - name: Generate LivingDoc HTML
-        run: livingdoc test-assembly bin/Debug/net8.0/SpecFlowApiTests.dll -t TestExecution.json
+        run: livingdoc test-assembly bin/Release/net8.0/SpecFlowApiTests.dll -t TestExecution.json
 
       - name: Upload LivingDoc artifact
         uses: actions/upload-artifact@v4
