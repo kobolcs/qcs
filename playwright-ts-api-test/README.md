@@ -2,6 +2,7 @@
 
 Modern API and UI test suite for a React/PokeDemo app. Showcases Playwright's advanced patterns and consultant-level automation practices.
 
+These tests protect revenue-generating web flows by catching API and UI issues before real customers see them.
 ---
 
 ### When to Use Playwright with TypeScript
@@ -13,11 +14,15 @@ Playwright is a top-tier framework for testing modern web applications, particul
 * **Developer-Friendly**: The API is intuitive, and features like auto-waits, tracing, and code generation significantly improve the developer experience.
 * **TypeScript Support**: Provides strong type-checking for building more robust and maintainable test suites.
 
-### Similar Tooling in Other Languages
+### Strategic Advantage
+- Unified API and UI testing ensures user journeys remain reliable during rapid releases.
+- Built with TypeScript for maintainability and first-class editor support.
+- Shared patterns documented in [Architectural Principles](../ARCHITECTURAL_PRINCIPLES.md).
 
+### Similar Tooling in Other Languages
 Playwright is a leader in a competitive space for modern web testing.
 * **Cypress**: The most direct competitor, also using JavaScript/TypeScript, with a strong focus on developer experience.
-* **Selenium**: The classic standard, available for all major languages (Java, Python, C#, etc.). It is highly flexible but often requires more setup for modern SPAs.
+* **Selenium**: The classic standard, available for all major languages (Java, Python, C#, etc.). It is highly flexible but often requires more setup for modern single page apps.
 * **Puppeteer**: The Google-maintained library that Playwright was forked from, primarily focused on programmatic control of Chrome/Chromium.
 
 ### Installation and Running

@@ -1,6 +1,6 @@
 # The QA Consultant Suite
 
-Welcome to my QA Consultant Suite, a curated collection of projects demonstrating a multi-disciplinary approach to modern software quality and test automation. Each project is a self-contained showcase of specific technologies, methodologies, and best practices, designed to tackle real-world quality challenges.
+The QA Consultant Suite demonstrates how disciplined automation directly impacts the bottom line. By applying scalable patterns across multiple technologies, these examples typically reduce manual regression effort by **50% or more** and surface defects before they become costly production issues. For a high-level snapshot of every project and its CI status, see the **[Portfolio Dashboard](dashboard.md)**.
 
 ## Guiding Principles
 
@@ -17,18 +17,18 @@ This repository is built on a few core principles:
 
 The following table serves as a guide to the skills and technologies demonstrated in each project within this suite.
 
-| Project Directory                                           | Primary Technologies                    | Key Concepts Demonstrated                                                                                                                   |
-| :---------------------------------------------------------- | :-------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------ |
-| `csharp-specflow-api-tests`                | C#, SpecFlow, .NET, NUnit               | BDD, API Testing, Dependency Injection, Structured Logging, CI/CD with Living Documentation.                                    |
-| `java-event-driven-tests`                      | Java, Spring Boot, Testcontainers       | Testing for Microservices, Event-Driven Architecture (Kafka), Asynchronous Flows, Containerized Test Dependencies (Redis).        |
-| `robot-framework-python-tests`               | Robot Framework, Python, Pytest         | Hybrid Test Frameworks, Mitigating Common RF Anti-Patterns, Custom Keyword Libraries, Page Object Model (POM), Parallel Execution (Pabot). |
-| `playwright-ts-api-test`                | TypeScript, Playwright, Node.js | Modern Web Testing, API Interception (`page.route`), Hybrid UI/API tests, Visual Regression, Accessibility (a11y) Testing.  |
-| `go-api-tests`                                   | Go (Golang)                             | High-Performance API Testing, Concurrency/Parallelism, Custom Reporting, Resiliency Patterns (Retries, Timeouts), Configuration Management. |
-| `pact-contract-testing`                    | Node.js, Pact, Jest, Express       | Consumer-Driven Contract Testing, CI/CD integration for contract verification, API mocking, and provider state management.          |
-| `k6-performance-tests`                          | k6, JavaScript                          | Performance Testing as Code, Service Level Objectives (SLOs), Thresholds, CI/CD-integrated performance checks.                   |
-| `elixir-api-tests`                                 | Elixir, ExUnit, StreamData | Property-Based Testing, Concurrency with the BEAM VM, Pattern Matching for concise assertions, Custom HTML Reporting. |
-| `prototypes/ai-test-observability`                             | Python, Scikit-learn, Streamlit         | *(Experimental)* Applying AI/ML to QA, Flaky Test Detection (Classification), Failure Clustering (NLP), Building Data-Driven Dashboards.       |
-| `prototypes/blockchain-smart-contracts-tests` | Solidity, Hardhat, Ethers.js            | *(Experimental)* Web3 Quality, Smart Contract Auditing, Security Vulnerability Testing (Reentrancy & Overflow), Gas Usage Assertions with Hardhat Gas Reporter, Testing on a Local Blockchain. |
+| Project Directory | Primary Technologies | Key Concepts Demonstrated | Live Report |
+| :--- | :--- | :--- | :--- |
+| `csharp-specflow-api-tests` | C#, SpecFlow, .NET, NUnit | BDD, API Testing, Dependency Injection, Structured Logging, CI/CD with Living Documentation. | `LivingDoc.html` artifact |
+| `java-event-driven-tests` | Java, Spring Boot, Testcontainers | Testing for Microservices, Event-Driven Architecture (Kafka), Asynchronous Flows, Containerized Test Dependencies (Redis). | Surefire HTML reports |
+| `robot-framework-python-tests` | Robot Framework, Python, Pytest | Hybrid frameworks, mitigated RF anti-patterns, custom keywords, POM, parallel execution. | `allure-report` artifact |
+| `playwright-ts-api-test` | TypeScript, Playwright, Node.js | Modern web testing, API interception (`page.route`), hybrid UI/API tests, visual regression, a11y checks. | `playwright-report` HTML |
+| `go-api-tests` | Go (Golang) | High-performance API testing, concurrency, custom reporting, resiliency patterns. | `weather_test_report.json` |
+| `pact-contract-testing` | Node.js, Pact, Jest, Express | Consumer-driven contract testing with CI/CD, API mocking, provider state management. | Pact logs & HTML |
+| `k6-performance-tests` | k6, JavaScript | Performance testing as code with SLOs and thresholds, CI/CD integration. | `summary.html` |
+| `elixir-api-tests` | Elixir, ExUnit, StreamData | Property-based testing, concurrency on the BEAM VM, custom HTML reporting. | `elixir-reports` HTML |
+| `prototypes/ai-test-observability` | Python, Scikit-learn, Streamlit | *(Experimental)* AI/ML for flaky test detection and failure clustering. | Streamlit dashboard |
+| `prototypes/blockchain-smart-contracts-tests` | Solidity, Hardhat, Ethers.js | *(Experimental)* Web3 quality, smart contract auditing, gas usage assertions. | Gas/coverage reports |
 
 ## Makefile Usage
 
@@ -80,3 +80,4 @@ checks can gate contract verification in a real CI/CD pipeline.
 Refer to [CODE_STYLE.md](CODE_STYLE.md) for the coding conventions used across
 this repository. Following consistent style guides helps maintain readability
 as projects span multiple languages.
+For an overview of design patterns used across all projects, see [ARCHITECTURAL_PRINCIPLES.md](ARCHITECTURAL_PRINCIPLES.md).

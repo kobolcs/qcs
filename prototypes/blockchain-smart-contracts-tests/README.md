@@ -4,6 +4,7 @@
 
 This project demonstrates advanced testing techniques for Web3 applications, focusing on the unique quality assurance challenges presented by blockchain and smart contracts.
 
+It serves as R&D for clients exploring decentralized finance and other emerging Web3 opportunities.
 ---
 ### When to Use This Technology
 
@@ -13,12 +14,16 @@ This stack (`Solidity`, `Hardhat`, `Ethers.js`) is the industry standard for dev
 * **Security is Paramount**: The immutable nature of blockchains means that security vulnerabilities cannot be easily "patched." Testing for common exploits like reentrancy, integer overflows, and access control issues is non-negotiable.
 * **Gas Efficiency Matters**: Every operation on a blockchain costs "gas" (a transaction fee). Inefficient code is expensive code. Gas reporting during tests is a crucial performance optimization step.
 
-### Similar Tooling in Other Languages
+### Strategic Advantage
+- Demonstrates how to safeguard high-value smart contracts before they are deployed.
+- Includes gas usage assertions to help control ongoing transaction costs.
+- Architectural foundations are outlined in [../../ARCHITECTURAL_PRINCIPLES.md](../../ARCHITECTURAL_PRINCIPLES.md).
 
+### Similar Tooling in Other Languages
 * **Framework Alternatives**: `Truffle` (JavaScript-based) and `Foundry` (Solidity-based) are popular alternatives to `Hardhat` for smart contract development and testing.
 * **Other Blockchains**: Different blockchains have their own native languages and testing frameworks (e.g., `Rust + Anchor` for Solana). However, the principles of unit testing, security analysis, and resource management are universal.
 
-### (Proposed) Installation and Running
+### Installation and Running
 
 **Prerequisites:**
 * Node.js (version 18.x or later)

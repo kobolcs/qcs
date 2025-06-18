@@ -2,6 +2,7 @@
 
 This project demonstrates how to perform automated performance testing as part of a CI/CD pipeline using [k6](https://k6.io/), a modern, developer-friendly load testing tool from Grafana Labs.
 
+Regular load testing protects your brand by ensuring critical endpoints remain responsive as traffic grows.
 ---
 
 ### When to Use k6
@@ -12,8 +13,12 @@ k6 is a powerful tool for performance testing that is designed with developers a
 * **Developer-Friendly Scripting**: Tests are written in JavaScript, a language familiar to many developers, making it easy to write, version-control, and maintain test scripts.
 * **Goal-Oriented Testing**: It is excellent for load, stress, and spike testing where you need to simulate realistic traffic patterns using its `stages` configuration.
 
-### Similar Tooling in Other Languages
+### Strategic Advantage
+- Lightweight scripting keeps performance checks close to the developers.
+- Thresholds turn performance metrics into go/no-go business decisions.
+- Additional context in [Architectural Principles](../ARCHITECTURAL_PRINCIPLES.md).
 
+### Similar Tooling in Other Languages
 * **JMeter**: A long-standing, powerful, UI-driven tool from Apache. It is written in Java and is excellent for complex protocols but can be more difficult to integrate into a "performance-as-code" workflow.
 * **Gatling**: A strong, code-based competitor written in Scala. It is known for its high performance and detailed HTML reports.
 * **Locust**: A popular performance testing tool where test scenarios are written in Python.
