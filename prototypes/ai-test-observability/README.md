@@ -14,18 +14,17 @@ This is an advanced strategy for mature QA organizations facing specific challen
 * **Flaky Test Problems**: Flakiness undermines trust in automation. An AI model can objectively identify and flag statistically flaky tests, separating them from legitimate regressions.
 * **Root Cause Analysis**: When a single backend issue causes dozens of tests to fail, NLP clustering can group them by their error messages, immediately pointing teams to the likely root cause.
 
-### Similar Tooling in Other Languages
 ### Strategic Advantage
 - Provides a glimpse into data-driven QA strategies our clients are beginning to request.
 - Helps prioritize failures and focus engineering effort on what matters most.
 - Architecture concepts shared in [../../ARCHITECTURAL_PRINCIPLES.md](../../ARCHITECTURAL_PRINCIPLES.md).
 
-
+### Similar Tooling in Other Languages
 This project demonstrates the core principles behind commercial AI-in-testing platforms.
 * **Commercial Tools**: `Launchable`, `Testim`, `Applitools` (for visual AI), and others use similar ML techniques for test selection, root cause analysis, and self-healing.
 * **Open Source**: `Healenium` is an open-source tool specifically focused on self-healing locators, a subset of this broader vision.
 
-### (Proposed) Installation and Running
+### Installation and Running
 
 **Prerequisites:**
 * Python (version 3.10 or later)
