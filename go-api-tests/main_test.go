@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-// loadConfig loads the configuration from config.json
+// loadConfig reads config.json so all tests share one source of settings
 func loadConfig() (*Config, error) {
 	f, err := os.Open("config.json")
 	if err != nil {
@@ -24,7 +24,7 @@ func loadConfig() (*Config, error) {
 	return &cfg, err
 }
 
-// getAPIKey safely retrieves the API key from the environment variable.
+// getAPIKey pulls the secret from the environment to keep it out of source control
 func getAPIKey(envName string) string {
 	return os.Getenv(envName)
 }
@@ -55,9 +55,9 @@ func TestWeatherAPI(t *testing.T) {
 		})
 	}
 
-	// Use a slice protected by a mutex for concurrent test appends.
-	var results []TestResult
-	var mu sync.Mutex
+        // NOTE: results slice is guarded with a mutex for safe concurrent writes
+        var results []TestResult
+        var mu sync.Mutex
 
 	t.Run("Cities", func(t *testing.T) {
 		for _, city := range cfg.Cities {
@@ -97,8 +97,8 @@ func TestWeatherAPI(t *testing.T) {
 		}
 	})
 
-	// Use t.Cleanup to ensure the report is written after all parallel tests complete.
-	t.Cleanup(func() {
+        // NOTE: t.Cleanup runs after the parallel subtests finish so we write the report once
+        t.Cleanup(func() {
 		if err := WriteReport(results, "weather_test_report.json"); err != nil {
 			t.Logf("Could not write report: %v", err)
 		}

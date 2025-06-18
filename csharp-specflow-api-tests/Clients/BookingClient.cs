@@ -59,7 +59,6 @@ namespace SpecFlowApiTests.Clients
             return response.Data;
         }
 
-        // NEW METHOD: Fully updates a booking
         public BookingDetails UpdateBooking(int bookingId, BookingDetails payload)
         {
             var request = new RestRequest($"/booking/{bookingId}", Method.Put);
@@ -77,7 +76,6 @@ namespace SpecFlowApiTests.Clients
             return response.Data;
         }
 
-        // NEW METHOD: Partially updates a booking
         public BookingDetails PartialUpdateBooking(int bookingId, PartialBookingUpdateRequest payload)
         {
             var request = new RestRequest($"/booking/{bookingId}", Method.Patch);

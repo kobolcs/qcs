@@ -14,7 +14,7 @@ type trackingBody struct{ closed bool }
 func (tb *trackingBody) Read(p []byte) (int, error) { return 0, io.EOF }
 func (tb *trackingBody) Close() error               { tb.closed = true; return nil }
 
-// transport that always returns 500 responses
+// retryTransport simulates a server that always fails to trigger retries
 type retryTransport struct{ bodies []*trackingBody }
 
 func (t *retryTransport) RoundTrip(req *http.Request) (*http.Response, error) {
@@ -46,7 +46,7 @@ func TestGetWithRetryClosesBodies(t *testing.T) {
 	rt.bodies[len(rt.bodies)-1].Close()
 }
 
-// transport that returns both a response and an error
+// errorClient returns a response and an error to check both paths
 type errorClient struct {
 	bodies []*trackingBody
 }

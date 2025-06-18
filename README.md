@@ -1,6 +1,6 @@
 # The QA Consultant Suite
 
-The QA Consultant Suite demonstrates how disciplined automation directly impacts the bottom line. By applying scalable patterns across multiple technologies, these examples typically reduce manual regression effort by **50% or more** and surface defects before they become costly production issues. For a high-level snapshot of every project and its CI status, see the **[Portfolio Dashboard](dashboard.md)**.
+The QA Consultant Suite demonstrates how disciplined automation directly impacts the bottom line. By applying scalable patterns across multiple technologies, these examples typically reduce manual regression effort by **50% or more** and surface defects before they become costly production issues. Parallel execution further shortens feedback loops—what once took hours now finishes in minutes. For a high-level snapshot of every project and its CI status, see the **[Portfolio Dashboard](dashboard.md)**.
 
 ## Guiding Principles
 
@@ -81,3 +81,7 @@ Refer to [CODE_STYLE.md](CODE_STYLE.md) for the coding conventions used across
 this repository. Following consistent style guides helps maintain readability
 as projects span multiple languages.
 For an overview of design patterns used across all projects, see [ARCHITECTURAL_PRINCIPLES.md](ARCHITECTURAL_PRINCIPLES.md).
+
+## Engage with Me
+
+If you're looking to accelerate your own testing strategy or have questions about the approaches shown here, let's talk. Connect with me on [LinkedIn](https://www.linkedin.com/) or visit [my website](https://example.com) to start the conversation.
