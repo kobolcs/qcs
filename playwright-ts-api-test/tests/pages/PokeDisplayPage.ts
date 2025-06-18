@@ -1,4 +1,4 @@
-import { type Page, type Locator } from '@playwright/test';
+import type { Page, Locator } from '@playwright/test'
 
 /**
  * Represents the Page Object for the Pokémon display page.
@@ -7,22 +7,22 @@ import { type Page, type Locator } from '@playwright/test';
  */
 export class PokeDisplayPage {
     // Page instance from Playwright
-    readonly page: Page;
+    readonly page: Page
 
     // Locators for the elements on the page
-    readonly nameLocator: Locator;
-    readonly spriteLocator: Locator;
-    readonly searchButton: Locator;
-    readonly searchInput: Locator;
+    readonly nameLocator: Locator
+    readonly spriteLocator: Locator
+    readonly searchButton: Locator
+    readonly searchInput: Locator
 
     constructor(page: Page) {
-        this.page = page;
+        this.page = page
 
         // Initialize locators using Playwright's recommended practices
-        this.nameLocator = page.locator('#name');
-        this.spriteLocator = page.locator('#sprite');
-        this.searchInput = page.locator('#search');
-        this.searchButton = page.locator('#search-btn');
+        this.nameLocator = page.locator('#name')
+        this.spriteLocator = page.locator('#sprite')
+        this.searchInput = page.locator('#search')
+        this.searchButton = page.locator('#search-btn')
     }
 
     /**
@@ -35,9 +35,9 @@ export class PokeDisplayPage {
             route.fulfill({
                 status: 200,
                 contentType: 'application/json',
-                body: JSON.stringify(response),
-            });
-        });
+                body: JSON.stringify(response)
+            })
+        })
     }
 
     /**
@@ -45,7 +45,7 @@ export class PokeDisplayPage {
      * @param html - The HTML string to load.
      */
     async loadContent(html: string) {
-        await this.page.setContent(html);
+        await this.page.setContent(html)
     }
 
     /**
@@ -53,7 +53,7 @@ export class PokeDisplayPage {
      * @param name - The name of the Pokémon to search for.
      */
     async searchForPokemon(name: string) {
-        await this.searchInput.fill(name);
-        await this.searchButton.click();
+        await this.searchInput.fill(name)
+        await this.searchButton.click()
     }
 }
