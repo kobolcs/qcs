@@ -74,3 +74,9 @@ produce the `weather_test_report.json` artifact, automatically kicks off the
 consumer and provider Pact tests. A Node.js helper script is used so the flow
 works the same on Windows and Unix systems. This demonstrates how functional
 checks can gate contract verification in a real CI/CD pipeline.
+
+## Code Style
+
+Refer to [CODE_STYLE.md](CODE_STYLE.md) for the coding conventions used across
+this repository. Following consistent style guides helps maintain readability
+as projects span multiple languages.
