@@ -12,9 +12,13 @@ defmodule RestCountriesAsiaValidatorTest do
       {:ok, endpoint: @default_endpoint}
     else
       bypass = Bypass.open()
-      json = Jason.encode!([
-        %{"name" => %{"common" => "Mock"}, "region" => "Asia", "area" => 1000}
-      ])
+
+      mock_countries =
+        for i <- 1..35 do
+          %{"name" => %{"common" => "Mock#{i}"}, "region" => "Asia", "area" => 1000 + i}
+        end
+
+      json = Jason.encode!(mock_countries)
 
       Bypass.stub(bypass, "GET", "/v3.1/region/asia", fn conn ->
         Conn.put_resp_header(conn, "content-type", "application/json")
