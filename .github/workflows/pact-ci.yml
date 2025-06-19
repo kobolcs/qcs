@@ -18,11 +18,13 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Cache npm
+      - name: Cache npm (consumer)
         uses: actions/cache@v4
         with:
           path: ~/.npm
-          key: ${{ hashFiles('**/package-lock.json') }}
+          key: npm-consumer-${{ runner.os }}-node18-${{ hashFiles('pact-contract-testing/consumer-frontend/package-lock.json') }}
+          restore-keys: |
+            npm-consumer-${{ runner.os }}-node18-
 
       - name: Install consumer dependencies
         working-directory: pact-contract-testing/consumer-frontend
@@ -32,6 +34,14 @@ jobs:
         working-directory: pact-contract-testing/consumer-frontend
         run: npm test
 
+      - name: Cache npm (provider)
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-provider-${{ runner.os }}-node18-${{ hashFiles('pact-contract-testing/provider-api/package-lock.json') }}
+          restore-keys: |
+            npm-provider-${{ runner.os }}-node18-
+
       - name: Install provider dependencies
         working-directory: pact-contract-testing/provider-api
         run: npm ci
@@ -39,3 +49,12 @@ jobs:
       - name: Run provider verification
         working-directory: pact-contract-testing/provider-api
         run: npm test
+
+      - name: Upload Pact files as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pact-files
+          path: |
+            pact-contract-testing/consumer-frontend/pacts/
+            pact-contract-testing/provider-api/pacts/
