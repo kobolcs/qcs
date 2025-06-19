@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { readFileSync } from 'fs'
+import { readFileSync, existsSync } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { PokeDisplayPage } from './pages/PokeDisplayPage'
@@ -31,9 +31,18 @@ test.describe('PokeDisplayPage', () => {
         await expect(pokePage.nameLocator).toHaveText('Pikachu', { timeout: 10000 })
         await expect(pokePage.spriteLocator).toHaveAttribute('src', 'https://img.pokemondb.net/sprites/pikachu.png')
 
-        // Optionally verify UI visually with a screenshot snapshot.
-        // Disabled in CI since a baseline image may not exist yet.
-        // await expect(page).toHaveScreenshot('pikachu-search.png')
+        // Optionally verify UI visually with a screenshot snapshot when
+        // a baseline image is present.
+        const baseline = path.join(
+            __dirname,
+            'api-ui.spec.ts-snapshots',
+            `pikachu-search-${process.platform}.png`
+        )
+        if (existsSync(baseline)) {
+            await expect(page).toHaveScreenshot('pikachu-search.png')
+        } else {
+            console.warn('Skipping screenshot comparison: baseline not found')
+        }
     })
 
     test('shows Not found on API 404', async ({ page }) => {
