@@ -52,7 +52,8 @@ jobs:
 
       - name: Run tests with TRX logger
         # Using the TRX logger which is a standard format understood by VSTest and SpecFlow+ LivingDoc CLI.
-        run: dotnet test --configuration Release --no-build --logger:"trx;LogFileName=TestResults.trx"
+        # Output the TRX file in the current working directory so the next step can locate it.
+        run: dotnet test --configuration Release --no-build --logger:"trx;LogFileName=TestResults.trx" --results-directory .
         env: # Add this section
           ApiSettings__Password: ${{ secrets.CSHARP_API_PWD }} # Pass the password as an environment variable
 
