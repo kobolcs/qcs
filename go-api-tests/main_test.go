@@ -55,9 +55,9 @@ func TestWeatherAPI(t *testing.T) {
 		})
 	}
 
-        // NOTE: results slice is guarded with a mutex for safe concurrent writes
-        var results []TestResult
-        var mu sync.Mutex
+	// NOTE: results slice is guarded with a mutex for safe concurrent writes
+	var results []TestResult
+	var mu sync.Mutex
 
 	t.Run("Cities", func(t *testing.T) {
 		for _, city := range cfg.Cities {
@@ -97,8 +97,8 @@ func TestWeatherAPI(t *testing.T) {
 		}
 	})
 
-        // NOTE: t.Cleanup runs after the parallel subtests finish so we write the report once
-        t.Cleanup(func() {
+	// NOTE: t.Cleanup runs after the parallel subtests finish so we write the report once
+	t.Cleanup(func() {
 		if err := WriteReport(results, "weather_test_report.json"); err != nil {
 			t.Logf("Could not write report: %v", err)
 		}
