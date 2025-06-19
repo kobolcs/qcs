@@ -1,7 +1,11 @@
 import { test, expect } from '@playwright/test'
 import { readFileSync } from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import AxeBuilder from '@axe-core/playwright' // Import AxeBuilder
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const html = readFileSync(path.join(__dirname, 'fixtures/poke-page.html'), 'utf-8')
 
