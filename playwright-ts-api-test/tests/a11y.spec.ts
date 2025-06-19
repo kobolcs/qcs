@@ -18,6 +18,9 @@ test.describe('Accessibility', () => {
             .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']) // Configure rules
             .analyze()
 
+        // Log any violations found for easier debugging
+        console.log('Accessibility violations:', accessibilityScanResults.violations)
+
         // Assert that there are no violations
         expect(accessibilityScanResults.violations).toEqual([])
     })
