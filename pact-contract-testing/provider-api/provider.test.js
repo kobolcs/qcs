@@ -1,6 +1,7 @@
 import { Verifier } from '@pact-foundation/pact';
 import { server } from './server.js';
 import path from 'path';
+import { jest } from '@jest/globals';
 
 // Set a longer timeout for Pact verification
 jest.setTimeout(30000);
