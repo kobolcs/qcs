@@ -5,10 +5,11 @@
     <title>Pokémon Display</title>
 </head>
 <body>
+    <label for="search">Pokémon Name</label>
     <input id="search" type="text" />
     <button id="search-btn">Search</button>
     <h2 id="name"></h2>
-    <img id="sprite" src="" alt="sprite" />
+    <img id="sprite" src="" alt="Pokémon sprite" />
     <script>
         document.getElementById("search-btn").onclick = async () => {
             const name = document.getElementById("search").value.toLowerCase();

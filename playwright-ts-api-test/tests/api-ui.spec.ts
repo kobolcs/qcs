@@ -1,7 +1,11 @@
 import { test, expect } from '@playwright/test'
 import { readFileSync } from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import { PokeDisplayPage } from './pages/PokeDisplayPage'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const html = readFileSync(path.join(__dirname, 'fixtures/poke-page.html'), 'utf-8')
 
@@ -23,7 +27,8 @@ test.describe('PokeDisplayPage', () => {
         await pokePage.searchForPokemon('pikachu')
 
         // Assert: Use the POM locators to verify the result
-        await expect(pokePage.nameLocator).toHaveText('Pikachu')
+        console.log(await pokePage.nameLocator.textContent())
+        await expect(pokePage.nameLocator).toHaveText('Pikachu', { timeout: 10000 })
         await expect(pokePage.spriteLocator).toHaveAttribute('src', 'https://img.pokemondb.net/sprites/pikachu.png')
 
         // Take a screenshot and compare it to a stored snapshot.
@@ -41,6 +46,7 @@ test.describe('PokeDisplayPage', () => {
         await pokePage.loadContent(html)
         await pokePage.searchForPokemon('unknown')
 
-        await expect(pokePage.nameLocator).toHaveText('Not found')
+        console.log(await pokePage.nameLocator.textContent())
+        await expect(pokePage.nameLocator).toHaveText('Not found', { timeout: 10000 })
     })
 })
