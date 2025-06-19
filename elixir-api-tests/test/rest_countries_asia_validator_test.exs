@@ -29,7 +29,7 @@ defmodule RestCountriesAsiaValidatorTest do
         Conn.resp(conn, 404, "[]")
       end)
 
-      on_exit(fn -> Bypass.close(bypass) end)
+      on_exit(fn -> Bypass.down(bypass) end)
 
       {:ok, endpoint: "http://localhost:#{bypass.port}/v3.1/region/asia"}
     end
