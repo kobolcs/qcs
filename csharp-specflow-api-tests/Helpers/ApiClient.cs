@@ -1,5 +1,6 @@
 using RestSharp;
 using System;
+using System.Net;
 
 namespace SpecFlowApiTests.Helpers
 {
@@ -15,6 +16,9 @@ namespace SpecFlowApiTests.Helpers
         {
             if (string.IsNullOrWhiteSpace(baseUrl))
                 throw new ArgumentException("Base URL cannot be null or whitespace.", nameof(baseUrl));
+
+            // Enforce TLS 1.2 for all outbound requests
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
             var options = new RestClientOptions(baseUrl)
             {

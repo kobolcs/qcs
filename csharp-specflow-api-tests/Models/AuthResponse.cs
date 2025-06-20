@@ -1,12 +1,11 @@
+using System.Text.Json.Serialization;
+
 namespace SpecFlowApiTests.Models
 {
     public class AuthResponse
     {
-        public string? Token { get; }
-
-        public AuthResponse(string? token)
-        {
-            Token = token;
-        }
+        // NOTE: setter needed for System.Text.Json deserialization
+        [JsonPropertyName("token")]
+        public string? Token { get; set; }
     }
 }

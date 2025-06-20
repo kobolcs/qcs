@@ -29,6 +29,12 @@ namespace SpecFlowApiTests.Hooks
                 .CreateLogger();
 
             Log.Information("====== Test Run Started ======");
+
+            // Capture any unhandled exceptions to avoid silent test failures
+            AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+            {
+                Log.Fatal(args.ExceptionObject as Exception, "Unhandled exception occurred");
+            };
         }
 
         [BeforeScenario(Order = 0)]
