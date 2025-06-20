@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    - cron: "0 3 * * *" # Runs every 12 hours
+    - cron: "0 3 * * *" # Runs every day at 03:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: csharp-specflow-api-tests # All commands within this job will run in this directory by default
+        working-directory: csharp-specflow-api-tests
     permissions:
       security-events: write
       actions: read
@@ -32,16 +32,24 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.x'
+          dotnet-version: '8.0.x'
 
       - name: Cache NuGet packages
         uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/global.json', '**/*.sln', '**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-            ${{ runner.os }}-
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Cache dotnet tools
+        uses: actions/cache@v4
+        with:
+          path: ~/.dotnet/tools
+          key: ${{ runner.os }}-dotnet-tools-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-dotnet-tools-
+
+      - name: Add .dotnet/tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: dotnet restore
@@ -53,38 +61,36 @@ jobs:
         uses: github/codeql-action/analyze@v3
 
       - name: Run tests with TRX logger
-        # Using the TRX logger which is a standard format understood by VSTest and SpecFlow+ LivingDoc CLI.
-        # Output the TRX file in the TestResults directory for the next step.
-        run: dotnet test --configuration Release --no-build --logger:"trx;LogFileName=TestResults.trx" --results-directory ./TestResults
-        env: # Add this section
-          ApiSettings__Password: ${{ secrets.CSHARP_API_PWD }} # Pass the password as an environment variable
-
-      - name: Run SpecFlow Tests and generate JSON report
-        run: dotnet test --configuration Release --no-build --logger:"json;LogFileName=TestExecution.json"
+        run: dotnet test --configuration Release --no-build --logger:"trx;LogFileName=TestResults.trx" --results-directory .
         env:
           ApiSettings__Password: ${{ secrets.CSHARP_API_PWD }}
 
       - name: Install SpecFlow+ LivingDoc CLI
-        run: dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI --version 3.9.57
+        run: dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI --version 4.0.336
 
       - name: Generate LivingDoc HTML
-        run: livingdoc test-assembly bin/Release/net8.0/SpecFlowApiTests.dll --test-execution-json TestExecution.json
+        run: livingdoc test-assembly bin/Release/net8.0/SpecFlowApiTests.dll -t TestResults.trx
 
       - name: Upload LivingDoc artifact
         uses: actions/upload-artifact@v4
         with:
           name: living-doc
-          # The path to the generated LivingDoc HTML file, relative to the working directory.
           path: csharp-specflow-api-tests/LivingDoc.html
 
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: csharp-specflow-api-tests/TestResults.trx
+
   deploy_living_doc:
-    needs: build_and_test # This job depends on the successful completion of the 'build_and_test' job
-    if: github.ref == 'refs/heads/main'
+    needs: build_and_test
     runs-on: ubuntu-latest
     permissions:
-      contents: write # To write to the gh-pages branch
-      pages: write    # To deploy to GitHub Pages
-      id-token: write # Required for OIDC authentication with GitHub Pages
+      contents: write
+      pages: write
+      id-token: write
 
     steps:
       - name: Setup Pages
@@ -96,19 +102,11 @@ jobs:
           name: living-doc
 
       - name: Prepare artifact for GitHub Pages
-        # GitHub Pages typically serves 'index.html' as the default page.
-        run: |
-          if [ -f LivingDoc.html ]; then
-            mv LivingDoc.html index.html
-          else
-            echo "LivingDoc.html not found!"
-            exit 1
-          fi
+        run: mv LivingDoc.html index.html
 
       - name: Upload artifact for GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          # Uploads the current directory (which now contains index.html) as the artifact for GitHub Pages.
           path: '.'
 
       - name: Deploy to GitHub Pages
