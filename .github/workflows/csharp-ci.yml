@@ -59,12 +59,16 @@ jobs:
         env: # Add this section
           ApiSettings__Password: ${{ secrets.CSHARP_API_PWD }} # Pass the password as an environment variable
 
+      - name: Run SpecFlow Tests and generate JSON report
+        run: dotnet test --configuration Release --no-build --logger:"json;LogFileName=TestExecution.json"
+        env:
+          ApiSettings__Password: ${{ secrets.CSHARP_API_PWD }}
+
       - name: Install SpecFlow+ LivingDoc CLI
         run: dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI --version 3.9.57
 
       - name: Generate LivingDoc HTML
-        # Uses the generated TRX file as input for test execution results.
-        run: livingdoc test-assembly bin/Release/net8.0/SpecFlowApiTests.dll -t TestResults/TestResults.trx
+        run: livingdoc test-assembly bin/Release/net8.0/SpecFlowApiTests.dll --test-execution-json TestExecution.json
 
       - name: Upload LivingDoc artifact
         uses: actions/upload-artifact@v4
