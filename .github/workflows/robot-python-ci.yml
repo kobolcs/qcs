@@ -5,11 +5,18 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  schedule:
+    - cron: '0 4 * * *'
+
+env:
+  TESTS_DIR: robot-framework-python-tests
+  ALLURE_RESULTS: allure-results
+  ALLURE_REPORT: allure-report
 
 jobs:
-  run-spacex-tests:
+  lint-and-quality:
+    name: Lint & Quality Gate
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -19,52 +26,155 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install dependencies
-        working-directory: ./robot-framework-python-tests
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -r requirements-dev.txt
-          pip install allure-pytest
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('${{ env.TESTS_DIR }}/requirements*.txt') }}
 
-      - name: Run Code Quality and Linting Gate
-        working-directory: ./robot-framework-python-tests
-        run: |
-          robocop .
-          black --check .
+      - name: Install dependencies (composite action)
+        uses: ./.github/actions/install-python-deps
+        with:
+          python-version: "3.10"
+          tests-dir: ${{ env.TESTS_DIR }}
+
+      - name: Run Robocop Lint
+        working-directory: ${{ env.TESTS_DIR }}
+        run: robocop .
+
+      - name: Check formatting with Black
+        working-directory: ${{ env.TESTS_DIR }}
+        run: black --check .
+
+  api-tests:
+    name: Test: API Suite
+    runs-on: ubuntu-latest
+    needs: lint-and-quality
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('${{ env.TESTS_DIR }}/requirements*.txt') }}
+
+      - name: Install dependencies (composite action)
+        uses: ./.github/actions/install-python-deps
+        with:
+          python-version: "3.10"
+          tests-dir: ${{ env.TESTS_DIR }}
 
       - name: Run API tests with Allure
-        working-directory: ./robot-framework-python-tests
-        run: >
-          pabot --processes 4
-          --listener allure_robotframework
-          --alluredir allure-results
-          --outputdir reports/api_pabot
-          tests/api_tests
+        working-directory: ${{ env.TESTS_DIR }}
+        run: |
+          pabot --processes 4 \
+            --listener allure_robotframework \
+            --alluredir ${{ env.ALLURE_RESULTS }} \
+            --outputdir reports/api_pabot \
+            tests/api_tests
 
-      - name: Run GUI and Visual tests with Allure
-        working-directory: ./robot-framework-python-tests
-        run: >
-          robot --listener allure_robotframework
-          --alluredir allure-results
-          --outputdir reports/gui_visual_results
-          tests/gui_tests tests/visual_tests
+      - name: Upload API test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-pabot-report
+          path: ${{ env.TESTS_DIR }}/reports/api_pabot
+
+  gui-visual-tests:
+    name: Test: GUI & Visual Suite
+    runs-on: ubuntu-latest
+    needs: lint-and-quality
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('${{ env.TESTS_DIR }}/requirements*.txt') }}
+
+      - name: Install dependencies (composite action)
+        uses: ./.github/actions/install-python-deps
+        with:
+          python-version: "3.10"
+          tests-dir: ${{ env.TESTS_DIR }}
+
+      - name: Run GUI & Visual tests with Allure
+        working-directory: ${{ env.TESTS_DIR }}
+        run: |
+          robot --listener allure_robotframework \
+            --alluredir ${{ env.ALLURE_RESULTS }} \
+            --outputdir reports/gui_visual_results \
+            tests/gui_tests tests/visual_tests
+
+      - name: Upload GUI & Visual test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gui-visual-report
+          path: ${{ env.TESTS_DIR }}/reports/gui_visual_results
+
+  unit-tests:
+    name: Test: Pytest Unit Suite
+    runs-on: ubuntu-latest
+    needs: lint-and-quality
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('${{ env.TESTS_DIR }}/requirements*.txt') }}
+
+      - name: Install dependencies (composite action)
+        uses: ./.github/actions/install-python-deps
+        with:
+          python-version: "3.10"
+          tests-dir: ${{ env.TESTS_DIR }}
 
       - name: Run Pytest unit tests with Allure
-        working-directory: ./robot-framework-python-tests
-        run: pytest --alluredir=allure-results pytest_unit
+        working-directory: ${{ env.TESTS_DIR }}
+        run: pytest --alluredir=${{ env.ALLURE_RESULTS }} pytest_unit
+
+      - name: Upload unit test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-unit-report
+          path: ${{ env.TESTS_DIR }}/pytest_unit
+
+  generate-allure-report:
+    name: Reporting: Allure Merge & Upload
+    runs-on: ubuntu-latest
+    needs: [api-tests, gui-visual-tests, unit-tests]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Download all test results
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ env.TESTS_DIR }}
 
       - name: Generate Allure Report
-        if: always()
         uses: allure-framework/allure-action@v3
         with:
-          report_path: allure-report
-          results_path: allure-results
-        working-directory: ./robot-framework-python-tests
+          report_path: ${{ env.TESTS_DIR }}/${{ env.ALLURE_REPORT }}
+          results_path: ${{ env.TESTS_DIR }}/${{ env.ALLURE_RESULTS }}
 
       - name: Upload Allure Report Artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report
-          path: robot-framework-python-tests/allure-report
+          name: ${{ env.ALLURE_REPORT }}
+          path: ${{ env.TESTS_DIR }}/${{ env.ALLURE_REPORT }}

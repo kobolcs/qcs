@@ -6,6 +6,5 @@ namespace SpecFlowApiTests.Models
     {
         // NOTE: setter needed for System.Text.Json deserialization
         [JsonPropertyName("token")]
-        public string? Token { get; set; }
-    }
+
 }
