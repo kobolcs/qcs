@@ -38,8 +38,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: ${{ runner.os }}-nuget-
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/global.json', '**/*.sln', '**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+            ${{ runner.os }}-
 
       - name: Install dependencies
         run: dotnet restore
@@ -52,17 +54,21 @@ jobs:
 
       - name: Run tests with TRX logger
         # Using the TRX logger which is a standard format understood by VSTest and SpecFlow+ LivingDoc CLI.
-        # Output the TRX file in the current working directory so the next step can locate it.
-        run: dotnet test --configuration Release --no-build --logger:"trx;LogFileName=TestResults.trx" --results-directory .
+        # Output the TRX file in the TestResults directory for the next step.
+        run: dotnet test --configuration Release --no-build --logger:"trx;LogFileName=TestResults.trx" --results-directory ./TestResults
         env: # Add this section
           ApiSettings__Password: ${{ secrets.CSHARP_API_PWD }} # Pass the password as an environment variable
 
+      - name: Run SpecFlow Tests and generate JSON report
+        run: dotnet test --configuration Release --no-build --logger:"json;LogFileName=TestExecution.json"
+        env:
+          ApiSettings__Password: ${{ secrets.CSHARP_API_PWD }}
+
       - name: Install SpecFlow+ LivingDoc CLI
-        run: dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
+        run: dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI --version 3.9.57
 
       - name: Generate LivingDoc HTML
-        # Uses the generated TRX file as input for test execution results.
-        run: livingdoc test-assembly bin/Release/net8.0/SpecFlowApiTests.dll -t TestResults.trx
+        run: livingdoc test-assembly bin/Release/net8.0/SpecFlowApiTests.dll --test-execution-json TestExecution.json
 
       - name: Upload LivingDoc artifact
         uses: actions/upload-artifact@v4
@@ -73,6 +79,7 @@ jobs:
 
   deploy_living_doc:
     needs: build_and_test # This job depends on the successful completion of the 'build_and_test' job
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: write # To write to the gh-pages branch
@@ -90,7 +97,13 @@ jobs:
 
       - name: Prepare artifact for GitHub Pages
         # GitHub Pages typically serves 'index.html' as the default page.
-        run: mv LivingDoc.html index.html
+        run: |
+          if [ -f LivingDoc.html ]; then
+            mv LivingDoc.html index.html
+          else
+            echo "LivingDoc.html not found!"
+            exit 1
+          fi
 
       - name: Upload artifact for GitHub Pages
         uses: actions/upload-pages-artifact@v3
