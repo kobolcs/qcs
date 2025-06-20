@@ -24,7 +24,13 @@ namespace SpecFlowApiTests.Helpers
             {
                 Timeout = TimeSpan.FromSeconds(30)
             };
-            return new RestClient(options);
+
+            var client = new RestClient(options);
+            // Ensure the API receives headers expected by the Restful Booker service
+            client.AddDefaultHeader("Accept", "application/json");
+            client.AddDefaultHeader("User-Agent", "Mozilla/5.0");
+
+            return client;
         }
     }
 }
