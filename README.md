@@ -92,4 +92,4 @@ For an overview of design patterns used across all projects, see [ARCHITECTURAL_
 
 ## Engage with Me
 
-If you're looking to accelerate your own testing strategy or have questions about the approaches shown here, let's talk. Connect with me on [LinkedIn](https://www.linkedin.com/) or visit [my website](https://example.com) to start the conversation.
+If you're looking to accelerate your own testing strategy or have questions about the approaches shown here, let's talk. Connect with me on [LinkedIn](https://www.linkedin.com/in/csabakobol/) or visit [my website](https://csabakobol.com) to start the conversation.
