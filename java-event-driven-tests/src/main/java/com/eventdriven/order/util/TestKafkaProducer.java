@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Thread-safe test utility for sending messages to Kafka in integration tests.
@@ -19,6 +21,8 @@ public class TestKafkaProducer implements AutoCloseable {
 
     private static final Logger logger = LoggerFactory.getLogger(TestKafkaProducer.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    /** Timeout in seconds for Kafka send acknowledgements. */
+    private static final long SEND_TIMEOUT_SECONDS = 10L;
     private final KafkaProducer<String, String> producer;
     private final String topic;
 
@@ -54,14 +58,7 @@ public class TestKafkaProducer implements AutoCloseable {
         Objects.requireNonNull(order, "order must not be null");
         String orderJson = objectMapper.writeValueAsString(order);
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, order.getId(), orderJson);
-        try {
-            producer.send(record).get(); // NOTE: wait for ack so tests know the send succeeded
-            logger.info("Sent order to Kafka: {}", order.getId());
-        } catch (Exception e) {
-            logger.error("Failed to send order to Kafka: {}", order.getId(), e);
-            throw new RuntimeException("Failed to send order to Kafka: " + order.getId(), e);
-        }
-        producer.flush();
+        sendRecord(record, "order " + order.getId());
     }
 
     /**
@@ -72,14 +69,33 @@ public class TestKafkaProducer implements AutoCloseable {
      * @param jsonValue The raw JSON string to send.
      * @throws RuntimeException if sending to Kafka fails
      */
-    public void sendRawJson(String key, String jsonValue) {
+        Objects.requireNonNull(key, "key must not be null");
+        Objects.requireNonNull(jsonValue, "jsonValue must not be null");
+    try {
+        producer.send(record).get(SEND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        logger.error("Thread interrupted while waiting for Kafka acknowledgement with key: {}", key, e);
+        throw new RuntimeException("Thread interrupted sending raw JSON to Kafka with key: " + key, e);
+    }
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, jsonValue);
+        sendRecord(record, "raw JSON with key " + key);
+    }
+
+    /**
+     * Internal helper to send a record with timeout handling and logging.
+     */
+    private void sendRecord(ProducerRecord<String, String> record, String description) {
         try {
-            producer.send(record).get(); // NOTE: wait for ack so tests know the send succeeded
-            logger.info("Sent raw JSON to Kafka with key: {}", key);
+            // Wait for broker acknowledgement to avoid tests hanging indefinitely
+            producer.send(record).get(SEND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+            logger.info("Sent {} to Kafka", description);
+        } catch (TimeoutException te) {
+            logger.error("Timed out after {} seconds sending {}", SEND_TIMEOUT_SECONDS, description, te);
+            throw new RuntimeException("Timed out after " + SEND_TIMEOUT_SECONDS + " seconds sending " + description + " to Kafka", te);
         } catch (Exception e) {
-            logger.error("Failed to send raw JSON to Kafka with key: {}", key, e);
-            throw new RuntimeException("Failed to send raw JSON to Kafka with key: " + key, e);
+            logger.error("Failed to send {}", description, e);
+            throw new RuntimeException("Failed to send " + description + " to Kafka", e);
         }
         producer.flush();
     }

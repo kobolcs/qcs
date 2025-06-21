@@ -19,8 +19,8 @@ public class OrderStatusRepository {
 
     /**
      * Sets the status for the given order ID in Redis.
-     * * @param orderId the order ID, must not be null or empty
      *
+     * @param orderId the order ID, must not be null or empty
      * @param status the status to set, must not be null
      */
     public void setStatus(String orderId, String status) {
@@ -35,8 +35,8 @@ public class OrderStatusRepository {
 
     /**
      * Retrieves the status for the given order ID from Redis.
-     * * @param orderId the order ID, must not be null or empty
      *
+     * @param orderId the order ID, must not be null or empty
      * @return an Optional containing the status if present, otherwise empty
      */
     public Optional<String> getStatus(String orderId) {
