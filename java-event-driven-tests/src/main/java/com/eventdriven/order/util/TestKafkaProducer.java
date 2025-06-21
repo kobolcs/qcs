@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Thread-safe test utility for sending messages to Kafka in integration tests.
@@ -61,6 +62,9 @@ public class TestKafkaProducer implements AutoCloseable {
             // Wait for broker acknowledgement to avoid tests hanging indefinitely
             producer.send(record).get(SEND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
             logger.info("Sent order to Kafka: {}", order.getId());
+        } catch (TimeoutException te) {
+            logger.error("Timed out after {} seconds sending order {}", SEND_TIMEOUT_SECONDS, order.getId(), te);
+            throw new RuntimeException("Timed out after " + SEND_TIMEOUT_SECONDS + " seconds sending order to Kafka: " + order.getId(), te);
         } catch (Exception e) {
             logger.error("Failed to send order to Kafka: {}", order.getId(), e);
             throw new RuntimeException("Failed to send order to Kafka: " + order.getId(), e);
@@ -82,6 +86,9 @@ public class TestKafkaProducer implements AutoCloseable {
             // Wait for broker acknowledgement to avoid tests hanging indefinitely
             producer.send(record).get(SEND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
             logger.info("Sent raw JSON to Kafka with key: {}", key);
+        } catch (TimeoutException te) {
+            logger.error("Timed out after {} seconds sending raw JSON with key {}", SEND_TIMEOUT_SECONDS, key, te);
+            throw new RuntimeException("Timed out after " + SEND_TIMEOUT_SECONDS + " seconds sending raw JSON to Kafka with key: " + key, te);
         } catch (Exception e) {
             logger.error("Failed to send raw JSON to Kafka with key: {}", key, e);
             throw new RuntimeException("Failed to send raw JSON to Kafka with key: " + key, e);
