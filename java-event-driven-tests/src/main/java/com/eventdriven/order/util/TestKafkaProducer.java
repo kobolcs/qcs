@@ -69,7 +69,13 @@ public class TestKafkaProducer implements AutoCloseable {
      * @param jsonValue The raw JSON string to send.
      * @throws RuntimeException if sending to Kafka fails
      */
-    public void sendRawJson(String key, String jsonValue) {
+    try {
+        producer.send(record).get(SEND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        logger.error("Thread interrupted while waiting for Kafka acknowledgement with key: {}", key, e);
+        throw new RuntimeException("Thread interrupted sending raw JSON to Kafka with key: " + key, e);
+    }
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, jsonValue);
         sendRecord(record, "raw JSON with key " + key);
     }
