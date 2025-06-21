@@ -69,6 +69,8 @@ public class TestKafkaProducer implements AutoCloseable {
      * @param jsonValue The raw JSON string to send.
      * @throws RuntimeException if sending to Kafka fails
      */
+        Objects.requireNonNull(key, "key must not be null");
+        Objects.requireNonNull(jsonValue, "jsonValue must not be null");
     try {
         producer.send(record).get(SEND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
     } catch (InterruptedException e) {
