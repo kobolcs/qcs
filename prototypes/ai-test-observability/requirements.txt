@@ -7,5 +7,5 @@ plotly==6.1.2
 streamlit==1.45.1
 
 # Libraries for testing and code coverage
-pytest==8.4.0
-pytest-cov==6.1.1
+pytest==8.4.1
+pytest-cov==6.2.1

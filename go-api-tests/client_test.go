@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 )
@@ -24,10 +25,15 @@ func (t *retryTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 }
 
 func TestGetWithRetryClosesBodies(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(500)
+	}))
+	defer ts.Close()
+
 	rt := &retryTransport{}
 	client := &http.Client{Transport: rt}
 
-	_, err := GetWithRetry(context.Background(), client, "http://example.com")
+	_, err := GetWithRetry(context.Background(), client, ts.URL)
 	if err == nil {
 		t.Fatal("expected error")
 	}
@@ -83,4 +89,20 @@ func TestGetWithRetryErrorWithResponse(t *testing.T) {
 		t.Error("final body should not be closed")
 	}
 	resp.Body.Close()
+}
+
+func TestErrorClient(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(500)
+	}))
+	defer ts.Close()
+
+	ec := &errorClient{}
+	resp, err := GetWithRetry(context.Background(), ec, ts.URL)
+	if err == nil {
+		t.Fatal("expected error")
+	}
+	if resp != nil && resp.StatusCode != 500 {
+		t.Errorf("expected status 500, got %d", resp.StatusCode)
+	}
 }

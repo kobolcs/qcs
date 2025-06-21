@@ -5,6 +5,9 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  schedule:
+    - cron: '15 3 * * *' # 03:15 UTC
+  workflow_dispatch:
 
 jobs:
   build-and-sast:
@@ -31,7 +34,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
-        go-version: '1.23'
+        go-version: '1.24'
 
     - name: Check Formatting
       run: |
@@ -46,7 +49,8 @@ jobs:
 
     - name: Test
       env:
-        OWM_API_KEY: ${{ secrets.OWM_API_KEY || 'dummy-api-key' }}
+        # Set OWM_API_KEY in repository secrets, or use a dummy value for forks/PRs
+        OWM_API_KEY: ${{ secrets.OWM_API_KEY }}
       run: go test -v ./...
 
     - name: Perform CodeQL Analysis (SAST)

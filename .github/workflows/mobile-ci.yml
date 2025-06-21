@@ -11,6 +11,9 @@ on:
     paths:
       - 'mobile-appium-tests/**'
       - '.github/workflows/mobile-ci.yml'
+  schedule:
+    - cron: '15 4 * * *' # 04:15 UTC
+  workflow_dispatch:
 
 jobs:
   android-test:
@@ -81,3 +84,6 @@ jobs:
           path: |
             mobile-appium-tests/report.xml
             mobile-appium-tests/appium.log
+      - name: Mobile Report Download Instructions
+        run: |
+          echo "Download the 'mobile-test-artifacts' artifact from the Actions run and view the report locally."

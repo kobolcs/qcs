@@ -9,6 +9,10 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Consumes order events from Kafka, processes them, and updates order status in Redis.
+ * On failure, sends the order to a dead-letter topic for further investigation.
+ */
 @Component
 public class OrderEventConsumer {
 
@@ -19,12 +23,21 @@ public class OrderEventConsumer {
     private final OrderStatusRepository orderStatusRepository;
     private final KafkaTemplate<String, Order> kafkaTemplate;
 
+    /**
+     * Constructs the consumer with required dependencies.
+     * @param orderStatusRepository Repository for order status persistence
+     * @param kafkaTemplate Kafka template for sending messages
+     */
     @Autowired
     public OrderEventConsumer(OrderStatusRepository orderStatusRepository, KafkaTemplate<String, Order> kafkaTemplate) {
         this.orderStatusRepository = orderStatusRepository;
         this.kafkaTemplate = kafkaTemplate;
     }
 
+    /**
+     * Handles order created events from Kafka, updates status, and handles errors.
+     * @param order The order event received from Kafka
+     */
     @KafkaListener(topics = "order_created_topic", groupId = "order_group", containerFactory = "orderKafkaListenerContainerFactory")
     public void handleOrderCreatedEvent(Order order) {
         String orderId = order.getId();

@@ -20,9 +20,16 @@ namespace SpecFlowApiTests.Helpers
             // Enforce TLS 1.2 for all outbound requests
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
+            int timeoutSeconds = 30;
+            var timeoutEnv = Environment.GetEnvironmentVariable("API_CLIENT_TIMEOUT_SECONDS");
+            if (!string.IsNullOrEmpty(timeoutEnv) && int.TryParse(timeoutEnv, out var parsedTimeout))
+            {
+                timeoutSeconds = parsedTimeout;
+            }
+
             var options = new RestClientOptions(baseUrl)
             {
-                Timeout = TimeSpan.FromSeconds(30)
+                Timeout = TimeSpan.FromSeconds(timeoutSeconds)
             };
 
             var client = new RestClient(options);

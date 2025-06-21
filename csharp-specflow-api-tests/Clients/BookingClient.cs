@@ -4,6 +4,7 @@ using SpecFlowApiTests.Models;
 using System.Text.Json;
 using Serilog;
 using SpecFlowApiTests.Exceptions;
+using Polly;
 
 namespace SpecFlowApiTests.Clients
 {
@@ -45,11 +46,62 @@ namespace SpecFlowApiTests.Clients
             return response.Data;
         }
 
+        public async Task<BookingResponse> CreateBookingAsync(BookingDetails payload)
+        {
+            var request = new RestRequest("/booking", Method.Post);
+            request.AddJsonBody(payload);
+            AddAuthHeaders(request);
+            LogRequest("CreateBooking", request, payload);
+
+            var policy = Policy
+                .Handle<Exception>()
+                .OrResult<RestResponse<BookingResponse>>(r => r.StatusCode == System.Net.HttpStatusCode.RequestTimeout || (int)r.StatusCode >= 500)
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                    (outcome, timespan, retryCount, context) =>
+                    {
+                        _logger.Warning($"Retry {retryCount} for CreateBooking due to: {outcome.Exception?.Message ?? outcome.Result?.StatusCode.ToString()}");
+                    });
+
+            var response = await policy.ExecuteAsync(() => _client.ExecuteAsync<BookingResponse>(request));
+            LogResponse("CreateBooking", response);
+
+            if (!response.IsSuccessful || response.Data == null)
+            {
+                throw new ApiException(response);
+            }
+            return response.Data;
+        }
+
         public BookingDetails GetBooking(int bookingId)
         {
             var request = new RestRequest($"/booking/{bookingId}", Method.Get);
             LogRequest("GetBooking", request);
             var response = _client.Execute<BookingDetails>(request);
+            LogResponse("GetBooking", response);
+
+            if (!response.IsSuccessful || response.Data == null)
+            {
+                throw new ApiException(response);
+            }
+            return response.Data;
+        }
+
+        public async Task<BookingDetails> GetBookingAsync(int bookingId)
+        {
+            var request = new RestRequest($"/booking/{bookingId}", Method.Get);
+            AddAuthHeaders(request);
+            LogRequest("GetBooking", request);
+
+            var policy = Policy
+                .Handle<Exception>()
+                .OrResult<RestResponse<BookingDetails>>(r => r.StatusCode == System.Net.HttpStatusCode.RequestTimeout || (int)r.StatusCode >= 500)
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                    (outcome, timespan, retryCount, context) =>
+                    {
+                        _logger.Warning($"Retry {retryCount} for GetBooking due to: {outcome.Exception?.Message ?? outcome.Result?.StatusCode.ToString()}");
+                    });
+
+            var response = await policy.ExecuteAsync(() => _client.ExecuteAsync<BookingDetails>(request));
             LogResponse("GetBooking", response);
 
             if (!response.IsSuccessful || response.Data == null)

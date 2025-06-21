@@ -15,6 +15,9 @@ export class PokeDisplayPage {
     readonly searchButton: Locator
     readonly searchInput: Locator
 
+    /**
+     * @param page - Playwright Page instance
+     */
     constructor(page: Page) {
         this.page = page
 
@@ -30,7 +33,7 @@ export class PokeDisplayPage {
      * @param url - The URL glob to intercept.
      * @param response - The JSON object to return as the response body.
      */
-    async interceptApi(url: string, response: object) {
+    async interceptApi(url: string, response: object): Promise<void> {
         await this.page.route(url, route => {
             route.fulfill({
                 status: 200,
@@ -44,7 +47,7 @@ export class PokeDisplayPage {
      * Loads the provided HTML content directly into the page.
      * @param html - The HTML string to load.
      */
-    async loadContent(html: string) {
+    async loadContent(html: string): Promise<void> {
         await this.page.setContent(html)
     }
 
@@ -52,7 +55,7 @@ export class PokeDisplayPage {
      * Simulates a user searching for a Pokémon.
      * @param name - The name of the Pokémon to search for.
      */
-    async searchForPokemon(name: string) {
+    async searchForPokemon(name: string): Promise<void> {
         await this.searchInput.fill(name)
         await this.searchButton.click()
     }

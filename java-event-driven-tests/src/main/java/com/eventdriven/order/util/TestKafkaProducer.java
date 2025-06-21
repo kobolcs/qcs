@@ -5,15 +5,34 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.Objects;
 import java.util.Properties;
 
+/**
+ * Thread-safe test utility for sending messages to Kafka in integration tests.
+ * <p>
+ * This class is thread-safe: multiple threads can share a single instance.
+ */
 public class TestKafkaProducer implements AutoCloseable {
 
+    private static final Logger logger = LoggerFactory.getLogger(TestKafkaProducer.class);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     private final KafkaProducer<String, String> producer;
     private final String topic;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Constructs a test Kafka producer for the given bootstrap servers and topic.
+     * @param bootstrapServers Kafka bootstrap servers
+     * @param topic Kafka topic to send messages to
+     */
     public TestKafkaProducer(String bootstrapServers, String topic) {
+        Objects.requireNonNull(bootstrapServers, "bootstrapServers must not be null");
+        Objects.requireNonNull(topic, "topic must not be null");
+        if (topic.isBlank()) {
+            throw new IllegalArgumentException("topic must not be blank");
+        }
         this.topic = topic;
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -24,38 +43,50 @@ public class TestKafkaProducer implements AutoCloseable {
         this.producer = new KafkaProducer<>(props);
     }
 
+    /**
+     * Sends an {@link Order} as a JSON message to the configured Kafka topic.
+     *
+     * @param order the order to send (must not be null)
+     * @throws JsonProcessingException if serialization fails
+     * @throws RuntimeException if sending to Kafka fails
+     */
     public void sendOrder(Order order) throws JsonProcessingException {
+        Objects.requireNonNull(order, "order must not be null");
         String orderJson = objectMapper.writeValueAsString(order);
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, order.getId(), orderJson);
         try {
             producer.send(record).get(); // NOTE: wait for ack so tests know the send succeeded
-            System.out.println("Sent order to Kafka: " + order.getId());
+            logger.info("Sent order to Kafka: {}", order.getId());
         } catch (Exception e) {
-            System.err.println("Failed to send order to Kafka: " + order.getId());
-            e.printStackTrace();
+            logger.error("Failed to send order to Kafka: {}", order.getId(), e);
+            throw new RuntimeException("Failed to send order to Kafka: " + order.getId(), e);
         }
         producer.flush();
     }
 
     /**
-     *  Sends a raw JSON string value to the topic.
+     * Sends a raw JSON string value to the topic.
      * This is used to simulate malformed events to test DLQ functionality.
      *
-     * @param key       The message key.
+     * @param key The message key.
      * @param jsonValue The raw JSON string to send.
+     * @throws RuntimeException if sending to Kafka fails
      */
     public void sendRawJson(String key, String jsonValue) {
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, jsonValue);
         try {
             producer.send(record).get(); // NOTE: wait for ack so tests know the send succeeded
-            System.out.println("Sent raw JSON to Kafka with key: " + key);
+            logger.info("Sent raw JSON to Kafka with key: {}", key);
         } catch (Exception e) {
-            System.err.println("Failed to send raw JSON to Kafka with key: " + key);
-            e.printStackTrace();
+            logger.error("Failed to send raw JSON to Kafka with key: {}", key, e);
+            throw new RuntimeException("Failed to send raw JSON to Kafka with key: " + key, e);
         }
         producer.flush();
     }
 
+    /**
+     * Closes the Kafka producer and releases resources.
+     */
     @Override
     public void close() {
         producer.close();

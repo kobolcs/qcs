@@ -87,6 +87,7 @@ jobs:
   deploy_living_doc:
     needs: build_and_test
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' # Only deploy on push/schedule/manual
     permissions:
       contents: write
       pages: write

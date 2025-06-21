@@ -5,6 +5,9 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  schedule:
+    - cron: '30 4 * * *' # 04:30 UTC
+  workflow_dispatch:
 
 jobs:
   contract-test:
@@ -58,3 +61,6 @@ jobs:
           path: |
             pact-contract-testing/consumer-frontend/pacts/
             pact-contract-testing/provider-api/pacts/
+      - name: Pact Report Download Instructions
+        run: |
+          echo "Download the 'pact-files' artifact from the Actions run and view the files locally."

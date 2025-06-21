@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Serilog;
 using System;
+using Polly;
 
 namespace SpecFlowApiTests.Clients
 {
@@ -33,15 +34,34 @@ namespace SpecFlowApiTests.Clients
 
             _logger.Information("Attempting to authenticate user: {Username}", _username);
 
-            var response = await _client.ExecuteAsync<AuthResponse>(request);
+            var policy = Policy
+                .Handle<Exception>()
+                .OrResult<RestResponse<AuthResponse>>(r => r.StatusCode == HttpStatusCode.RequestTimeout || (int)r.StatusCode >= 500)
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                    (outcome, timespan, retryCount, context) =>
+                    {
+                        _logger.Warning($"Retry {retryCount} for authentication due to: {outcome.Exception?.Message ?? outcome.Result?.StatusCode.ToString()}");
+                    });
+
+            var response = await policy.ExecuteAsync(() => _client.ExecuteAsync<AuthResponse>(request));
 
             if (response.StatusCode == HttpStatusCode.OK && !string.IsNullOrEmpty(response.Data?.Token))
             {
                 _logger.Information("Authentication successful for user: {Username}", _username);
                 return response.Data.Token;
             }
-
-            _logger.Error("Authentication failed. Status: {StatusCode}, Content: {Content}", response.StatusCode, response.Content);
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                _logger.Error("Authentication failed: Unauthorized. Check credentials for user: {Username}", _username);
+            }
+            else if ((int)response.StatusCode == 418)
+            {
+                _logger.Error("Authentication failed: HTTP 418 (I'm a teapot) for user: {Username}", _username);
+            }
+            else
+            {
+                _logger.Error("Authentication failed. Status: {StatusCode}, Content: {Content}", response.StatusCode, response.Content);
+            }
             throw new System.Security.Authentication.AuthenticationException($"Authentication failed. Status: {response.StatusCode}. Content: {response.Content}");
         }
     }

@@ -2,6 +2,7 @@ import json
 import csv
 import argparse
 import os
+import logging
 from typing import Dict
 
 import pandas as pd
@@ -55,9 +56,10 @@ def load_data(path: str) -> Dict:
         with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
-        # Let the caller handle missing files
+        logging.error(f"File not found: {path}")
         raise
     except json.JSONDecodeError as exc:
+        logging.error(f"Invalid JSON in {path}: {exc}")
         raise ValueError(f"Invalid JSON in {path}") from exc
 
 

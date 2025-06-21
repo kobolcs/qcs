@@ -1,18 +1,10 @@
 import pytest
 import csv
+from robot_framework_python_tests.helpers.csv_keywords import CSVKeywords
 
 from unittest.mock import patch, MagicMock
 from resources.keywords.extended_spacex_helpers import ExtendedSpaceX
 from resources.api_clients.spacex_client import SpaceXClientError
-
-def read_csv_file_to_list(path: str) -> list:
-    """Reads a CSV file and returns its content as a list of dictionaries."""
-    data = []
-    with open(path, mode='r', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            data.append(row)
-    return data
 
 
 class TestExtendedSpaceX:
