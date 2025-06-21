@@ -58,18 +58,7 @@ public class TestKafkaProducer implements AutoCloseable {
         Objects.requireNonNull(order, "order must not be null");
         String orderJson = objectMapper.writeValueAsString(order);
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, order.getId(), orderJson);
-        try {
-            // Wait for broker acknowledgement to avoid tests hanging indefinitely
-            producer.send(record).get(SEND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-            logger.info("Sent order to Kafka: {}", order.getId());
-        } catch (TimeoutException te) {
-            logger.error("Timed out after {} seconds sending order {}", SEND_TIMEOUT_SECONDS, order.getId(), te);
-            throw new RuntimeException("Timed out after " + SEND_TIMEOUT_SECONDS + " seconds sending order to Kafka: " + order.getId(), te);
-        } catch (Exception e) {
-            logger.error("Failed to send order to Kafka: {}", order.getId(), e);
-            throw new RuntimeException("Failed to send order to Kafka: " + order.getId(), e);
-        }
-        producer.flush();
+        sendRecord(record, "order " + order.getId());
     }
 
     /**
@@ -82,16 +71,23 @@ public class TestKafkaProducer implements AutoCloseable {
      */
     public void sendRawJson(String key, String jsonValue) {
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, jsonValue);
+        sendRecord(record, "raw JSON with key " + key);
+    }
+
+    /**
+     * Internal helper to send a record with timeout handling and logging.
+     */
+    private void sendRecord(ProducerRecord<String, String> record, String description) {
         try {
             // Wait for broker acknowledgement to avoid tests hanging indefinitely
             producer.send(record).get(SEND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-            logger.info("Sent raw JSON to Kafka with key: {}", key);
+            logger.info("Sent {} to Kafka", description);
         } catch (TimeoutException te) {
-            logger.error("Timed out after {} seconds sending raw JSON with key {}", SEND_TIMEOUT_SECONDS, key, te);
-            throw new RuntimeException("Timed out after " + SEND_TIMEOUT_SECONDS + " seconds sending raw JSON to Kafka with key: " + key, te);
+            logger.error("Timed out after {} seconds sending {}", SEND_TIMEOUT_SECONDS, description, te);
+            throw new RuntimeException("Timed out after " + SEND_TIMEOUT_SECONDS + " seconds sending " + description + " to Kafka", te);
         } catch (Exception e) {
-            logger.error("Failed to send raw JSON to Kafka with key: {}", key, e);
-            throw new RuntimeException("Failed to send raw JSON to Kafka with key: " + key, e);
+            logger.error("Failed to send {}", description, e);
+            throw new RuntimeException("Failed to send " + description + " to Kafka", e);
         }
         producer.flush();
     }
