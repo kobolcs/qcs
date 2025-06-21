@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Thread-safe test utility for sending messages to Kafka in integration tests.
@@ -19,6 +20,8 @@ public class TestKafkaProducer implements AutoCloseable {
 
     private static final Logger logger = LoggerFactory.getLogger(TestKafkaProducer.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    /** Timeout in seconds for Kafka send acknowledgements. */
+    private static final long SEND_TIMEOUT_SECONDS = 10L;
     private final KafkaProducer<String, String> producer;
     private final String topic;
 
@@ -55,7 +58,8 @@ public class TestKafkaProducer implements AutoCloseable {
         String orderJson = objectMapper.writeValueAsString(order);
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, order.getId(), orderJson);
         try {
-            producer.send(record).get(); // NOTE: wait for ack so tests know the send succeeded
+            // Wait for broker acknowledgement to avoid tests hanging indefinitely
+            producer.send(record).get(SEND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
             logger.info("Sent order to Kafka: {}", order.getId());
         } catch (Exception e) {
             logger.error("Failed to send order to Kafka: {}", order.getId(), e);
@@ -75,7 +79,8 @@ public class TestKafkaProducer implements AutoCloseable {
     public void sendRawJson(String key, String jsonValue) {
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, jsonValue);
         try {
-            producer.send(record).get(); // NOTE: wait for ack so tests know the send succeeded
+            // Wait for broker acknowledgement to avoid tests hanging indefinitely
+            producer.send(record).get(SEND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
             logger.info("Sent raw JSON to Kafka with key: {}", key);
         } catch (Exception e) {
             logger.error("Failed to send raw JSON to Kafka with key: {}", key, e);
