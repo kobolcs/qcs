@@ -2,9 +2,7 @@ name: SpaceX Suite CI with Allure and Quality Gates
 
 on:
   push:
-    branches: [main, master]
   pull_request:
-    branches: [main, master]
   schedule:
     - cron: '0 4 * * *'
 
