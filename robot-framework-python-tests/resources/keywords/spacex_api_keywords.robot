@@ -9,6 +9,14 @@ Get Latest Launch JSON
     ${json}=    Output    body
     RETURN    ${json}
 
+Get Launch By ID
+    [Arguments]    ${launch_id}
+    [Documentation]    Calls SpaceX API to get a launch by its ID.
+    GET    /launches/${launch_id}
+    Status    200
+    ${json}=    Output    body
+    RETURN    ${json}
+
 Validate Launch Fields
     [Arguments]    ${launch_json}
     Should Not Be Empty    ${launch_json['name']}

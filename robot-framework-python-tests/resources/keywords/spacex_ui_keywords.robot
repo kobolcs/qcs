@@ -4,7 +4,9 @@ Library    SeleniumLibrary
 *** Keywords ***
 Open Launch Page
     [Arguments]    ${url}    ${browser}    ${timeout}
-    Open Browser    ${url}    ${browser}
+    ${unique_dir}=    Evaluate    __import__('uuid').uuid4().hex
+    &{options}=    Create Dictionary    args=--user-data-dir=/tmp/chrome_${unique_dir}
+    Open Browser    ${url}    ${browser}    options=${options}
     Maximize Browser Window
     Set Selenium Timeout    ${timeout}
 

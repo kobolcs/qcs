@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SpecFlowApiTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+00a39e8f7172fc88e769470983785bedd07ac270")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+33e6e24e7761b6b98af67b647531ad601ad36542")]
 [assembly: System.Reflection.AssemblyProductAttribute("SpecFlowApiTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SpecFlowApiTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
