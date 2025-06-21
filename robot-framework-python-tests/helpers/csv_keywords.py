@@ -2,7 +2,9 @@ import csv
 import logging
 from typing import List, Dict
 
-class CSVKeywords:
+ROBOT_LIBRARY_SCOPE = "GLOBAL"
+
+class csv_keywords:
     """Keywords for handling CSV files."""
 
     def read_csv_file_to_list(self, csv_path: str) -> List[Dict[str, str]]:

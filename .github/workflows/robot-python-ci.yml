@@ -70,6 +70,10 @@ jobs:
           python-version: "3.11"
           tests-dir: ${{ env.TESTS_DIR }}
 
+      - name: Initialize rfbrowser (Browser library)
+        working-directory: ${{ env.TESTS_DIR }}
+        run: rfbrowser init
+
       - name: Run API tests with Allure
         working-directory: ${{ env.TESTS_DIR }}
         run: |
@@ -113,6 +117,10 @@ jobs:
         with:
           python-version: "3.11"
           tests-dir: ${{ env.TESTS_DIR }}
+
+      - name: Initialize rfbrowser (Browser library)
+        working-directory: ${{ env.TESTS_DIR }}
+        run: rfbrowser init
 
       - name: Run GUI & Visual tests with Allure
         working-directory: ${{ env.TESTS_DIR }}

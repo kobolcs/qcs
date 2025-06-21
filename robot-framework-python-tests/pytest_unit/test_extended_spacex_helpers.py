@@ -1,6 +1,6 @@
 import pytest
 import csv
-from robot_framework_python_tests.helpers.csv_keywords import CSVKeywords
+from helpers.csv_keywords import CSVKeywords
 
 from unittest.mock import patch, MagicMock
 from resources.keywords.extended_spacex_helpers import ExtendedSpaceX
