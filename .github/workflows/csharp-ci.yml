@@ -66,7 +66,7 @@ jobs:
           ApiSettings__Password: ${{ secrets.CSHARP_API_PWD }}
 
       - name: Install SpecFlow+ LivingDoc CLI
-        run: dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI --version 4.0.336
+        run: dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
 
       - name: Generate LivingDoc HTML
         run: livingdoc test-assembly bin/Release/net8.0/SpecFlowApiTests.dll -t TestResults.trx
