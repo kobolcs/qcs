@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.kafka.KafkaContainer;
+import org.testcontainers.DockerClientFactory;
+import org.testng.SkipException;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
@@ -75,6 +77,9 @@ public class EventDrivenTest {
 
     @BeforeClass
     public static void setupTestClass() {
+        if (!DockerClientFactory.instance().isDockerAvailable()) {
+            throw new SkipException("Docker is not available, skipping integration tests");
+        }
         kafka = new KafkaContainer(DockerImageName.parse(KAFKA_IMAGE))
                 .withNetwork(network)
                 .withNetworkAliases(KAFKA_ALIAS);

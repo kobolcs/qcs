@@ -32,6 +32,8 @@ The **Testcontainers** pattern of managing ephemeral test dependencies in code i
 * Apache Maven
 * Docker Desktop (for Testcontainers)
 
+If Docker is not available, the integration tests will be skipped automatically.
+
 The JDK and Maven are only necessary when not using the Docker image provided in
 this repository.
 
