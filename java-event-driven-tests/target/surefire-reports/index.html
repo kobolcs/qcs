@@ -25,7 +25,7 @@
       <span class="top-banner-title-font">Test results</span>
       <button id="button" class="button">Switch Retro Theme</button> <!-- button -->
       <br/>
-      <span class="top-banner-font-1">1 suite</span>
+      <span class="top-banner-font-1">1 suite, 2 failed tests</span>
     </div> <!-- top-banner-root -->
     <div class="navigator-root">
       <div class="navigator-suite-header">
@@ -39,7 +39,7 @@
         <div class="rounded-window">
           <div class="suite-header light-rounded-window-top">
             <a href="#" panel-name="suite-EventDrivenIntegrationSuite" class="navigator-link">
-              <span class="suite-name border-skipped">EventDrivenIntegrationSuite</span>
+              <span class="suite-name border-failed">EventDrivenIntegrationSuite</span>
             </a> <!-- navigator-link -->
           </div> <!-- suite-header light-rounded-window-top -->
           <div class="navigator-suite-content">
@@ -92,26 +92,26 @@
               <div class="suite-section-content">
                 <ul>
                   <li>
-                    <span class="method-stats">2 methods,  2 skipped,  </span>
+                    <span class="method-stats">2 methods, 2 failed,   </span>
                   </li>
                   <li>
-                    <span class="method-list-title skipped">Skipped methods</span>
-                    <span class="show-or-hide-methods skipped">
-                      <a href="#" panel-name="suite-EventDrivenIntegrationSuite" class="hide-methods skipped suite-EventDrivenIntegrationSuite"> (hide)</a> <!-- hide-methods skipped suite-EventDrivenIntegrationSuite -->
-                      <a href="#" panel-name="suite-EventDrivenIntegrationSuite" class="show-methods skipped suite-EventDrivenIntegrationSuite"> (show)</a> <!-- show-methods skipped suite-EventDrivenIntegrationSuite -->
+                    <span class="method-list-title failed">Failed methods</span>
+                    <span class="show-or-hide-methods failed">
+                      <a href="#" panel-name="suite-EventDrivenIntegrationSuite" class="hide-methods failed suite-EventDrivenIntegrationSuite"> (hide)</a> <!-- hide-methods failed suite-EventDrivenIntegrationSuite -->
+                      <a href="#" panel-name="suite-EventDrivenIntegrationSuite" class="show-methods failed suite-EventDrivenIntegrationSuite"> (show)</a> <!-- show-methods failed suite-EventDrivenIntegrationSuite -->
                     </span>
-                    <div class="method-list-content skipped suite-EventDrivenIntegrationSuite">
+                    <div class="method-list-content failed suite-EventDrivenIntegrationSuite">
                       <span>
-                        <img src="skipped.png" width="3%"/>
+                        <img src="failed.png" width="3%"/>
                         <a href="#" panel-name="suite-EventDrivenIntegrationSuite" title="com.eventdriven.order.EventDrivenTest" class="method navigator-link" hash-for-method="testMalformedOrderGoesToDlq">testMalformedOrderGoesToDlq</a> <!-- method navigator-link -->
                       </span>
                       <br/>
                       <span>
-                        <img src="skipped.png" width="3%"/>
+                        <img src="failed.png" width="3%"/>
                         <a href="#" panel-name="suite-EventDrivenIntegrationSuite" title="com.eventdriven.order.EventDrivenTest" class="method navigator-link" hash-for-method="testOrderEventEndToEnd">testOrderEventEndToEnd</a> <!-- method navigator-link -->
                       </span>
                       <br/>
-                    </div> <!-- method-list-content skipped suite-EventDrivenIntegrationSuite -->
+                    </div> <!-- method-list-content failed suite-EventDrivenIntegrationSuite -->
                   </li>
                 </ul>
               </div> <!-- suite-section-content -->
@@ -123,9 +123,9 @@
     <div class="wrapper">
       <div class="main-panel-root">
         <div panel-name="suite-EventDrivenIntegrationSuite" class="panel EventDrivenIntegrationSuite">
-          <div class="suite-EventDrivenIntegrationSuite-class-skipped">
+          <div class="suite-EventDrivenIntegrationSuite-class-failed">
             <div class="main-panel-header rounded-window-top">
-              <img src="skipped.png"/>
+              <img src="failed.png"/>
               <span class="class-name">com.eventdriven.order.EventDrivenTest</span>
             </div> <!-- main-panel-header rounded-window-top -->
             <div class="main-panel-content rounded-window-bottom">
@@ -134,38 +134,14 @@
                   <a name="testMalformedOrderGoesToDlq">
                   </a> <!-- testMalformedOrderGoesToDlq -->
                   <span class="method-name">testMalformedOrderGoesToDlq</span>
-                  <div class="stack-trace">java.lang.RuntimeException: Failed to start containers
-	at com.eventdriven.order.EventDrivenTest.startContainers(EventDrivenTest.java:129)
-	at com.eventdriven.order.EventDrivenTest.setupTestClass(EventDrivenTest.java:73)
+                  <div class="stack-trace">java.lang.NullPointerException: Cannot invoke &quot;org.testcontainers.kafka.KafkaContainer.getBootstrapServers()&quot; because &quot;com.eventdriven.order.EventDrivenTest.kafka&quot; is null
+	at com.eventdriven.order.EventDrivenTest.testMalformedOrderGoesToDlq(EventDrivenTest.java:184)
 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
-Caused by: org.testcontainers.containers.ContainerLaunchException: Container startup failed for image confluentinc/cp-kafka:7.5.0
-	at org.testcontainers.containers.GenericContainer.doStart(GenericContainer.java:351)
-	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:322)
-	at com.eventdriven.order.EventDrivenTest.startContainers(EventDrivenTest.java:117)
-	... 15 more
-Caused by: org.rnorth.ducttape.RetryCountExceededException: Retry limit hit with exception
-	at org.rnorth.ducttape.unreliables.Unreliables.retryUntilSuccess(Unreliables.java:88)
-	at org.testcontainers.containers.GenericContainer.doStart(GenericContainer.java:336)
-	... 17 more
-Caused by: org.testcontainers.containers.ContainerLaunchException: Could not create/start container
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:556)
-	at org.testcontainers.containers.GenericContainer.lambda$doStart$0(GenericContainer.java:346)
-	at org.rnorth.ducttape.unreliables.Unreliables.retryUntilSuccess(Unreliables.java:81)
-	... 18 more
-Caused by: java.lang.IllegalStateException: Wait strategy failed. Container exited with code 127
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:525)
-	... 20 more
-Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching &apos;.*Transitioning from RECOVERY to RUNNING.*&apos;
-	at org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy.waitUntilReady(LogMessageWaitStrategy.java:47)
-	at org.testcontainers.containers.wait.strategy.AbstractWaitStrategy.waitUntilReady(AbstractWaitStrategy.java:52)
-	at org.testcontainers.containers.GenericContainer.waitUntilContainerStarted(GenericContainer.java:909)
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:492)
-	... 20 more
-... Removed 9 stack frames
+... Removed 11 stack frames
 </div> <!-- stack-trace -->
                   <em>
 (Should route a malformed event to the dead-letter queue)                  </em>
@@ -176,45 +152,21 @@ Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out wai
                   <a name="testOrderEventEndToEnd">
                   </a> <!-- testOrderEventEndToEnd -->
                   <span class="method-name">testOrderEventEndToEnd</span>
-                  <div class="stack-trace">java.lang.RuntimeException: Failed to start containers
-	at com.eventdriven.order.EventDrivenTest.startContainers(EventDrivenTest.java:129)
-	at com.eventdriven.order.EventDrivenTest.setupTestClass(EventDrivenTest.java:73)
+                  <div class="stack-trace">java.lang.NullPointerException: Cannot invoke &quot;com.eventdriven.order.util.TestKafkaProducer.sendOrder(com.eventdriven.order.model.Order)&quot; because &quot;com.eventdriven.order.EventDrivenTest.testKafkaProducer&quot; is null
+	at com.eventdriven.order.EventDrivenTest.testOrderEventEndToEnd(EventDrivenTest.java:160)
 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
-Caused by: org.testcontainers.containers.ContainerLaunchException: Container startup failed for image confluentinc/cp-kafka:7.5.0
-	at org.testcontainers.containers.GenericContainer.doStart(GenericContainer.java:351)
-	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:322)
-	at com.eventdriven.order.EventDrivenTest.startContainers(EventDrivenTest.java:117)
-	... 15 more
-Caused by: org.rnorth.ducttape.RetryCountExceededException: Retry limit hit with exception
-	at org.rnorth.ducttape.unreliables.Unreliables.retryUntilSuccess(Unreliables.java:88)
-	at org.testcontainers.containers.GenericContainer.doStart(GenericContainer.java:336)
-	... 17 more
-Caused by: org.testcontainers.containers.ContainerLaunchException: Could not create/start container
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:556)
-	at org.testcontainers.containers.GenericContainer.lambda$doStart$0(GenericContainer.java:346)
-	at org.rnorth.ducttape.unreliables.Unreliables.retryUntilSuccess(Unreliables.java:81)
-	... 18 more
-Caused by: java.lang.IllegalStateException: Wait strategy failed. Container exited with code 127
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:525)
-	... 20 more
-Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching &apos;.*Transitioning from RECOVERY to RUNNING.*&apos;
-	at org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy.waitUntilReady(LogMessageWaitStrategy.java:47)
-	at org.testcontainers.containers.wait.strategy.AbstractWaitStrategy.waitUntilReady(AbstractWaitStrategy.java:52)
-	at org.testcontainers.containers.GenericContainer.waitUntilContainerStarted(GenericContainer.java:909)
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:492)
-	... 20 more
-... Removed 9 stack frames
+... Removed 11 stack frames
 </div> <!-- stack-trace -->
                   <em>
 (Should process an order event and update status in Redis to PROCESSED)                  </em>
                 </div> <!-- method-content -->
               </div> <!-- method -->
             </div> <!-- main-panel-content rounded-window-bottom -->
-          </div> <!-- suite-EventDrivenIntegrationSuite-class-skipped -->
+          </div> <!-- suite-EventDrivenIntegrationSuite-class-failed -->
         </div> <!-- panel EventDrivenIntegrationSuite -->
         <div panel-name="test-xml-EventDrivenIntegrationSuite" class="panel">
           <div class="main-panel-header rounded-window-top">
@@ -286,18 +238,18 @@ data.addColumn('string', 'Class');
 data.addColumn('number', 'Time (ms)');
 data.addRows(2);
 data.setCell(0, 0, 0)
-data.setCell(0, 1, 'testOrderEventEndToEnd')
+data.setCell(0, 1, 'testMalformedOrderGoesToDlq')
 data.setCell(0, 2, 'com.eventdriven.order.EventDrivenTest')
-data.setCell(0, 3, 0);
+data.setCell(0, 3, 22);
 data.setCell(1, 0, 1)
-data.setCell(1, 1, 'testMalformedOrderGoesToDlq')
+data.setCell(1, 1, 'testOrderEventEndToEnd')
 data.setCell(1, 2, 'com.eventdriven.order.EventDrivenTest')
-data.setCell(1, 3, 0);
+data.setCell(1, 3, 16);
 window.suiteTableData['EventDrivenIntegrationSuite']= { tableData: data, tableDiv: 'times-div-EventDrivenIntegrationSuite'}
 return data;
 }
               </script>
-              <span class="suite-total-time">Total running time: 0 ms</span>
+              <span class="suite-total-time">Total running time: 38 ms</span>
               <div id="times-div-EventDrivenIntegrationSuite">
               </div> <!-- times-div-EventDrivenIntegrationSuite -->
             </div> <!-- times-div -->
@@ -324,16 +276,18 @@ return data;
           <div class="main-panel-content rounded-window-bottom">
             <div class="chronological-class">
               <div class="chronological-class-name">com.eventdriven.order.EventDrivenTest</div> <!-- chronological-class-name -->
-              <div class="configuration-class before">
+              <div class="test-method">
                 <img src="failed.png">
                 </img>
-                <span class="method-name">setupTestClass</span>
+                <span class="method-name">testMalformedOrderGoesToDlq</span>
                 <span class="method-start">0 ms</span>
-              </div> <!-- configuration-class before -->
-              <div class="configuration-class after">
-                <span class="method-name">cleanupTestClass</span>
-                <span class="method-start">105858 ms</span>
-              </div> <!-- configuration-class after -->
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <img src="failed.png">
+                </img>
+                <span class="method-name">testOrderEventEndToEnd</span>
+                <span class="method-start">0 ms</span>
+              </div> <!-- test-method -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
       </div> <!-- main-panel-root -->

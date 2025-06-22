@@ -11,9 +11,7 @@
       <class name="com.eventdriven.order.EventDrivenTest">
         <methods>
           <include name="testMalformedOrderGoesToDlq"/>
-          <include name="cleanupTestClass"/>
           <include name="testOrderEventEndToEnd"/>
-          <include name="setupTestClass"/>
         </methods>
       </class> <!-- com.eventdriven.order.EventDrivenTest -->
     </classes>

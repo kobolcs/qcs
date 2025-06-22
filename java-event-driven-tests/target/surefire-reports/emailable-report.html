@@ -9,105 +9,25 @@
 <table>
 <tr><th>Test</th><th># Passed</th><th># Skipped</th><th># Retried</th><th># Failed</th><th>Time (ms)</th><th>Included Groups</th><th>Excluded Groups</th></tr>
 <tr><th colspan="8">EventDrivenIntegrationSuite</th></tr>
-<tr><td><a href="#t0">Full Integration Test</a></td><td class="num">0</td><td class="num attn">2</td><td class="num">0</td><td class="num">0</td><td class="num">106,574</td><td>integration</td><td></td></tr>
+<tr><td><a href="#t0">Full Integration Test</a></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num attn">2</td><td class="num">98</td><td>integration</td><td></td></tr>
 </table>
-<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">EventDrivenIntegrationSuite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Full Integration Test &#8212; failed (configuration methods)</th></tr><tr class="failedeven"><td rowspan="1">com.eventdriven.order.EventDrivenTest</td><td><a href="#m0">setupTestClass</a></td><td rowspan="1">1750578252781</td><td rowspan="1">105830</td></tr><tr><th colspan="4">Full Integration Test &#8212; skipped</th></tr><tr class="skippedeven"><td rowspan="2">com.eventdriven.order.EventDrivenTest</td><td><a href="#m1">testMalformedOrderGoesToDlq</a></td><td rowspan="1">1750578358636</td><td rowspan="1">0</td></tr><tr class="skippedeven"><td><a href="#m2">testOrderEventEndToEnd</a></td><td rowspan="1">1750578358636</td><td rowspan="1">0</td></tr></tbody>
+<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">EventDrivenIntegrationSuite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Full Integration Test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="2">com.eventdriven.order.EventDrivenTest</td><td><a href="#m0">testMalformedOrderGoesToDlq</a></td><td rowspan="1">1750579806227</td><td rowspan="1">22</td></tr><tr class="failedeven"><td><a href="#m1">testOrderEventEndToEnd</a></td><td rowspan="1">1750579806227</td><td rowspan="1">16</td></tr></tbody>
 </table>
-<h2>Full Integration Test</h2><h3 id="m0">com.eventdriven.order.EventDrivenTest#setupTestClass</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.RuntimeException: Failed to start containers
-	at com.eventdriven.order.EventDrivenTest.startContainers(EventDrivenTest.java:129)
-	at com.eventdriven.order.EventDrivenTest.setupTestClass(EventDrivenTest.java:73)
+<h2>Full Integration Test</h2><h3 id="m0">com.eventdriven.order.EventDrivenTest#testMalformedOrderGoesToDlq</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.NullPointerException: Cannot invoke &quot;org.testcontainers.kafka.KafkaContainer.getBootstrapServers()&quot; because &quot;com.eventdriven.order.EventDrivenTest.kafka&quot; is null
+	at com.eventdriven.order.EventDrivenTest.testMalformedOrderGoesToDlq(EventDrivenTest.java:184)
 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
-Caused by: org.testcontainers.containers.ContainerLaunchException: Container startup failed for image confluentinc/cp-kafka:7.5.0
-	at org.testcontainers.containers.GenericContainer.doStart(GenericContainer.java:351)
-	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:322)
-	at com.eventdriven.order.EventDrivenTest.startContainers(EventDrivenTest.java:117)
-	... 15 more
-Caused by: org.rnorth.ducttape.RetryCountExceededException: Retry limit hit with exception
-	at org.rnorth.ducttape.unreliables.Unreliables.retryUntilSuccess(Unreliables.java:88)
-	at org.testcontainers.containers.GenericContainer.doStart(GenericContainer.java:336)
-	... 17 more
-Caused by: org.testcontainers.containers.ContainerLaunchException: Could not create/start container
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:556)
-	at org.testcontainers.containers.GenericContainer.lambda$doStart$0(GenericContainer.java:346)
-	at org.rnorth.ducttape.unreliables.Unreliables.retryUntilSuccess(Unreliables.java:81)
-	... 18 more
-Caused by: java.lang.IllegalStateException: Wait strategy failed. Container exited with code 127
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:525)
-	... 20 more
-Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching &apos;.*Transitioning from RECOVERY to RUNNING.*&apos;
-	at org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy.waitUntilReady(LogMessageWaitStrategy.java:47)
-	at org.testcontainers.containers.wait.strategy.AbstractWaitStrategy.waitUntilReady(AbstractWaitStrategy.java:52)
-	at org.testcontainers.containers.GenericContainer.waitUntilContainerStarted(GenericContainer.java:909)
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:492)
-	... 20 more
-... Removed 9 stack frames</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m1">com.eventdriven.order.EventDrivenTest#testMalformedOrderGoesToDlq</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.RuntimeException: Failed to start containers
-	at com.eventdriven.order.EventDrivenTest.startContainers(EventDrivenTest.java:129)
-	at com.eventdriven.order.EventDrivenTest.setupTestClass(EventDrivenTest.java:73)
+... Removed 11 stack frames</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m1">com.eventdriven.order.EventDrivenTest#testOrderEventEndToEnd</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.NullPointerException: Cannot invoke &quot;com.eventdriven.order.util.TestKafkaProducer.sendOrder(com.eventdriven.order.model.Order)&quot; because &quot;com.eventdriven.order.EventDrivenTest.testKafkaProducer&quot; is null
+	at com.eventdriven.order.EventDrivenTest.testOrderEventEndToEnd(EventDrivenTest.java:160)
 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
-Caused by: org.testcontainers.containers.ContainerLaunchException: Container startup failed for image confluentinc/cp-kafka:7.5.0
-	at org.testcontainers.containers.GenericContainer.doStart(GenericContainer.java:351)
-	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:322)
-	at com.eventdriven.order.EventDrivenTest.startContainers(EventDrivenTest.java:117)
-	... 15 more
-Caused by: org.rnorth.ducttape.RetryCountExceededException: Retry limit hit with exception
-	at org.rnorth.ducttape.unreliables.Unreliables.retryUntilSuccess(Unreliables.java:88)
-	at org.testcontainers.containers.GenericContainer.doStart(GenericContainer.java:336)
-	... 17 more
-Caused by: org.testcontainers.containers.ContainerLaunchException: Could not create/start container
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:556)
-	at org.testcontainers.containers.GenericContainer.lambda$doStart$0(GenericContainer.java:346)
-	at org.rnorth.ducttape.unreliables.Unreliables.retryUntilSuccess(Unreliables.java:81)
-	... 18 more
-Caused by: java.lang.IllegalStateException: Wait strategy failed. Container exited with code 127
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:525)
-	... 20 more
-Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching &apos;.*Transitioning from RECOVERY to RUNNING.*&apos;
-	at org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy.waitUntilReady(LogMessageWaitStrategy.java:47)
-	at org.testcontainers.containers.wait.strategy.AbstractWaitStrategy.waitUntilReady(AbstractWaitStrategy.java:52)
-	at org.testcontainers.containers.GenericContainer.waitUntilContainerStarted(GenericContainer.java:909)
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:492)
-	... 20 more
-... Removed 9 stack frames</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m2">com.eventdriven.order.EventDrivenTest#testOrderEventEndToEnd</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.RuntimeException: Failed to start containers
-	at com.eventdriven.order.EventDrivenTest.startContainers(EventDrivenTest.java:129)
-	at com.eventdriven.order.EventDrivenTest.setupTestClass(EventDrivenTest.java:73)
-	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
-	at java.base/java.lang.Thread.run(Thread.java:1583)
-Caused by: org.testcontainers.containers.ContainerLaunchException: Container startup failed for image confluentinc/cp-kafka:7.5.0
-	at org.testcontainers.containers.GenericContainer.doStart(GenericContainer.java:351)
-	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:322)
-	at com.eventdriven.order.EventDrivenTest.startContainers(EventDrivenTest.java:117)
-	... 15 more
-Caused by: org.rnorth.ducttape.RetryCountExceededException: Retry limit hit with exception
-	at org.rnorth.ducttape.unreliables.Unreliables.retryUntilSuccess(Unreliables.java:88)
-	at org.testcontainers.containers.GenericContainer.doStart(GenericContainer.java:336)
-	... 17 more
-Caused by: org.testcontainers.containers.ContainerLaunchException: Could not create/start container
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:556)
-	at org.testcontainers.containers.GenericContainer.lambda$doStart$0(GenericContainer.java:346)
-	at org.rnorth.ducttape.unreliables.Unreliables.retryUntilSuccess(Unreliables.java:81)
-	... 18 more
-Caused by: java.lang.IllegalStateException: Wait strategy failed. Container exited with code 127
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:525)
-	... 20 more
-Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching &apos;.*Transitioning from RECOVERY to RUNNING.*&apos;
-	at org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy.waitUntilReady(LogMessageWaitStrategy.java:47)
-	at org.testcontainers.containers.wait.strategy.AbstractWaitStrategy.waitUntilReady(AbstractWaitStrategy.java:52)
-	at org.testcontainers.containers.GenericContainer.waitUntilContainerStarted(GenericContainer.java:909)
-	at org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:492)
-	... 20 more
-... Removed 9 stack frames</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+... Removed 11 stack frames</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
 </body>
 </html>
