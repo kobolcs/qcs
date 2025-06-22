@@ -28,7 +28,7 @@ The **Testcontainers** pattern of managing ephemeral test dependencies in code i
 ### Installation and Running
 
 **Prerequisites:**
-* Java Development Kit (JDK) 17 or later
+* Java Development Kit (JDK) 21 or later
 * Apache Maven
 * Docker Desktop (for Testcontainers)
 
