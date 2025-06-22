@@ -12,7 +12,7 @@ import org.awaitility.Awaitility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
@@ -39,62 +39,96 @@ import static org.testng.Assert.fail;
 public class EventDrivenTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventDrivenTest.class);
+
     private static final String TOPIC = "order_created_topic";
     private static final String DLQ_TOPIC = "order_dead_letter_topic";
+    private static final String KAFKA_IMAGE = "confluentinc/cp-kafka:7.2.1";
+    private static final String REDIS_IMAGE = "redis:7.0.2";
+    private static final String KAFKA_ALIAS = "kafka";
+    private static final String REDIS_ALIAS = "redis";
+    private static final int REDIS_PORT = 6379;
+    private static final int ORDER_SERVICE_PORT = 8080;
+    private static final String ENV_KAFKA_BOOTSTRAP = "SPRING_KAFKA_BOOTSTRAP_SERVERS";
+    private static final String ENV_REDIS_HOST = "SPRING_DATA_REDIS_HOST";
+    private static final String ENV_MANAGEMENT_ENDPOINTS = "MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE";
+    private static final String MANAGEMENT_ENDPOINTS_VALUE = "health";
+    private static final String HEALTH_ENDPOINT = "/actuator/health";
+    private static final Duration HEALTH_TIMEOUT = Duration.ofSeconds(120);
+
     private static final Network network = Network.newNetwork();
 
-    private KafkaContainer kafka;
-    private GenericContainer<?> redis;
-    private GenericContainer<?> orderServiceApp;
+    private static KafkaContainer kafka;
+    private static GenericContainer<?> redis;
+    private static GenericContainer<?> orderServiceApp;
 
-    private Jedis jedis;
-    private TestKafkaProducer testKafkaProducer;
+    private static Jedis jedis;
+    private static TestKafkaProducer testKafkaProducer;
 
     @BeforeClass
-    public void setupTestClass() {
-        kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.2.1"))
+    public static void setupTestClass() {
+        kafka = new KafkaContainer(DockerImageName.parse(KAFKA_IMAGE))
                 .withNetwork(network)
-                .withNetworkAliases("kafka");
-
-        redis = new GenericContainer<>(DockerImageName.parse("redis:7.0.2"))
-                .withExposedPorts(6379)
+                .withNetworkAliases(KAFKA_ALIAS);
+        redis = new GenericContainer<>(DockerImageName.parse(REDIS_IMAGE))
+                .withExposedPorts(REDIS_PORT)
                 .withNetwork(network)
-                .withNetworkAliases("redis");
+                .withNetworkAliases(REDIS_ALIAS);
 
         orderServiceApp = new GenericContainer<>(
                 new ImageFromDockerfile().withDockerfile(Paths.get("Dockerfile")))
-                .withExposedPorts(8080)
+                .withExposedPorts(ORDER_SERVICE_PORT)
                 .withNetwork(network)
                 .dependsOn(kafka, redis)
-                .withEnv("SPRING_KAFKA_BOOTSTRAP_SERVERS", "kafka:9092")
-                .withEnv("SPRING_DATA_REDIS_HOST", "redis")
-                .withEnv("MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE", "health")
-                .waitingFor(Wait.forHttp("/actuator/health").forStatusCode(200)
-                        .withStartupTimeout(Duration.ofSeconds(120)));
+                .withEnv(ENV_KAFKA_BOOTSTRAP, KAFKA_ALIAS + ":9092")
+                .withEnv(ENV_REDIS_HOST, REDIS_ALIAS)
+                .withEnv(ENV_MANAGEMENT_ENDPOINTS, MANAGEMENT_ENDPOINTS_VALUE)
+                .waitingFor(Wait.forHttp(HEALTH_ENDPOINT).forStatusCode(200)
+                        .withStartupTimeout(HEALTH_TIMEOUT));
 
         LOGGER.info("Starting Testcontainers... This will take a moment.");
-        kafka.start();
-        redis.start();
-        orderServiceApp.start();
-        LOGGER.info("Testcontainers started successfully.");
+        try {
+            kafka.start();
+            redis.start();
+            orderServiceApp.start();
+            LOGGER.info("Testcontainers started successfully.");
+        } catch (Exception e) {
+            LOGGER.error("Failed to start containers: {}", e.getMessage(), e);
+            if (orderServiceApp != null)
+                orderServiceApp.stop();
+            if (redis != null)
+                redis.stop();
+            if (kafka != null)
+                kafka.stop();
+            throw new RuntimeException("Failed to start containers", e);
+        }
 
         jedis = new Jedis(redis.getHost(), redis.getFirstMappedPort());
         testKafkaProducer = new TestKafkaProducer(kafka.getBootstrapServers(), TOPIC);
     }
 
     @AfterClass
-    public void cleanupTestClass() {
+    public static void cleanupTestClass() {
         LOGGER.info("Stopping Testcontainers...");
-        if (jedis != null)
-            jedis.close();
-        if (testKafkaProducer != null)
-            testKafkaProducer.close();
+        try {
+            if (jedis != null)
+                jedis.close();
+        } catch (Exception e) {
+            LOGGER.warn("Failed to close Jedis", e);
+        }
+        try {
+            if (testKafkaProducer != null)
+                testKafkaProducer.close();
+        } catch (Exception e) {
+            LOGGER.warn("Failed to close TestKafkaProducer", e);
+        }
         if (orderServiceApp != null)
             orderServiceApp.stop();
         if (redis != null)
             redis.stop();
         if (kafka != null)
             kafka.stop();
+        if (network != null)
+            network.close();
         LOGGER.info("Testcontainers stopped.");
     }
 
@@ -133,12 +167,9 @@ public class EventDrivenTest {
         LOGGER.info("Successfully verified order {} is PROCESSED.", orderId);
     }
 
-
     @Test(groups = "integration", description = "Should route a malformed event to the dead-letter queue")
     public void testMalformedOrderGoesToDlq() {
         String orderId = UUID.randomUUID().toString();
-        // This JSON is malformed because the 'description' field is missing, which the
-        // service expects.
         String invalidOrderJson = "{\"id\":\"" + orderId + "\"}";
 
         try (TestKafkaConsumer dlqConsumer = new TestKafkaConsumer(kafka.getBootstrapServers(), DLQ_TOPIC, orderId)) {
@@ -153,7 +184,6 @@ public class EventDrivenTest {
                     .untilAsserted(() -> {
                         Optional<String> receivedMessage = dlqConsumer.pollForMessageWithKey();
                         assertTrue(receivedMessage.isPresent(), "Message for order " + orderId + " should be in DLQ");
-                        // Optionally assert the message content for extra safety
                         assertTrue(receivedMessage.get().contains(orderId));
                     });
 
@@ -161,7 +191,6 @@ public class EventDrivenTest {
         }
     }
 
-    // NOTE: lightweight Kafka consumer used only for test assertions
     private static class TestKafkaConsumer implements AutoCloseable {
         private final KafkaConsumer<String, String> consumer;
         private final String messageKeyToFind;
@@ -179,7 +208,7 @@ public class EventDrivenTest {
         }
 
         public Optional<String> pollForMessageWithKey() {
-            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(200));
+            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
             for (ConsumerRecord<String, String> record : records) {
                 if (messageKeyToFind.equals(record.key())) {
                     return Optional.of(record.value());

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite thread-count="3" parallel="methods" name="Failed suite [EventDrivenIntegrationSuite]" guice-stage="DEVELOPMENT" verbose="0">
+  <test thread-count="3" parallel="methods" name="Full Integration Test(failed)" verbose="0">
+    <groups>
+      <run>
+        <include name="integration"/>
+      </run>
+    </groups>
+    <classes>
+      <class name="com.eventdriven.order.EventDrivenTest">
+        <methods>
+          <include name="testMalformedOrderGoesToDlq"/>
+          <include name="testOrderEventEndToEnd"/>
+        </methods>
+      </class> <!-- com.eventdriven.order.EventDrivenTest -->
+    </classes>
+  </test> <!-- Full Integration Test(failed) -->
+</suite> <!-- Failed suite [EventDrivenIntegrationSuite] -->
