@@ -28,8 +28,9 @@ public class TestKafkaProducer implements AutoCloseable {
 
     /**
      * Constructs a test Kafka producer for the given bootstrap servers and topic.
+     * 
      * @param bootstrapServers Kafka bootstrap servers
-     * @param topic Kafka topic to send messages to
+     * @param topic            Kafka topic to send messages to
      */
     public TestKafkaProducer(String bootstrapServers, String topic) {
         Objects.requireNonNull(bootstrapServers, "bootstrapServers must not be null");
@@ -52,7 +53,7 @@ public class TestKafkaProducer implements AutoCloseable {
      *
      * @param order the order to send (must not be null)
      * @throws JsonProcessingException if serialization fails
-     * @throws RuntimeException if sending to Kafka fails
+     * @throws RuntimeException        if sending to Kafka fails
      */
     public void sendOrder(Order order) throws JsonProcessingException {
         Objects.requireNonNull(order, "order must not be null");
@@ -65,19 +66,13 @@ public class TestKafkaProducer implements AutoCloseable {
      * Sends a raw JSON string value to the topic.
      * This is used to simulate malformed events to test DLQ functionality.
      *
-     * @param key The message key.
+     * @param key       The message key.
      * @param jsonValue The raw JSON string to send.
      * @throws RuntimeException if sending to Kafka fails
      */
+    public void sendRawJson(String key, String jsonValue) {
         Objects.requireNonNull(key, "key must not be null");
         Objects.requireNonNull(jsonValue, "jsonValue must not be null");
-    try {
-        producer.send(record).get(SEND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-    } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-        logger.error("Thread interrupted while waiting for Kafka acknowledgement with key: {}", key, e);
-        throw new RuntimeException("Thread interrupted sending raw JSON to Kafka with key: " + key, e);
-    }
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, jsonValue);
         sendRecord(record, "raw JSON with key " + key);
     }
@@ -92,7 +87,8 @@ public class TestKafkaProducer implements AutoCloseable {
             logger.info("Sent {} to Kafka", description);
         } catch (TimeoutException te) {
             logger.error("Timed out after {} seconds sending {}", SEND_TIMEOUT_SECONDS, description, te);
-            throw new RuntimeException("Timed out after " + SEND_TIMEOUT_SECONDS + " seconds sending " + description + " to Kafka", te);
+            throw new RuntimeException(
+                    "Timed out after " + SEND_TIMEOUT_SECONDS + " seconds sending " + description + " to Kafka", te);
         } catch (Exception e) {
             logger.error("Failed to send {}", description, e);
             throw new RuntimeException("Failed to send " + description + " to Kafka", e);

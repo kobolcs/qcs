@@ -22,6 +22,11 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - name: Ensure Docker is running
+        run: |
+          docker info
+          docker version
+
       - name: Build and Test
         working-directory: java-event-driven-tests
         run: mvn clean test -DsuiteXmlFile=testng-integration-suite.xml

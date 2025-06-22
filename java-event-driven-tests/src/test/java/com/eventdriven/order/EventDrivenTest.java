@@ -35,14 +35,12 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
-@Test
 public class EventDrivenTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventDrivenTest.class);
 
     private static final String TOPIC = "order_created_topic";
     private static final String DLQ_TOPIC = "order_dead_letter_topic";
-    private static final String KAFKA_IMAGE = "confluentinc/cp-kafka:7.2.1";
     private static final String REDIS_IMAGE = "redis:7.0.2";
     private static final String KAFKA_ALIAS = "kafka";
     private static final String REDIS_ALIAS = "redis";
@@ -54,8 +52,8 @@ public class EventDrivenTest {
     private static final String MANAGEMENT_ENDPOINTS_VALUE = "health";
     private static final String HEALTH_ENDPOINT = "/actuator/health";
     private static final Duration HEALTH_TIMEOUT = Duration.ofSeconds(120);
-
-    private static final Network network = Network.newNetwork();
+   
+    private static Network network;
 
     private static KafkaContainer kafka;
     private static GenericContainer<?> redis;
@@ -64,9 +62,36 @@ public class EventDrivenTest {
     private static Jedis jedis;
     private static TestKafkaProducer testKafkaProducer;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public static void setupTestClass() {
-        kafka = new KafkaContainer(DockerImageName.parse(KAFKA_IMAGE))
+        try {
+            network = Network.newNetwork();
+        } catch (Exception e) {
+            LOGGER.error("Failed to create Docker network: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to create Docker network", e);
+        }
+        startContainers();
+        try {
+            jedis = new Jedis(redis.getHost(), redis.getFirstMappedPort());
+            jedis.ping(); // Test connection
+        } catch (Exception e) {
+            LOGGER.error("Failed to connect to Redis: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to connect to Redis", e);
+        }
+        testKafkaProducer = new TestKafkaProducer(kafka.getBootstrapServers(), TOPIC);
+
+        // Add shutdown hook for cleanup
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                cleanupTestClass();
+            } catch (Exception ex) {
+                LOGGER.warn("Exception during shutdown hook cleanup", ex);
+            }
+        }));
+    }
+
+    private static void startContainers() {
+        kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.5.0"))
                 .withNetwork(network)
                 .withNetworkAliases(KAFKA_ALIAS);
         redis = new GenericContainer<>(DockerImageName.parse(REDIS_IMAGE))
@@ -101,12 +126,9 @@ public class EventDrivenTest {
                 kafka.stop();
             throw new RuntimeException("Failed to start containers", e);
         }
-
-        jedis = new Jedis(redis.getHost(), redis.getFirstMappedPort());
-        testKafkaProducer = new TestKafkaProducer(kafka.getBootstrapServers(), TOPIC);
     }
 
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     public static void cleanupTestClass() {
         LOGGER.info("Stopping Testcontainers...");
         try {
@@ -121,14 +143,42 @@ public class EventDrivenTest {
         } catch (Exception e) {
             LOGGER.warn("Failed to close TestKafkaProducer", e);
         }
-        if (orderServiceApp != null)
-            orderServiceApp.stop();
-        if (redis != null)
-            redis.stop();
-        if (kafka != null)
-            kafka.stop();
-        if (network != null)
-            network.close();
+        if (orderServiceApp != null) {
+            try {
+                orderServiceApp.stop();
+                orderServiceApp.close();
+            } catch (Exception e) {
+                LOGGER.warn("Failed to close orderServiceApp", e);
+            }
+        }
+        if (redis != null) {
+            try {
+                redis.stop();
+                redis.close();
+            } catch (Exception e) {
+                LOGGER.warn("Failed to close redis", e);
+            }
+        }
+        if (kafka != null) {
+            try {
+                kafka.stop();
+            } catch (Exception e) {
+                LOGGER.warn("Failed to stop kafka", e);
+            }
+            try {
+                kafka.close();
+            } catch (Exception e) {
+                LOGGER.warn("Failed to close kafka", e);
+            }
+        }
+        if (network != null) {
+            try {
+                network.close();
+            } catch (Exception e) {
+                LOGGER.warn("Failed to close Docker network", e);
+            }
+            network = null;
+        }
         LOGGER.info("Testcontainers stopped.");
     }
 
@@ -219,8 +269,12 @@ public class EventDrivenTest {
 
         @Override
         public void close() {
-            if (consumer != null) {
-                consumer.close();
+            try {
+                // Any additional cleanup logic if needed
+            } finally {
+                if (consumer != null) {
+                    consumer.close();
+                }
             }
         }
     }
