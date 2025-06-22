@@ -32,7 +32,9 @@ The **Testcontainers** pattern of managing ephemeral test dependencies in code i
 * Apache Maven
 * Docker Desktop (for Testcontainers)
 
-If Docker is not available, the integration tests will be skipped automatically.
+Docker is required to run the integration tests. The GitHub Actions workflow
+provides Docker by default, so the tests execute there automatically. When
+running locally without Docker, the tests will be skipped.
 
 The JDK and Maven are only necessary when not using the Docker image provided in
 this repository.
