@@ -1,5 +1,5 @@
 # Stage 1: Build the application using Maven
-FROM maven:3.9-eclipse-temurin-17 AS build
+FROM maven:3.9-eclipse-temurin-21@sha256:<digest> AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
@@ -7,7 +7,7 @@ COPY src ./src
 RUN mvn clean install -DskipTests
 
 # Stage 2: Create the final lightweight runtime image
-FROM eclipse-temurin:17-jre-jammy
+FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 # Copy the executable JAR from the build stage
 COPY --from=build /app/target/*.jar app.jar

@@ -69,7 +69,10 @@ jobs:
         run: dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
 
       - name: Generate LivingDoc HTML
-        run: livingdoc test-assembly bin/Release/net8.0/SpecFlowApiTests.dll -t TestResults.trx
+        run: |
+          livingdoc test-assembly bin/Release/net8.0/SpecFlowApiTests.dll \
+            --test-results TestResults.trx \
+            --output LivingDoc.html
 
       - name: Upload LivingDoc artifact
         uses: actions/upload-artifact@v4
