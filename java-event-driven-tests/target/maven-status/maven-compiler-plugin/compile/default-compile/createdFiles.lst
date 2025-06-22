@@ -1,7 +1,0 @@
-com\eventdriven\order\redis\OrderStatusRepository.class
-com\eventdriven\order\model\Order$Builder.class
-com\eventdriven\order\kafka\OrderKafkaConfig.class
-com\eventdriven\order\model\Order.class
-com\eventdriven\order\OrderServiceApplication.class
-com\eventdriven\order\kafka\OrderEventConsumer.class
-com\eventdriven\order\util\TestKafkaProducer.class
