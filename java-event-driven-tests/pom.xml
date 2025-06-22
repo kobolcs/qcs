@@ -9,6 +9,8 @@
     <testcontainers.version>1.21.2</testcontainers.version>
     <testng.version>7.11.0</testng.version>
     <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
   </properties>
   <dependencies>
     <dependency>
@@ -87,6 +89,7 @@
         <plugin>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
+            <version>${spring-boot.version}</version>
         </plugin>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>

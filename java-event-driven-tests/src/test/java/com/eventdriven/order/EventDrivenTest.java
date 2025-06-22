@@ -52,7 +52,7 @@ public class EventDrivenTest {
     private static final String MANAGEMENT_ENDPOINTS_VALUE = "health";
     private static final String HEALTH_ENDPOINT = "/actuator/health";
     private static final Duration HEALTH_TIMEOUT = Duration.ofSeconds(120);
-   
+
     private static Network network;
 
     private static KafkaContainer kafka;
@@ -91,7 +91,9 @@ public class EventDrivenTest {
     }
 
     private static void startContainers() {
-        kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.5.0"))
+        kafka = new KafkaContainer(
+                DockerImageName.parse("confluentinc/cp-kafka:7.5.0")
+                        .asCompatibleSubstituteFor("apache/kafka"))
                 .withNetwork(network)
                 .withNetworkAliases(KAFKA_ALIAS);
         redis = new GenericContainer<>(DockerImageName.parse(REDIS_IMAGE))
