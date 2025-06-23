@@ -99,3 +99,4 @@ bin/
 logs/
 output/
 go-api-tests/weather_test_report.json
+java-event-driven-tests/target/
