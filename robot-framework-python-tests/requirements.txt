@@ -6,7 +6,7 @@ robotframework-imagehorizonlibrary==1.0.0
 Pillow==11.2.1
 allure-robotframework==2.14.3
 robotframework-pabot==4.2.0
-robotframework-dashboard==0.9.4
+robotframework-dashboard==1.0.1
 pytest==8.4.1
 pytest-html==4.1.1
 requests==2.32.4
