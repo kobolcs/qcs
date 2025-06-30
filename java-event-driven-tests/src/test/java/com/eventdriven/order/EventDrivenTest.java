@@ -196,6 +196,35 @@ public class EventDrivenTest {
         }
     }
 
+    private static void setupTestClients() {
+        try {
+            jedis = new Jedis(redis.getHost(), redis.getFirstMappedPort());
+            jedis.ping(); // Test connection
+            LOGGER.info("Redis connection established");
+
+            testKafkaProducer = new TestKafkaProducer(kafka.getBootstrapServers(), TOPIC);
+            LOGGER.info("Kafka producer created");
+        } catch (Exception e) {
+            LOGGER.error("Failed to setup test clients", e);
+            throw new RuntimeException("Failed to setup test clients", e);
+        }
+    }
+
+    private static void cleanupContainers() {
+        if (orderServiceApp != null && orderServiceApp.isRunning()) {
+            orderServiceApp.stop();
+        }
+        if (redis != null && redis.isRunning()) {
+            redis.stop();
+        }
+        if (kafka != null && kafka.isRunning()) {
+            kafka.stop();
+        }
+        if (network != null) {
+            network.close();
+        }
+    }
+
     @AfterClass
     public static void cleanupTestClass() {
         LOGGER.info("Stopping Testcontainers...");
@@ -331,4 +360,3 @@ public class EventDrivenTest {
         }
     }
 }
-
