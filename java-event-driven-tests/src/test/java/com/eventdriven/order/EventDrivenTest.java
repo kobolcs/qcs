@@ -82,10 +82,12 @@ public class EventDrivenTest {
             throw new SkipException("Docker is not available, skipping integration tests");
         }
         try {
-            kafka = new KafkaContainer(DockerImageName.parse(KAFKA_IMAGE))
-                    .withNetwork(network)
-                    .withNetworkAliases(KAFKA_ALIAS)
-                    .withEmbeddedZookeeper();
+            KafkaContainer kafkaContainer = new KafkaContainer(
+                    DockerImageName.parse(KAFKA_IMAGE)
+                            .asCompatibleSubstituteFor("apache/kafka"));
+            kafkaContainer.withNetwork(network)
+                    .withNetworkAliases(KAFKA_ALIAS);
+            kafka = kafkaContainer;
 
             redis = new GenericContainer<>(DockerImageName.parse(REDIS_IMAGE))
                     .withExposedPorts(REDIS_PORT)
@@ -127,7 +129,7 @@ public class EventDrivenTest {
 
         } catch (Exception e) {
             LOGGER.error("Failed to start containers: {}", e.getMessage(), e);
-            cleanupContainers();
+            cleanupContainersAndResources();
             throw new RuntimeException("Failed to start containers", e);
         }
     }
@@ -165,22 +167,39 @@ public class EventDrivenTest {
         }
     }
 
-    private static void cleanupContainers() {
-        if (orderServiceApp != null && orderServiceApp.isRunning()) {
+    private static void cleanupContainersAndResources() {
+        // Close test clients
+        try {
+            if (jedis != null) {
+                jedis.close();
+            }
+        } catch (Exception e) {
+            LOGGER.warn("Failed to close Jedis", e);
+        }
+        try {
+            if (testKafkaProducer != null) {
+                testKafkaProducer.close();
+            }
+        } catch (Exception e) {
+            LOGGER.warn("Failed to close TestKafkaProducer", e);
+        }
+
+        // Stop containers in reverse order of startup
+        if (orderServiceApp != null) {
             try {
                 orderServiceApp.stop();
             } catch (Exception e) {
                 LOGGER.warn("Failed to stop application container", e);
             }
         }
-        if (redis != null && redis.isRunning()) {
+        if (redis != null) {
             try {
                 redis.stop();
             } catch (Exception e) {
                 LOGGER.warn("Failed to stop Redis container", e);
             }
         }
-        if (kafka != null && kafka.isRunning()) {
+        if (kafka != null) {
             try {
                 kafka.stop();
             } catch (Exception e) {
@@ -196,54 +215,11 @@ public class EventDrivenTest {
         }
     }
 
-    private static void setupTestClients() {
-        try {
-            jedis = new Jedis(redis.getHost(), redis.getFirstMappedPort());
-            jedis.ping(); // Test connection
-            LOGGER.info("Redis connection established");
-
-            testKafkaProducer = new TestKafkaProducer(kafka.getBootstrapServers(), TOPIC);
-            LOGGER.info("Kafka producer created");
-        } catch (Exception e) {
-            LOGGER.error("Failed to setup test clients", e);
-            throw new RuntimeException("Failed to setup test clients", e);
-        }
-    }
-
-    private static void cleanupContainers() {
-        if (orderServiceApp != null && orderServiceApp.isRunning()) {
-            orderServiceApp.stop();
-        }
-        if (redis != null && redis.isRunning()) {
-            redis.stop();
-        }
-        if (kafka != null && kafka.isRunning()) {
-            kafka.stop();
-        }
-        if (network != null) {
-            network.close();
-        }
-    }
-
     @AfterClass
     public static void cleanupTestClass() {
-        LOGGER.info("Stopping Testcontainers...");
-        try {
-            if (jedis != null) {
-                jedis.close();
-            }
-        } catch (Exception e) {
-            LOGGER.warn("Failed to close Jedis", e);
-        }
-        try {
-            if (testKafkaProducer != null) {
-                testKafkaProducer.close();
-            }
-        } catch (Exception e) {
-            LOGGER.warn("Failed to close TestKafkaProducer", e);
-        }
-        cleanupContainers();
-        LOGGER.info("Testcontainers stopped.");
+        LOGGER.info("Stopping Testcontainers and cleaning up resources...");
+        cleanupContainersAndResources();
+        LOGGER.info("Cleanup complete.");
     }
 
     @BeforeMethod
@@ -310,10 +286,10 @@ public class EventDrivenTest {
                     .pollInterval(Duration.ofMillis(500))
                     .untilAsserted(() -> {
                         Optional<String> receivedMessage = dlqConsumer.pollForMessageWithKey();
-                        assertTrue(receivedMessage.isPresent(), 
-                            "Message for order " + orderId + " should be in DLQ");
+                        assertTrue(receivedMessage.isPresent(),
+                                "Message for order " + orderId + " should be in DLQ");
                         assertTrue(receivedMessage.get().contains(orderId),
-                            "DLQ message should contain order ID");
+                                "DLQ message should contain order ID");
                     });
 
             LOGGER.info("Successfully verified malformed order {} was sent to DLQ.", orderId);
