@@ -133,6 +133,70 @@ public class EventDrivenTest {
     }
 
     private static void setupTestClients() {
+        Jedis tempJedis = null;
+        TestKafkaProducer tempProducer = null;
+        try {
+            tempJedis = new Jedis(redis.getHost(), redis.getFirstMappedPort());
+            tempJedis.ping();
+            LOGGER.info("Redis connection established");
+
+            tempProducer = new TestKafkaProducer(kafka.getBootstrapServers(), TOPIC);
+            LOGGER.info("Kafka producer created");
+
+            jedis = tempJedis;
+            testKafkaProducer = tempProducer;
+        } catch (Exception e) {
+            LOGGER.error("Failed to setup test clients", e);
+            if (tempProducer != null) {
+                try {
+                    tempProducer.close();
+                } catch (Exception ex) {
+                    LOGGER.warn("Failed to close Kafka producer during setup", ex);
+                }
+            }
+            if (tempJedis != null) {
+                try {
+                    tempJedis.close();
+                } catch (Exception ex) {
+                    LOGGER.warn("Failed to close Jedis during setup", ex);
+                }
+            }
+            throw new RuntimeException("Failed to setup test clients", e);
+        }
+    }
+
+    private static void cleanupContainers() {
+        if (orderServiceApp != null && orderServiceApp.isRunning()) {
+            try {
+                orderServiceApp.stop();
+            } catch (Exception e) {
+                LOGGER.warn("Failed to stop application container", e);
+            }
+        }
+        if (redis != null && redis.isRunning()) {
+            try {
+                redis.stop();
+            } catch (Exception e) {
+                LOGGER.warn("Failed to stop Redis container", e);
+            }
+        }
+        if (kafka != null && kafka.isRunning()) {
+            try {
+                kafka.stop();
+            } catch (Exception e) {
+                LOGGER.warn("Failed to stop Kafka container", e);
+            }
+        }
+        if (network != null) {
+            try {
+                network.close();
+            } catch (Exception e) {
+                LOGGER.warn("Failed to close network", e);
+            }
+        }
+    }
+
+    private static void setupTestClients() {
         try {
             jedis = new Jedis(redis.getHost(), redis.getFirstMappedPort());
             jedis.ping(); // Test connection
