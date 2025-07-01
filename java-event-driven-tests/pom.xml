@@ -22,7 +22,7 @@
     <!-- Dependency versions -->
     <spring-boot.version>3.5.3</spring-boot.version>
     <spring-kafka.version>3.3.0</spring-kafka.version>
-    <testcontainers.version>1.21.2</testcontainers.version>
+    <testcontainers.version>1.21.3</testcontainers.version>
     <testng.version>7.11.0</testng.version>
     <jackson.version>2.19.1</jackson.version>
     <jedis.version>6.0.0</jedis.version>
