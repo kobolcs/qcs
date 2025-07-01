@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Console appender with pattern -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Test-specific logging levels -->
+    <logger name="com.eventdriven.order" level="DEBUG"/>
+    <logger name="org.testcontainers" level="INFO"/>
+    <logger name="org.springframework.kafka" level="INFO"/>
+    <logger name="org.apache.kafka" level="WARN"/>
+    <logger name="docker.image.build" level="INFO"/>
+
+    <!-- Reduce noise from Testcontainers internals -->
+    <logger name="org.testcontainers.shaded" level="WARN"/>
+    <logger name="com.github.dockerjava" level="WARN"/>
+
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

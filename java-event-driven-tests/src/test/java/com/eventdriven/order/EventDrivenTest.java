@@ -17,6 +17,8 @@ import org.testcontainers.DockerClientFactory;
 import org.testng.SkipException;
 import org.testcontainers.containers.Network;
 import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.images.builder.ImageFromDockerfile;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -24,6 +26,7 @@ import org.testng.annotations.Test;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Optional;
@@ -37,6 +40,17 @@ import static org.testng.Assert.fail;
 
 /**
  * Integration tests for the event-driven order processing system.
+ * <p>
+ * This class uses Testcontainers to spin up Kafka, Redis, and the Order Service
+ * application in Docker containers, and verifies end-to-end event processing
+ * and error
+ * handling.
+ *
+ * Tests the complete flow:
+ * 1. Kafka receives order events
+ * 2. Spring Boot application consumes events
+ * 3. Order status is updated in Redis
+ * 4. Failed events are sent to dead letter queue
  */
 @Test(groups = "integration")
 public class EventDrivenTest {
@@ -47,23 +61,33 @@ public class EventDrivenTest {
     private static final String DLQ_TOPIC = "order_dead_letter_topic";
     private static final String KAFKA_IMAGE = "apache/kafka:3.8.1";
     private static final String REDIS_IMAGE = "redis:7-alpine";
+    private static final String KAFKA_ALIAS = "kafka";
+    private static final String REDIS_ALIAS = "redis";
     private static final int REDIS_PORT = 6379;
+    private static final int ORDER_SERVICE_PORT = 8080;
+    private static final String ENV_KAFKA_BOOTSTRAP = "SPRING_KAFKA_BOOTSTRAP_SERVERS";
+    private static final String ENV_REDIS_HOST = "SPRING_DATA_REDIS_HOST";
+    private static final String ENV_MANAGEMENT_ENDPOINTS = "MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE";
+    private static final String MANAGEMENT_ENDPOINTS_VALUE = "health";
+    private static final String HEALTH_ENDPOINT = "/actuator/health";
+    private static final Duration HEALTH_TIMEOUT = Duration.ofMinutes(3);
 
     private static final Network network = Network.newNetwork();
 
     private static KafkaContainer kafka;
     private static GenericContainer<?> redis;
+    private static GenericContainer<?> orderServiceApp;
 
     private static Jedis jedis;
     private static TestKafkaProducer testKafkaProducer;
 
     static {
-        System.out.println("=== EventDrivenTest CLASS LOADED ===");
+        LOGGER.info("=== EventDrivenTest CLASS LOADED ===");
     }
 
     @BeforeClass(groups = "integration")
     public static void setupTestClass() {
-        System.out.println("=== Starting EventDrivenTest Setup ===");
+        LOGGER.info("=== Starting EventDrivenTest Setup ===");
 
         // Check Docker availability first
         if (!DockerClientFactory.instance().isDockerAvailable()) {
@@ -72,33 +96,52 @@ public class EventDrivenTest {
             throw new SkipException(message);
         }
 
-        System.out.println("Docker is available, proceeding with container setup...");
+        LOGGER.info("Docker is available, proceeding with container setup...");
 
         try {
-            // Start Kafka container
-            System.out.println("Starting Kafka container...");
+            // Start infrastructure containers first
+            LOGGER.info("Starting Kafka container...");
             kafka = new KafkaContainer(DockerImageName.parse(KAFKA_IMAGE))
                     .withNetwork(network)
-                    .withNetworkAliases("kafka");
+                    .withNetworkAliases(KAFKA_ALIAS);
             kafka.start();
-            System.out.println("Kafka started successfully on: " + kafka.getBootstrapServers());
+            LOGGER.info("Kafka started successfully on: {}", kafka.getBootstrapServers());
 
-            // Start Redis container
-            System.out.println("Starting Redis container...");
+            LOGGER.info("Starting Redis container...");
             redis = new GenericContainer<>(DockerImageName.parse(REDIS_IMAGE))
                     .withExposedPorts(REDIS_PORT)
                     .withNetwork(network)
-                    .withNetworkAliases("redis");
+                    .withNetworkAliases(REDIS_ALIAS);
             redis.start();
-            System.out.println("Redis started successfully on: " + redis.getHost() + ":" + redis.getFirstMappedPort());
+            LOGGER.info("Redis started successfully on: {}:{}", redis.getHost(), redis.getFirstMappedPort());
+
+            // Build and start the application container
+            LOGGER.info("Building application Docker image...");
+            orderServiceApp = new GenericContainer<>(
+                    new ImageFromDockerfile()
+                            .withDockerfile(Paths.get("Dockerfile")))
+                    .withExposedPorts(ORDER_SERVICE_PORT)
+                    .withNetwork(network)
+                    .dependsOn(kafka, redis)
+                    .withEnv(ENV_KAFKA_BOOTSTRAP, KAFKA_ALIAS + ":9092")
+                    .withEnv(ENV_REDIS_HOST, REDIS_ALIAS)
+                    .withEnv(ENV_MANAGEMENT_ENDPOINTS, MANAGEMENT_ENDPOINTS_VALUE)
+                    .waitingFor(Wait.forHttp(HEALTH_ENDPOINT)
+                            .forStatusCode(200)
+                            .withStartupTimeout(HEALTH_TIMEOUT))
+                    .withLogConsumer(outputFrame -> LOGGER.debug("APP: {}", outputFrame.getUtf8String()));
+
+            LOGGER.info("Starting application container...");
+            orderServiceApp.start();
+            LOGGER.info("Application started successfully");
 
             // Setup test clients
             setupTestClients();
 
-            System.out.println("=== EventDrivenTest Setup Complete ===");
+            LOGGER.info("=== EventDrivenTest Setup Complete ===");
 
         } catch (Exception e) {
-            System.err.println("Failed to start containers during setup: " + e.getMessage());
+            LOGGER.error("Failed to start containers during setup", e);
             cleanupContainersAndResources();
             throw new RuntimeException("Failed to start containers: " + e.getMessage(), e);
         }
@@ -107,27 +150,27 @@ public class EventDrivenTest {
     private static void setupTestClients() {
         try {
             // Setup Redis client
-            System.out.println("Setting up Redis client...");
+            LOGGER.info("Setting up Redis client...");
             jedis = new Jedis(redis.getHost(), redis.getFirstMappedPort());
             jedis.ping(); // Test connection
-            System.out.println("Redis client connected successfully");
+            LOGGER.info("Redis client connected successfully");
 
             // Setup Kafka producer
-            System.out.println("Setting up Kafka producer...");
+            LOGGER.info("Setting up Kafka producer...");
             testKafkaProducer = new TestKafkaProducer(kafka.getBootstrapServers(), TOPIC);
-            System.out.println("Kafka producer created successfully");
+            LOGGER.info("Kafka producer created successfully");
 
         } catch (Exception e) {
-            System.err.println("Failed to setup test clients: " + e.getMessage());
+            LOGGER.error("Failed to setup test clients", e);
             throw new RuntimeException("Failed to setup test clients: " + e.getMessage(), e);
         }
     }
 
     @AfterClass(groups = "integration")
     public static void cleanupTestClass() {
-        System.out.println("=== Starting EventDrivenTest Cleanup ===");
+        LOGGER.info("=== Starting EventDrivenTest Cleanup ===");
         cleanupContainersAndResources();
-        System.out.println("=== EventDrivenTest Cleanup Complete ===");
+        LOGGER.info("=== EventDrivenTest Cleanup Complete ===");
     }
 
     private static void cleanupContainersAndResources() {
@@ -135,76 +178,86 @@ public class EventDrivenTest {
         if (jedis != null) {
             try {
                 jedis.close();
-                System.out.println("Redis client closed");
+                LOGGER.info("Redis client closed");
             } catch (Exception e) {
-                System.err.println("Failed to close Jedis: " + e.getMessage());
+                LOGGER.error("Failed to close Jedis", e);
             }
         }
 
         if (testKafkaProducer != null) {
             try {
                 testKafkaProducer.close();
-                System.out.println("Kafka producer closed");
+                LOGGER.info("Kafka producer closed");
             } catch (Exception e) {
-                System.err.println("Failed to close TestKafkaProducer: " + e.getMessage());
+                LOGGER.error("Failed to close TestKafkaProducer", e);
             }
         }
 
-        // Stop containers
+        // Stop containers in reverse order of startup
+        if (orderServiceApp != null) {
+            try {
+                orderServiceApp.stop();
+                LOGGER.info("Application container stopped");
+            } catch (Exception e) {
+                LOGGER.error("Failed to stop application container", e);
+            }
+        }
+
         if (redis != null) {
             try {
                 redis.stop();
-                System.out.println("Redis container stopped");
+                LOGGER.info("Redis container stopped");
             } catch (Exception e) {
-                System.err.println("Failed to stop Redis container: " + e.getMessage());
+                LOGGER.error("Failed to stop Redis container", e);
             }
         }
 
         if (kafka != null) {
             try {
                 kafka.stop();
-                System.out.println("Kafka container stopped");
+                LOGGER.info("Kafka container stopped");
             } catch (Exception e) {
-                System.err.println("Failed to stop Kafka container: " + e.getMessage());
+                LOGGER.error("Failed to stop Kafka container", e);
             }
         }
 
         if (network != null) {
             try {
                 network.close();
-                System.out.println("Network closed");
+                LOGGER.info("Network closed");
             } catch (Exception e) {
-                System.err.println("Failed to close network: " + e.getMessage());
+                LOGGER.error("Failed to close network", e);
             }
         }
     }
 
     @BeforeMethod(groups = "integration")
     public void setupTestMethod() {
-        System.out.println("=== Setting up test method ===");
+        LOGGER.debug("=== Setting up test method ===");
 
         // Verify containers are still running
-        if (kafka == null || redis == null || jedis == null || testKafkaProducer == null) {
+        if (kafka == null || redis == null || jedis == null || testKafkaProducer == null || orderServiceApp == null) {
             throw new IllegalStateException("Test infrastructure not properly initialized. " +
                     "Kafka: " + (kafka != null) + ", Redis: " + (redis != null) +
-                    ", Jedis: " + (jedis != null) + ", Producer: " + (testKafkaProducer != null));
+                    ", Jedis: " + (jedis != null) + ", Producer: " + (testKafkaProducer != null) +
+                    ", App: " + (orderServiceApp != null));
         }
 
         // Verify Redis connection and reconnect if needed
         try {
             jedis.ping(); // Test connection first
-            System.out.println("Redis connection verified");
+            LOGGER.debug("Redis connection verified");
         } catch (Exception e) {
-            System.out.println("Redis connection lost, reconnecting...");
+            LOGGER.warn("Redis connection lost, reconnecting...");
             try {
                 if (jedis != null) {
                     jedis.close();
                 }
                 jedis = new Jedis(redis.getHost(), redis.getFirstMappedPort());
                 jedis.ping();
-                System.out.println("Redis reconnected successfully");
+                LOGGER.info("Redis reconnected successfully");
             } catch (Exception reconnectException) {
-                System.err.println("Failed to reconnect to Redis: " + reconnectException.getMessage());
+                LOGGER.error("Failed to reconnect to Redis", reconnectException);
                 throw new RuntimeException("Redis connection failed: " + reconnectException.getMessage(),
                         reconnectException);
             }
@@ -212,17 +265,17 @@ public class EventDrivenTest {
 
         try {
             jedis.flushDB();
-            System.out.println("Redis database flushed for new test");
+            LOGGER.debug("Redis database flushed for new test");
         } catch (Exception e) {
-            System.err.println("Failed to flush Redis: " + e.getMessage());
+            LOGGER.warn("Failed to flush Redis: {}", e.getMessage());
             // Don't fail the test for flush issues, just log it
-            System.out.println("Continuing test despite flush failure...");
+            LOGGER.debug("Continuing test despite flush failure...");
         }
     }
 
-    @Test(groups = "integration", description = "Should process an order event and update status in Redis to PROCESSED")
+    @Test(groups = "integration", description = "Should process an order event end-to-end: Kafka → Spring Boot → Redis")
     public void testOrderEventEndToEnd() {
-        System.out.println("=== Starting testOrderEventEndToEnd ===");
+        LOGGER.info("=== Starting testOrderEventEndToEnd ===");
 
         String orderId = UUID.randomUUID().toString();
         Order testOrder = Order.builder()
@@ -230,7 +283,7 @@ public class EventDrivenTest {
                 .description("A test order from the E2E suite")
                 .build();
 
-        System.out.println("Sending order " + orderId + " to Kafka topic " + TOPIC);
+        LOGGER.info("Sending order {} to Kafka topic {}", orderId, TOPIC);
 
         try {
             testKafkaProducer.sendOrder(testOrder);
@@ -239,28 +292,97 @@ public class EventDrivenTest {
         }
 
         String redisKey = REDIS_KEY_PREFIX + orderId;
-        System.out.println("Awaiting for Redis key " + redisKey + " to be PROCESSED...");
+        LOGGER.info("Awaiting for Redis key {} to be PROCESSED...", redisKey);
 
-        // For now, let's just verify the infrastructure works
-        System.out.println("Test infrastructure is working - containers are running!");
-        System.out.println("Kafka bootstrap servers: " + kafka.getBootstrapServers());
-        System.out.println("Redis host:port: " + redis.getHost() + ":" + redis.getFirstMappedPort());
+        // Wait for the Spring Boot application to consume the message and update Redis
+        Awaitility.await()
+                .atMost(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofMillis(500))
+                .untilAsserted(() -> {
+                    try {
+                        String status = jedis.get(redisKey);
+                        LOGGER.debug("Polling Redis for order {}. Current status: {}", orderId, status);
+                        assertEquals(status, "PROCESSED",
+                                "Order status in Redis should be 'PROCESSED' for order " + orderId);
+                    } catch (JedisConnectionException e) {
+                        fail("Redis connection lost during test: " + e.getMessage());
+                    }
+                });
 
-        // Simple success for now - we'll add the full message flow testing later
-        assertTrue(true, "Infrastructure test passed");
+        LOGGER.info("Successfully verified order {} is PROCESSED in Redis!", orderId);
+        LOGGER.info("✅ End-to-end test passed: Kafka → Spring Boot Consumer → Redis");
     }
 
     @Test(groups = "integration", description = "Should route a malformed event to the dead-letter queue")
     public void testMalformedOrderGoesToDlq() {
-        System.out.println("=== Starting testMalformedOrderGoesToDlq ===");
+        LOGGER.info("=== Starting testMalformedOrderGoesToDlq ===");
 
         String orderId = UUID.randomUUID().toString();
+        // Missing required 'description' field to trigger deserialization error
         String invalidOrderJson = "{\"id\":\"" + orderId + "\"}";
 
-        System.out.println("Sending malformed order " + orderId + " to Kafka");
-        testKafkaProducer.sendRawJson(orderId, invalidOrderJson);
+        try (TestKafkaConsumer dlqConsumer = new TestKafkaConsumer(kafka.getBootstrapServers(), DLQ_TOPIC, orderId)) {
 
-        System.out.println("Malformed order sent successfully - infrastructure test passed");
-        assertTrue(true, "Infrastructure test passed");
+            LOGGER.info("Sending malformed order {} to Kafka", orderId);
+            testKafkaProducer.sendRawJson(orderId, invalidOrderJson);
+
+            LOGGER.info("Awaiting for DLQ to receive message for order {}", orderId);
+            Awaitility.await()
+                    .atMost(Duration.ofSeconds(30))
+                    .pollInterval(Duration.ofMillis(500))
+                    .untilAsserted(() -> {
+                        Optional<String> receivedMessage = dlqConsumer.pollForMessageWithKey();
+                        assertTrue(receivedMessage.isPresent(),
+                                "Message for order " + orderId + " should be in DLQ");
+                        assertTrue(receivedMessage.get().contains(orderId),
+                                "DLQ message should contain order ID");
+                    });
+
+            LOGGER.info("Successfully verified malformed order {} was sent to DLQ!", orderId);
+            LOGGER.info("✅ Dead Letter Queue test passed: Malformed message → DLQ");
+        }
+    }
+
+    /**
+     * Test helper class for consuming messages from Kafka topics
+     */
+    private static class TestKafkaConsumer implements AutoCloseable {
+        private final KafkaConsumer<String, String> consumer;
+        private final String messageKeyToFind;
+
+        public TestKafkaConsumer(String bootstrapServers, String topic, String messageKeyToFind) {
+            this.messageKeyToFind = messageKeyToFind;
+            Properties props = new Properties();
+            props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+            props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-consumer-" + UUID.randomUUID());
+            props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+            props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+            props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+            props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "50");
+            this.consumer = new KafkaConsumer<>(props);
+            this.consumer.subscribe(Collections.singletonList(topic));
+        }
+
+        public Optional<String> pollForMessageWithKey() {
+            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
+            for (ConsumerRecord<String, String> record : records) {
+                LOGGER.debug("Received record with key: {}", record.key());
+                if (messageKeyToFind.equals(record.key())) {
+                    return Optional.of(record.value());
+                }
+            }
+            return Optional.empty();
+        }
+
+        @Override
+        public void close() {
+            if (consumer != null) {
+                try {
+                    consumer.close(Duration.ofSeconds(5));
+                } catch (Exception e) {
+                    LOGGER.error("Failed to close consumer gracefully", e);
+                }
+            }
+        }
     }
 }
