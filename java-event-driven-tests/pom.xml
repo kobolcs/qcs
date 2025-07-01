@@ -1,4 +1,4 @@
-]<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -177,8 +177,6 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Optional: Resilience4j - Uncomment if you want to use it -->
-    <!--
     <dependency>
       <groupId>io.github.resilience4j</groupId>
       <artifactId>resilience4j-spring-boot3</artifactId>
@@ -202,7 +200,7 @@
       <artifactId>spring-boot-starter-aop</artifactId>
       <version>${spring-boot.version}</version>
     </dependency>
-    -->
+
   </dependencies>
 
   <build>
