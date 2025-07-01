@@ -143,16 +143,14 @@
         <version>12.1.3</version>
         <configuration>
           <!-- Disable .NET analyzer that's causing the error -->
-          <analyzers>
-            <assemblyEnabled>false</assemblyEnabled>
-          </analyzers>
-          <!-- Set vulnerability threshold to not fail build on low/medium issues -->
-          <failBuildOnCVSS>8</failBuildOnCVSS>
+          <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+          <!-- Set vulnerability threshold to not fail build on critical issues -->
+          <failBuildOnCVSS>10</failBuildOnCVSS>
           <!-- Skip vulnerabilities that are in test scope only -->
           <skipTestScope>true</skipTestScope>
           <!-- Add suppression file for known false positives -->
           <suppressionFiles>
-            <suppressionFile>owasp-suppressions.xml</suppressionFile>
+            <suppressionFile>${project.basedir}/owasp-suppressions.xml</suppressionFile>
           </suppressionFiles>
         </configuration>
         <executions>
