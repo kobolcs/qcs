@@ -58,6 +58,14 @@ Pact tests. Using Node.js ensures the same workflow works on Windows as well as
 macOS/Linux systems. This example illustrates how contract verification can be
 gated by prior functional testing.
 
+## Secret Management
+
+Store sensitive tokens outside the repo using environment variables or a vault
+like **Azure Key Vault** or **HashiCorp Vault**. GitHub Secrets pass these
+credentials to the CI pipeline. For more details, see the "Configure API
+Credentials" section of
+[csharp-specflow-api-tests/README.md](../csharp-specflow-api-tests/README.md).
+
 ## Client Scenarios
 
 - Consumer-driven contracts reduced microservice integration bugs by **40%** for a fintech startup, saving about **80 hours of rework per quarter**.

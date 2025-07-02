@@ -58,6 +58,14 @@ This project uses Testcontainers, which will automatically start and manage the 
 
 The `docker-compose.yml` file is provided to manually run the dependencies if you wish to connect a running application to them, but the tests themselves are designed to manage their own containers.
 
+## Secret Management
+
+Avoid committing connection strings or passwords. Use environment variables or a
+vault like **Azure Key Vault** or **HashiCorp Vault**. GitHub Secrets inject
+these into the CI workflow. For a detailed example, see the "Configure API
+Credentials" section in
+[csharp-specflow-api-tests/README.md](../csharp-specflow-api-tests/README.md).
+
 ## Client Scenarios
 
 - By validating Kafka message flows before deployment, a logistics client reduced failed releases by **70%**, saving roughly **50 engineer hours** each month in rollbacks and hotfixes.

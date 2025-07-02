@@ -67,6 +67,14 @@ provided Docker image already includes it.
     docker run --rm elixir-api-tests
     ```
 
+## Secret Management
+
+Never commit API keys or credentials. Provide them via environment variables or a
+vault solution like **Azure Key Vault** or **HashiCorp Vault**. GitHub Secrets
+inject these values during CI. For a detailed example, see the "Configure API
+Credentials" section in
+[csharp-specflow-api-tests/README.md](../csharp-specflow-api-tests/README.md).
+
 ## Client Scenarios
 
 - Property-based testing uncovered edge cases that would have taken days to debug. A real-time analytics service saw customer support tickets drop **20%**, equating to roughly **€3k per month** saved in support time.

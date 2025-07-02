@@ -83,6 +83,14 @@ A `Dockerfile` is included to run the tests in a fully isolated environment.
 
 The GitHub Actions workflow in `.github/workflows/mobile-ci.yml` fully automates this process. It uses the `reactivecircus/android-emulator-runner` action to start an emulator, install the app, and run the tests.
 
+## Secret Management
+
+Store device credentials or API tokens outside of Git. Supply them via
+environment variables or a vault solution like **Azure Key Vault** or
+**HashiCorp Vault**. GitHub Secrets provide these values during CI. For a full
+example, see the "Configure API Credentials" section in
+[csharp-specflow-api-tests/README.md](../csharp-specflow-api-tests/README.md).
+
 ## Client Scenarios
 
 - Automated smoke tests on every commit shortened release certification from three days of manual checks to **under one hour** for a consumer app, saving roughly **€4k per release**.

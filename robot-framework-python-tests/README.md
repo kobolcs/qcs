@@ -82,9 +82,16 @@ A `Dockerfile` is already included for containerized execution.
    docker build -t robot-tests .
    ```
 2. **Run the tests using Docker**:
-   ```bash
-   docker run --rm robot-tests
-   ```
+    ```bash
+    docker run --rm robot-tests
+    ```
+
+## Secret Management
+
+Configure secrets like API tokens using environment variables or a vault such as
+**Azure Key Vault** or **HashiCorp Vault**. GitHub Secrets supply these values
+in CI. For a full example, see the "Configure API Credentials" section in
+[csharp-specflow-api-tests/README.md](../csharp-specflow-api-tests/README.md).
 
 ---
 
