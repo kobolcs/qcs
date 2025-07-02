@@ -67,6 +67,14 @@ Install Node.js only if you plan to run the suite outside of the Docker image.
     docker run --rm --ipc=host playwright-ts-tests
     ```
 
+## Secret Management
+
+Keep API tokens and other credentials out of source control. Use environment
+variables or a vault system such as **Azure Key Vault** or **HashiCorp Vault**.
+GitHub Secrets inject these values during CI. For a detailed walkthrough, see
+the "Configure API Credentials" section in
+[csharp-specflow-api-tests/README.md](../csharp-specflow-api-tests/README.md).
+
 ## Client Scenarios
 
 - Hybrid API and UI tests caught 90% of critical issues before staging for a B2C company, preventing two major outages in a year—roughly **€50k** in avoided downtime.

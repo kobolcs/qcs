@@ -74,6 +74,14 @@ This mirrors a pipeline step where functional API checks gate contract verificat
 
 ---
 
+## Secret Management
+
+Supply the `OWM_API_KEY` and other credentials via environment variables or a
+vault service such as **Azure Key Vault** or **HashiCorp Vault**. GitHub Secrets
+provide these values to the CI workflow. For a comprehensive example, see the
+"Configure API Credentials" section in
+[csharp-specflow-api-tests/README.md](../csharp-specflow-api-tests/README.md).
+
 ## Client Scenarios
 
 - Parallel execution cut API regression time from 20 minutes to about 5 minutes at a SaaS provider. Deployments accelerated by **3×** and early defect detection saved roughly **€5k per month** in incident costs.

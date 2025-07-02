@@ -58,6 +58,14 @@ container image contains the k6 runtime.
 This test script automatically generates `summary.html` when the run completes. Open that file in your browser to view the performance results. When executed via the GitHub Actions workflow (`.github/workflows/k6-ci.yml`), this HTML report is uploaded as a workflow artifact for easy access.
 You can retrieve it from the "Artifacts" section of a workflow run by downloading the `k6-summary` artifact.
 
+## Secret Management
+
+Any API tokens or credentials should be provided via environment variables or a
+vault such as **Azure Key Vault** or **HashiCorp Vault**. GitHub Secrets feed
+these values into the CI pipeline. For a complete example, refer to the
+"Configure API Credentials" section of
+[csharp-specflow-api-tests/README.md](../csharp-specflow-api-tests/README.md).
+
 ## Client Scenarios
 
 - Integrating k6 thresholds into CI alerted a retail client to a memory leak before launch, avoiding an estimated **€10k per month** in lost sales due to slow pages.
