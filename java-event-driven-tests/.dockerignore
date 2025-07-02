@@ -1,6 +1,14 @@
 .git
+.idea
+.vscode
 node_modules
-target/
+target/surefire-reports
+target/test-classes
+target/maven-status
 *.log
 test-results/
 reports/
+**/*.iml
+.settings
+.classpath
+.project
