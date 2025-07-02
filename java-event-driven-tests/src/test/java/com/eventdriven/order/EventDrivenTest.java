@@ -210,7 +210,7 @@ public class EventDrivenTest {
 
     @BeforeMethod(groups = "integration", alwaysRun = true)
     public void setupTest() {
-        LOGGER.debug("Setting up test method: {}", testContext().getMethodName());
+        LOGGER.debug("Setting up test method: {}");
 
         // Clear Redis data for test isolation
         try (Jedis jedis = jedisPool.getResource()) {
@@ -229,7 +229,7 @@ public class EventDrivenTest {
         // Cleanup test-specific resources
         activeConsumers.forEach((id, consumer) -> {
             try {
-                consumer.close(Duration.ofSeconds(5));
+                consumer.close();
                 LOGGER.debug("Closed consumer: {}", id);
             } catch (Exception e) {
                 LOGGER.warn("Failed to close consumer: {}", id, e);
