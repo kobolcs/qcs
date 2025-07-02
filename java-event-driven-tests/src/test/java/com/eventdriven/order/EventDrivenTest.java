@@ -1,5 +1,6 @@
 package com.eventdriven.order;
 
+import org.testcontainers.containers.output.OutputFrame;
 import com.eventdriven.order.model.Order;
 import com.eventdriven.order.util.TestKafkaProducer;
 import com.fasterxml.jackson.core.JsonProcessingException;

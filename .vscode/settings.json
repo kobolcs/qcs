@@ -1,5 +1,14 @@
 {
-    "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "automatic",
-    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable"
+    "maven.executable.path": "mvn",
+    "java.project.sourcePaths": [
+        "src/main/java",
+        "src/test/java"
+    ],
+    "java.project.resourcePaths": [
+        "src/main/resources",
+        "src/test/resources"
+    ],
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.test.defaultConfig": "default"
 }

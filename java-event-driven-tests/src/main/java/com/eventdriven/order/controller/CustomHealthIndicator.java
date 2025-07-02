@@ -1,5 +1,6 @@
 package com.eventdriven.order.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -11,9 +12,11 @@ import redis.clients.jedis.JedisPool;
 public class CustomHealthIndicator implements HealthIndicator {
 
     private final JedisPool jedisPool;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, Order> kafkaTemplate;
 
-    public CustomHealthIndicator(JedisPool jedisPool, KafkaTemplate<String, Object> kafkaTemplate) {
+    @Autowired
+    public CustomHealthIndicator(JedisPool jedisPool,
+            @Autowired(required = false) KafkaTemplate<String, Order> kafkaTemplate) {
         this.jedisPool = jedisPool;
         this.kafkaTemplate = kafkaTemplate;
     }
@@ -26,12 +29,12 @@ public class CustomHealthIndicator implements HealthIndicator {
                 jedis.ping();
             }
 
-            // Check Kafka
-            kafkaTemplate.getDefaultTopic();
+            // Check Kafka (if available)
+            boolean kafkaAvailable = kafkaTemplate != null && kafkaTemplate.getDefaultTopic() != null;
 
             return Health.up()
                     .withDetail("redis", "Available")
-                    .withDetail("kafka", "Available")
+                    .withDetail("kafka", kafkaAvailable ? "Available" : "Not configured")
                     .build();
 
         } catch (Exception e) {
