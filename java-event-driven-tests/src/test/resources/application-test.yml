@@ -1,0 +1,164 @@
+spring:
+  application:
+    name: order-service-test
+
+  profiles:
+    active: test
+
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: order_group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: com.eventdriven.order.model
+        session.timeout.ms: 30000
+        max.poll.interval.ms: 300000
+        max.poll.records: 10
+        isolation.level: read_committed
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      compression-type: snappy
+      enable-idempotence: true
+      properties:
+        linger.ms: 100
+        batch.size: 16384
+        max.in.flight.requests.per.connection: 5
+    listener:
+      ack-mode: manual
+      concurrency: 3
+      missing-topics-fatal: false
+      poll-timeout: 3000
+
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      timeout: 5000ms
+      connect-timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 2
+          max-wait: 2000ms
+        shutdown-timeout: 100ms
+
+  jackson:
+    default-property-inclusion: non_null
+    deserialization:
+      fail-on-unknown-properties: false
+      fail-on-ignored-properties: false
+    serialization:
+      write-dates-as-timestamps: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,circuitbreakers,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+    circuitbreakers:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+    export:
+      prometheus:
+        enabled: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+        slow-call-rate-threshold: 50
+        slow-call-duration-threshold: 2s
+        event-consumer-buffer-size: 10
+    instances:
+      redis-cb:
+        base-config: default
+        record-exceptions:
+          - redis.clients.jedis.exceptions.JedisConnectionException
+          - org.springframework.dao.DataAccessException
+          - java.net.ConnectException
+        ignore-exceptions:
+          - com.eventdriven.order.kafka.OrderEventConsumer.NonRetryableException
+          - java.lang.IllegalArgumentException
+
+  retry:
+    configs:
+      default:
+        max-attempts: 3
+        wait-duration: 1s
+        retry-on-result-predicate: com.eventdriven.order.config.RetryResultPredicate
+    instances:
+      redis-retry:
+        base-config: default
+        exponential-backoff-multiplier: 2
+        max-attempts: 3
+        retry-exceptions:
+          - redis.clients.jedis.exceptions.JedisConnectionException
+          - org.springframework.dao.DataAccessException
+          - java.net.ConnectException
+        ignore-exceptions:
+          - com.eventdriven.order.kafka.OrderEventConsumer.NonRetryableException
+          - java.lang.IllegalArgumentException
+
+  bulkhead:
+    instances:
+      redis-bulkhead:
+        max-concurrent-calls: 10
+        max-wait-duration: 100ms
+
+logging:
+  level:
+    root: INFO
+    com.eventdriven: DEBUG
+    org.springframework.kafka: INFO
+    org.springframework.data.redis: DEBUG
+    org.apache.kafka: WARN
+    io.github.resilience4j: DEBUG
+    org.testcontainers: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/order-service-test.log
+    max-size: 10MB
+    max-history: 5
+
+# Test-specific configurations
+test:
+  kafka:
+    consumer:
+      poll-timeout: 1000
+    producer:
+      request-timeout: 5000
+  redis:
+    connection-timeout: 2000
+    command-timeout: 1000

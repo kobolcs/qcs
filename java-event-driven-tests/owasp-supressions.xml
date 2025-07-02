@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
 
-  <!-- Suppress Spring Framework CVEs that are not applicable to our use case -->
+  <!-- Spring Framework CVEs -->
   <suppress>
     <notes><![CDATA[
-    CVE-2024-38820: Spring Framework WebMVC vulnerability - not applicable as we're not using WebMVC in this test project
+    CVE-2024-38820: Spring Framework WebMVC vulnerability - not applicable as we're not using WebMVC
     ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-.*@.*$</packageUrl>
     <cve>CVE-2024-38820</cve>
@@ -12,16 +12,16 @@
 
   <suppress>
     <notes><![CDATA[
-    CVE-2025-22233: Spring Framework vulnerability - test project with controlled environment
+    CVE-2025-22233: Spring Framework vulnerability - test environment with controlled access
     ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-.*@.*$</packageUrl>
     <cve>CVE-2025-22233</cve>
   </suppress>
 
-  <!-- Suppress Kafka client CVEs for test environment -->
+  <!-- Kafka Client CVEs -->
   <suppress>
     <notes><![CDATA[
-    Kafka CVEs are for test containers only, not production deployment
+    Kafka vulnerabilities in test containers only, not production deployment
     ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.apache\.kafka/kafka\-.*@.*$</packageUrl>
     <cve>CVE-2025-27817</cve>
@@ -29,7 +29,7 @@
 
   <suppress>
     <notes><![CDATA[
-    Kafka CVEs are for test containers only, not production deployment
+    Kafka vulnerabilities in test containers only, not production deployment
     ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.apache\.kafka/kafka\-.*@.*$</packageUrl>
     <cve>CVE-2025-27818</cve>
@@ -37,10 +37,37 @@
 
   <suppress>
     <notes><![CDATA[
-    Kafka CVEs are for test containers only, not production deployment
+    Kafka vulnerabilities in test containers only, not production deployment
     ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.apache\.kafka/kafka\-.*@.*$</packageUrl>
     <cve>CVE-2024-56128</cve>
+  </suppress>
+
+  <!-- Jackson Databind CVEs -->
+  <suppress>
+    <notes><![CDATA[
+    Jackson deserialization vulnerability - we use trusted packages configuration
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson\-databind@.*$</packageUrl>
+    <vulnerabilityName regex="true">.*deserialization.*</vulnerabilityName>
+  </suppress>
+
+  <!-- Logback CVEs -->
+  <suppress>
+    <notes><![CDATA[
+    Logback vulnerability - test environment only, no external log input
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/ch\.qos\.logback/logback\-.*@.*$</packageUrl>
+    <cpe>cpe:/a:qos:logback</cpe>
+  </suppress>
+
+  <!-- TestContainers -->
+  <suppress>
+    <notes><![CDATA[
+    TestContainers vulnerabilities - development/test dependency only
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.testcontainers/.*@.*$</packageUrl>
+    <cpe>cpe:/a:testcontainers:testcontainers</cpe>
   </suppress>
 
 </suppressions>

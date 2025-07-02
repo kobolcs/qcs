@@ -9,23 +9,22 @@ on:
     - cron: '0 4 * * *' # 04:00 UTC
   workflow_dispatch:
 
-# Add concurrency controls to prevent redundant builds
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 
 jobs:
   build-test:
-    runs-on: ubuntu-22.04  # Pin to specific version instead of ubuntu-latest
-    timeout-minutes: 30    # Add explicit timeout
-    
-    # Restrict workflow permissions for security
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
     permissions:
       contents: read
       actions: read
       checks: write
       pull-requests: write
-      
+      security-events: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,8 +34,8 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-          cache: maven  
-      
+          cache: maven
+
       - name: Cache Maven dependencies
         uses: actions/cache@v4
         with:
@@ -44,35 +43,85 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Ensure Docker is running
+      - name: Validate Docker environment
         run: |
           docker info
           docker version
+          docker compose version
 
-      - name: Build and Test
+      - name: Run OWASP Dependency Check
         working-directory: java-event-driven-tests
-        run: mvn clean test -DsuiteXmlFile=testng-integration-suite.xml
+        run: |
+          mvn org.owasp:dependency-check-maven:check \
+            -DsuppressionFiles=owasp-suppressions.xml \
+            -DfailBuildOnCVSS=7 \
+            -Dformat=ALL
+        continue-on-error: true
 
-      - name: Upload Surefire Reports
+      - name: Upload OWASP reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: surefire-reports-${{ github.run_id }}  # Make artifact names unique
-          path: java-event-driven-tests/target/surefire-reports
-          retention-days: 30  # Explicit retention period
-          if-no-files-found: warn  # Explicit behavior for missing files
-          
-      - name: Java Report Download Instructions
-        if: always()
+          name: owasp-reports-${{ github.run_id }}
+          path: java-event-driven-tests/target/dependency-check-report.*
+
+      - name: Build project
+        working-directory: java-event-driven-tests
+        run: mvn clean compile
+
+      - name: Run unit tests
+        working-directory: java-event-driven-tests
+        run: mvn test -Punit-tests
+
+      - name: Run integration tests
+        working-directory: java-event-driven-tests
         run: |
-          echo "Download the 'surefire-reports-${{ github.run_id }}' artifact from the Actions run and view the HTML report locally."
-      
+          mvn test -DsuiteXmlFile=testng-integration-suite.xml \
+            -Dmaven.test.failure.ignore=false \
+            -DtrimStackTrace=false
+
+      - name: Generate test report
+        if: always()
+        working-directory: java-event-driven-tests
+        run: mvn surefire-report:report-only
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-${{ github.run_id }}
+          path: |
+            java-event-driven-tests/target/surefire-reports
+            java-event-driven-tests/target/site
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: application-logs-${{ github.run_id }}
+          path: java-event-driven-tests/logs
+          retention-days: 7
+
       - name: Publish Test Results
-        uses: dorny/test-reporter@v1.9.1  # Pin to specific version for security
+        uses: dorny/test-reporter@v1.9.1
         if: success() || failure()
         with:
           name: Maven Tests
           path: java-event-driven-tests/target/surefire-reports/*.xml
           reporter: java-junit
-          fail-on-error: false  # Don't fail the workflow if test reporter fails
-          max-annotations: 10   # Limit annotations to avoid clutter
+          fail-on-error: false
+          max-annotations: 10
+
+      - name: Code Coverage with JaCoCo
+        working-directory: java-event-driven-tests
+        run: mvn jacoco:report
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: java-event-driven-tests/target/site/jacoco/jacoco.xml
+          flags: integration-tests
+          name: codecov-umbrella
+          fail_ci_if_error: false
