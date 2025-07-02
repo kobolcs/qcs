@@ -1,7 +1,7 @@
 # The QA Consultant Suite
 
 The QA Consultant Suite demonstrates how disciplined automation drives measurable value for stakeholders. By applying scalable patterns across multiple technologies, the examples reduce manual regression effort by **50% or more** and surface defects before they become costly production issues. Parallel execution shortens feedback loops from hours to minutes, delivering faster releases with less risk. For a high-level snapshot of every project and its CI status, see the **[Portfolio Dashboard](dashboard.md)**.
-For a direct link to the latest HTML reports hosted on GitHub Pages, visit the **[Reports Dashboard](docs/index.md)**.
+For a direct link to the latest HTML reports hosted on GitHub Pages, visit the **[Reports Dashboard](https://kobolcs.github.io/qcs)**.
 
 ## How I Can Help Your Business
 
