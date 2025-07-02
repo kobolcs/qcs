@@ -1,5 +1,6 @@
 package com.eventdriven.order.controller;
 
+import com.eventdriven.order.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
