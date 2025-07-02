@@ -12,6 +12,8 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.awaitility.Awaitility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.ITestResult;
+import org.testng.ITestContext;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
@@ -27,7 +29,12 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -65,8 +72,7 @@ public class EventDrivenTest {
     // Test resources
     private static JedisPool jedisPool;
     private static TestKafkaProducer testKafkaProducer;
-    private static final Map<String, KafkaConsumer<String, String>> activeConsumers = new ConcurrentHashMap<>();
-
+    private static final Map<String, TestKafkaConsumer> activeConsumers = new ConcurrentHashMap<>();
     @BeforeClass(groups = "integration", alwaysRun = true)
     public static void setupTestClass() {
         LOGGER.info("=== Starting EventDrivenTest Setup ===");
@@ -302,7 +308,7 @@ public class EventDrivenTest {
                     .atMost(TEST_TIMEOUT)
                     .pollInterval(Duration.ofMillis(500))
                     .untilAsserted(() -> {
-                        Optional<String> dlqMessage = dlqConsumer.pollForMessageWithKey();
+                        java.util.Optional<String> dlqMessage = dlqConsumer.pollForMessageWithKey();
                         assertTrue(dlqMessage.isPresent(),
                                 "Message should be routed to DLQ");
                         assertTrue(dlqMessage.get().contains(orderId),
@@ -480,9 +486,9 @@ public class EventDrivenTest {
             LOGGER.debug("Created consumer for topic: {} looking for key: {}", topic, messageKeyToFind);
         }
 
-        public Optional<String> pollForMessageWithKey() {
+        public java.util.Optional<String> pollForMessageWithKey() {
             if (closed) {
-                return Optional.empty();
+                return java.util.Optional.empty();
             }
 
             try {
@@ -494,14 +500,14 @@ public class EventDrivenTest {
 
                     if (messageKeyToFind.equals(record.key())) {
                         consumer.commitSync();
-                        return Optional.of(record.value());
+                        return java.util.Optional.of(record.value());
                     }
                 }
             } catch (Exception e) {
                 LOGGER.error("Error polling for messages", e);
             }
 
-            return Optional.empty();
+            return java.util.Optional.empty();
         }
 
         @Override
