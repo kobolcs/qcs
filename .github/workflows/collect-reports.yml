@@ -1,0 +1,85 @@
+name: Collect and Publish Reports
+
+on:
+  workflow_run:
+    workflows:
+      - "C# Build, Test, and Deploy LivingDoc"
+      - "Playwright TS CI"
+      - "SpaceX Suite CI with Allure and Quality Gates"
+      - "k6 Performance Test"
+      - "Java Event-Driven CI"
+      - "Elixir API Tests - CI & Report"
+      - "Mobile CI (Appium)"
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  collect:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download artifact from triggering workflow
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ github.event.workflow_run.id }}
+          path: artifacts
+
+      - name: Organize downloaded report
+        run: |
+          mkdir -p docs/reports
+          case "${{ github.event.workflow_run.name }}" in
+            "C# Build, Test, and Deploy LivingDoc")
+              mkdir -p docs/reports/csharp
+              cp artifacts/living-doc/LivingDoc.html docs/reports/csharp/index.html
+              ;;
+            "Playwright TS CI")
+              mkdir -p docs/reports/playwright
+              if [ -d artifacts/playwright-report/playwright-report ]; then
+                mv artifacts/playwright-report/playwright-report/* docs/reports/playwright/
+              else
+                mv artifacts/playwright-report/* docs/reports/playwright/
+              fi
+              ;;
+            "SpaceX Suite CI with Allure and Quality Gates")
+              mkdir -p docs/reports/allure
+              mv artifacts/allure-report/* docs/reports/allure/
+              ;;
+            "k6 Performance Test")
+              mkdir -p docs/reports/k6
+              cp artifacts/k6-summary/summary.html docs/reports/k6/index.html
+              ;;
+            "Java Event-Driven CI")
+              mkdir -p docs/reports/java
+              if ls artifacts/test-reports-*/target/site 1>/dev/null 2>&1; then
+                cp -r artifacts/test-reports-*/target/site/* docs/reports/java/
+              fi
+              ;;
+            "Elixir API Tests - CI & Report")
+              mkdir -p docs/reports/elixir
+              mv artifacts/elixir-reports/* docs/reports/elixir/
+              ;;
+            "Mobile CI (Appium)")
+              mkdir -p docs/reports/mobile
+              mv artifacts/mobile-test-artifacts/* docs/reports/mobile/
+              ;;
+          esac
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
