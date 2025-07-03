@@ -1,4 +1,4 @@
-# tests/performance/api_performance_tests.robot
+# tests/performance/performance_tests.robot
 *** Settings ***
 Library    Collections
 Library    DateTime

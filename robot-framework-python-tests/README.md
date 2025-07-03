@@ -67,7 +67,7 @@ Install Python only if you plan to run the suite locally without Docker.
     keyword. No additional packages are required.
 4.  **Run the tests using `pabot`** (for parallel execution):
     ```bash
-    pabot --processes 4 --outputdir reports tests/api_tests
+    pabot --processes 4 --outputdir reports tests/api
     ```
     The unit tests default to mocked HTTP responses. Set `USE_LIVE_SPACEX=1` to
     hit the real SpaceX API when running `pytest`.

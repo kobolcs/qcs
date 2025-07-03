@@ -1,6 +1,6 @@
 *** Settings ***
 Library    Browser
-Library    ../helpers/self_heal.py
+Library    ../../helpers/self_heal.py
 
 *** Test Cases ***
 Click In Iframe And Shadow DOM

@@ -265,7 +265,7 @@ test-java-security: install-java
 test-robot:
 	@echo "\n--- Running Robot Framework API Tests (using venv) ---"
 	@if [ ! -d "$(ROBOT_VENV)" ]; then echo "Robot Framework venv not found. Please run 'make install-robot' first."; exit 1; fi
-	$(ROBOT_VENV)/bin/pabot --processes 4 --outputdir robot-framework-python-tests/reports/api_pabot robot-framework-python-tests/tests/api_tests
+	$(ROBOT_VENV)/bin/pabot --processes 4 --outputdir robot-framework-python-tests/reports/api_pabot robot-framework-python-tests/tests/api
 
 .PHONY: test-robot-unit
 test-robot-unit: install-robot
