@@ -1,5 +1,5 @@
 *** Settings ***
-Library           ../../helpers/csv_keywords.py
+Library           ../../helpers/csv_keywords.CSVKeywords
 Resource          ../../resources/keywords/spacex_api_keywords.robot
 Resource          ../../resources/variables/spacex_variables.robot
 
