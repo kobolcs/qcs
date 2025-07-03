@@ -1,6 +1,9 @@
+"""Utility keywords for Robot Framework performance testing."""
+
 import math
 from statistics import mean
 from typing import Sequence
+
 from robot.api import logger
 
 
