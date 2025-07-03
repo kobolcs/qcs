@@ -5,6 +5,7 @@ Library             OperatingSystem
 Library             Collections
 Library             RESTinstance    ${BASE_URL}
 Library             resources.keywords.extended_spacex_helpers.ExtendedSpaceX
+Library             ../../helpers/dynamic_test_creator.DynamicTestCreator
 Suite Setup         Load Launch IDs From CSV
 Test Template       Verify Launch Data
 
