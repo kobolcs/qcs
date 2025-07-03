@@ -18,15 +18,28 @@ class PerformanceHelper:
 
         Returns:
             float: Calculated percentile value or ``0.0`` when ``data`` is empty.
+
+        Raises:
+            ValueError: When ``percentile`` is outside the range ``[0, 100]``.
         """
+        if not 0 <= percentile <= 100:
+            raise ValueError("Percentile must be between 0 and 100")
         if not data:
             return 0.0
+
         values = sorted(float(x) for x in data)
+
+        if percentile == 0:
+            return values[0]
+        if percentile == 100:
+            return values[-1]
+
         k = (len(values) - 1) * (percentile / 100.0)
         f = math.floor(k)
         c = math.ceil(k)
         if f == c:
             return values[int(k)]
+
         d0 = values[int(f)] * (c - k)
         d1 = values[int(c)] * (k - f)
         return d0 + d1
