@@ -4,7 +4,7 @@ Resource          ../../resources/keywords/spacex_api_keywords.robot
 Resource          ../../resources/variables/spacex_variables.robot
 
 *** Variables ***
-${CSV_PATH}       tests/api_tests/last_5_launches.csv
+${CSV_PATH}       tests/api/last_5_launches.csv
 
 *** Test Cases ***
 Validate Multiple Past Launches

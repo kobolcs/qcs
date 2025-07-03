@@ -81,7 +81,7 @@ jobs:
             --listener allure_robotframework \
             --alluredir ${{ env.ALLURE_RESULTS }} \
             --outputdir reports/api_pabot \
-            tests/api_tests
+            tests/api
 
       - name: Debug: Print HTTP error responses (if any)
         if: failure()
@@ -128,7 +128,7 @@ jobs:
           robot --listener allure_robotframework \
             --alluredir ${{ env.ALLURE_RESULTS }} \
             --outputdir reports/gui_visual_results \
-            tests/gui_tests tests/visual_tests
+            tests/web/ui_demo.robot tests/web/visual_tests
 
       - name: Upload GUI & Visual test results
         if: always()

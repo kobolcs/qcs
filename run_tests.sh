@@ -21,13 +21,13 @@ mkdir -p "$REPORTS_DIR/api" \
          "$RESULTS_DIR"
 
 echo "=== Running API tests ==="
-robot --outputdir "$REPORTS_DIR/api" "$TEST_DIR/tests/api_tests"
+robot --outputdir "$REPORTS_DIR/api" "$TEST_DIR/tests/api"
 
 echo "=== Running performance tests ==="
-robot --outputdir "$REPORTS_DIR/performance" "$TEST_DIR/tests/performance_tests"
+robot --outputdir "$REPORTS_DIR/performance" "$TEST_DIR/tests/performance"
 
 echo "=== Running GUI tests ==="
-robot --outputdir "$REPORTS_DIR/gui" "$TEST_DIR/tests/ui_demo.robot" "$TEST_DIR/tests/visual_tests"
+robot --outputdir "$REPORTS_DIR/gui" "$TEST_DIR/tests/web/ui_demo.robot" "$TEST_DIR/tests/web/visual_tests"
 
 echo "=== Running full test suite in parallel ==="
 pabot --processes "$PROCESSES" --outputdir "$REPORTS_DIR/all" "$TEST_DIR/tests"
