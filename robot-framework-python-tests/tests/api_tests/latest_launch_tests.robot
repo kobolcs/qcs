@@ -3,7 +3,7 @@ Documentation       This data-driven suite verifies rocket details for multiple 
 ...                 It reads launch IDs from a CSV and uses a template to run validations.
 Library             OperatingSystem
 Library             Collections
-Library             RESTinstance
+Library             RESTinstance    ${BASE_URL}
 Library             resources.keywords.extended_spacex_helpers.ExtendedSpaceX
 Suite Setup         Load Launch IDs From CSV
 Test Template       Verify Launch Data
