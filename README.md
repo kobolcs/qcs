@@ -11,6 +11,20 @@ The suite demonstrates a consulting approach that ties technical excellence dire
 - **Actionable Metrics**: Every project generates machine-readable reports so leadership can see return on investment after each run.
 - **Proactive Risk Reduction**: Integrating security, performance, and contract checks prevents issues that can result in thousands of euros in lost revenue or engineer rework.
 
+## ROI Demonstration
+
+- **Time Savings**: Parallel execution shrinks regression cycles from days to hours.
+- **Quality Impact**: Earlier defect detection cuts production incidents by 50% or more.
+- **Team Efficiency**: Automation frees engineers to focus on high-value work, often reclaiming the effort of one full-time tester per release.
+
+## Case Study: Telecom Provider
+
+One telecom client adopted the Robot Framework + Python approach showcased in
+this repository. Script maintenance dropped by **30%**, enabling thousands of
+tests without hiring additional QA engineers—about **€60k annually** saved.
+Non-technical staff authored high-level `.robot` scenarios while engineers
+focused on Python libraries, reducing defect triage time by **20%**.
+
 ## Guiding Principles
 
 This repository is built on a few core principles:
