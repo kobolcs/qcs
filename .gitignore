@@ -234,3 +234,4 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
+.pabotsuitenames

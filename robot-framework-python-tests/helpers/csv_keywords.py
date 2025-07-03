@@ -2,10 +2,10 @@ import csv
 import logging
 from typing import List, Dict
 
-ROBOT_LIBRARY_SCOPE = "GLOBAL"
 
-class csv_keywords:
+class CSVKeywords:  # follows proper CamelCase
     """Keywords for handling CSV files."""
+    ROBOT_LIBRARY_SCOPE = "GLOBAL"
 
     def read_csv_file_to_list(self, csv_path: str) -> List[Dict[str, str]]:
         """Return the contents of a CSV file as a list of dictionaries."""
