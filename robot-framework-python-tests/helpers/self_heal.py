@@ -22,5 +22,5 @@ def click_with_fallback(selectors):
             logger.info(f"Clicked using selector: {sel}")
             return sel
         except Exception as e:
-            logger.warn(f"Selector failed: {sel}: {e}")
+            logger.warning(f"Selector failed: {sel}: {e}")
     raise Exception("None of the selectors worked")
