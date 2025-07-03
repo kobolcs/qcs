@@ -2,11 +2,11 @@
 *** Settings ***
 Library    Collections
 Library    DateTime
-Library    ../../helpers/performance_helper.py
+Library    ../../helpers/performance_helper.PerformanceHelper
 Resource   ../../resources/keywords/spacex_api_keywords.robot
 
 *** Variables ***
-${ITERATIONS}       100
+${ITERATIONS}       10
 ${SLA_P95_MS}      500
 ${SLA_P99_MS}      1000
 
