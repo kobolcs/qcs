@@ -12,5 +12,5 @@ Validate Multiple Past Launches
     ${launches}=    Read CSV File To List    ${CSV_PATH}
     FOR    ${launch}    IN    @{launches}
         ${response}=    Get Launch By ID    ${launch}[id]
-        Validate Launch Details    ${response}    ${launch}
+        Validate Launch Fields    ${response}
     END
