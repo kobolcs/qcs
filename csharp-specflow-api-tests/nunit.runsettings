@@ -1,16 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Enhanced NUnit Run Settings for Professional Demo -->
 <RunSettings>
+  <!-- Core execution configuration -->
   <RunConfiguration>
+    <!-- Enable parallel execution for faster test runs -->
+    <MaxCpuCount>4</MaxCpuCount>
+    
+    <!-- Results directory -->
     <ResultsDirectory>TestResults</ResultsDirectory>
+    
+    <!-- Target framework -->
     <TargetFrameworkVersion>net8.0</TargetFrameworkVersion>
+    
+    <!-- Disable app domains for better performance -->
+    <DisableAppDomain>true</DisableAppDomain>
+    
+    <!-- Test timeout (15 minutes for comprehensive suite) -->
+    <TestSessionTimeout>900000</TestSessionTimeout>
+    
+    <!-- Batch size for parallel execution -->
+    <BatchSize>10</BatchSize>
   </RunConfiguration>
+
+  <!-- Data collection for code coverage and performance -->
   <DataCollectionRunSettings>
     <DataCollectors>
+      <!-- Code coverage collection -->
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
-          <Format>cobertura</Format>
+          <Format>cobertura,opencover</Format>
+          <ExcludeByFile>**/bin/**,**/obj/**</ExcludeByFile>
+          <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+          <IncludeDirectory>../</IncludeDirectory>
+        </Configuration>
+      </DataCollector>
+      
+      <!-- Performance data collection -->
+      <DataCollector friendlyName="blame" enabled="True">
+        <Configuration>
+          <CollectHangTimeouts>True</CollectHangTimeouts>
+          <HangTimeoutInMin>10</HangTimeoutInMin>
+          <CollectDumpOnHang>True</CollectDumpOnHang>
+          <CollectDumpOnTestProcessExit>True</CollectDumpOnTestProcessExit>
+          <CollectDumpOnFailure>False</CollectDumpOnFailure>
         </Configuration>
       </DataCollector>
     </DataCollectors>
   </DataCollectionRunSettings>
+
+  <!-- NUnit specific settings -->
+  <NUnit>
+    <!-- Number of worker threads for parallel execution -->
+    <NumberOfTestWorkers>4</NumberOfTestWorkers>
+    
+    <!-- Parallel execution scope -->
+    <ParallelScope>Fixtures</ParallelScope>
+    
+    <!-- Test output settings -->
+    <Verbosity>2</Verbosity>
+    
+    <!-- Seed for randomization (for reproducible test runs) -->
+    <RandomSeed>1234567890</RandomSeed>
+    
+    <!-- Default timeout for individual tests (5 minutes) -->
+    <DefaultTimeout>300000</DefaultTimeout>
+    
+    <!-- Stop on first failure for fast feedback during development -->
+    <StopOnError>false</StopOnError>
+    
+    <!-- Where clause for test filtering -->
+    <Where></Where>
+    
+    <!-- Work directory for test execution -->
+    <WorkDirectory>.</WorkDirectory>
+    
+    <!-- Internal trace level for debugging -->
+    <InternalTraceLevel>Off</InternalTraceLevel>
+    
+    <!-- Results format -->
+    <Results>
+      <OutputFormat>nunit3</OutputFormat>
+      <MergeReports>true</MergeReports>
+    </Results>
+  </NUnit>
+
+  <!-- Test platform settings -->
+  <TestPlatform>
+    <TestAdaptersPaths>.</TestAdaptersPaths>
+    <TestCaseFilter></TestCaseFilter>
+    <TreatTestAdapterErrorsAsWarnings>false</TreatTestAdapterErrorsAsWarnings>
+  </TestPlatform>
+
+  <!-- MSTest settings (if used alongside NUnit) -->
+  <MSTest>
+    <Parallelize>
+      <Workers>4</Workers>
+      <Scope>MethodLevel</Scope>
+    </Parallelize>
+    <CaptureTraceOutput>true</CaptureTraceOutput>
+    <MapInconclusiveToFailed>false</MapInconclusiveToFailed>
+    <EnableBaseClassTestMethodsFromOtherAssemblies>false</EnableBaseClassTestMethodsFromOtherAssemblies>
+    <ForcedLegacyMode>false</ForcedLegacyMode>
+    <SettingsFile></SettingsFile>
+    <TestTimeout>300000</TestTimeout>
+  </MSTest>
+
+  <!-- Logging configuration -->
+  <LoggerRunSettings>
+    <Loggers>
+      <!-- Console logger with detailed output -->
+      <Logger friendlyName="console" enabled="True">
+        <Configuration>
+          <Verbosity>detailed</Verbosity>
+          <NoSummary>False</NoSummary>
+        </Configuration>
+      </Logger>
+      
+      <!-- TRX logger for detailed results -->
+      <Logger friendlyName="trx" enabled="True">
+        <Configuration>
+          <LogFileName>TestResults.trx</LogFileName>
+          <LogFilePrefix>TestRun</LogFilePrefix>
+        </Configuration>
+      </Logger>
+      
+      <!-- JUnit logger for CI/CD integration -->
+      <Logger friendlyName="junit" enabled="True">
+        <Configuration>
+          <LogFileName>TestResults.xml</LogFileName>
+          <MethodFormat>Class</MethodFormat>
+          <FailureBodyFormat>Verbose</FailureBodyFormat>
+        </Configuration>
+      </Logger>
+      
+      <!-- HTML logger for rich reporting -->
+      <Logger friendlyName="html" enabled="True">
+        <Configuration>
+          <LogFileName>TestResults.html</LogFileName>
+        </Configuration>
+      </Logger>
+    </Loggers>
+  </LoggerRunSettings>
+
+  <!-- Environment variables for test execution -->
+  <TestRunParameters>
+    <Parameter name="webAppUrl" value="https://restful-booker.herokuapp.com" />
+    <Parameter name="environment" value="Test" />
+    <Parameter name="enableDetailedLogging" value="true" />
+    <Parameter name="parallelExecution" value="true" />
+    <Parameter name="maxRetries" value="3" />
+    <Parameter name="timeoutSeconds" value="30" />
+  </TestRunParameters>
+
 </RunSettings>

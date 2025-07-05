@@ -1,100 +1,253 @@
-name: C# Build, Test, and Deploy LivingDoc
+name: C# SpecFlow API Tests - Build, Test, and Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
+    paths: 
+      - 'csharp-specflow-api-tests/**'
+      - '.github/workflows/csharp-ci.yml'
   pull_request:
     branches: [ main ]
+    paths: 
+      - 'csharp-specflow-api-tests/**'
+      - '.github/workflows/csharp-ci.yml'
   schedule:
-    - cron: "0 3 * * *" # Runs every day at 03:00 UTC
+    # Run weekly on Mondays at 3 AM UTC instead of daily
+    - cron: "0 3 * * 1"
   workflow_dispatch:
+    inputs:
+      run_codeql:
+        description: 'Run CodeQL Analysis'
+        required: false
+        default: false
+        type: boolean
+      deploy_docs:
+        description: 'Deploy Living Documentation'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  PROJECT_PATH: 'csharp-specflow-api-tests'
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_NOLOGO: 1
+
+# Limit concurrent runs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build_and_test:
+  # Job 1: Build and Test
+  build-and-test:
+    name: Build and Test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
     defaults:
       run:
-        working-directory: csharp-specflow-api-tests
+        working-directory: ${{ env.PROJECT_PATH }}
+    
     permissions:
       security-events: write
       actions: read
       contents: read
+      checks: write
+      pull-requests: write # For PR comments
+
+    outputs:
+      test-success: ${{ steps.test.outcome == 'success' }}
+      artifact-name: living-doc-${{ github.run_number }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
         with:
-          languages: csharp
+          fetch-depth: 0 # Needed for better caching and GitVersion
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      # Enhanced caching strategy
       - name: Cache NuGet packages
         uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: ${{ runner.os }}-nuget-
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
       - name: Cache dotnet tools
         uses: actions/cache@v4
         with:
           path: ~/.dotnet/tools
           key: ${{ runner.os }}-dotnet-tools-${{ hashFiles('**/*.csproj') }}
-          restore-keys: ${{ runner.os }}-dotnet-tools-
+          restore-keys: |
+            ${{ runner.os }}-dotnet-tools-
 
-      - name: Add .dotnet/tools to PATH
-        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+      # Only run CodeQL on main branch, schedule, or manual trigger
+      - name: Initialize CodeQL
+        if: |
+          github.ref == 'refs/heads/main' || 
+          github.event_name == 'schedule' || 
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.run_codeql == 'true')
+        uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
+          queries: security-and-quality
 
-      - name: Install dependencies
-        run: dotnet restore
+      - name: Restore dependencies
+        run: |
+          dotnet restore --locked-mode --verbosity minimal
+          echo "✅ Dependencies restored successfully"
 
       - name: Build project
-        run: dotnet build --configuration Release --no-restore
+        run: |
+          dotnet build \
+            --configuration Release \
+            --no-restore \
+            --verbosity minimal \
+            --property:TreatWarningsAsErrors=true
+          echo "✅ Build completed successfully"
 
       - name: Perform CodeQL Analysis
+        if: |
+          github.ref == 'refs/heads/main' || 
+          github.event_name == 'schedule' || 
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.run_codeql == 'true')
         uses: github/codeql-action/analyze@v3
 
-      - name: Run tests with TRX logger
-        run: dotnet test --configuration Release --no-build --logger:"trx;LogFileName=TestResults.trx" --results-directory .
+      - name: Run tests with coverage
+        id: test
+        run: |
+          # Create TestResults directory
+          mkdir -p TestResults
+          
+          # Run tests with multiple loggers and coverage
+          dotnet test \
+            --configuration Release \
+            --no-build \
+            --logger:"trx;LogFileName=TestResults.trx" \
+            --logger:"junit;LogFileName=TestResults.xml" \
+            --logger:"console;verbosity=normal" \
+            --collect:"XPlat Code Coverage" \
+            --results-directory TestResults \
+            --settings nunit.runsettings \
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+          
+          echo "✅ Tests completed successfully"
         env:
           ApiSettings__Password: ${{ secrets.CSHARP_API_PWD }}
+          DOTNET_ENVIRONMENT: Test
 
       - name: Install SpecFlow+ LivingDoc CLI
-        run: dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
+        run: |
+          dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Generate LivingDoc HTML
         run: |
           livingdoc test-assembly bin/Release/net8.0/SpecFlowApiTests.dll \
-            --test-results TestResults.trx \
-            --output LivingDoc.html
+            --test-results TestResults/TestResults.trx \
+            --output LivingDoc.html \
+            --title "SpecFlow API Test Documentation - ${{ github.run_number }}"
+          
+          # Add metadata to the generated file
+          echo "<p><small>Generated on: $(date -u) | Build: ${{ github.run_number }} | Commit: ${{ github.sha }}</small></p>" >> LivingDoc.html
+          
+          echo "✅ Living Documentation generated successfully"
 
+      # Enhanced artifact uploads with proper retention
       - name: Upload LivingDoc artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: living-doc
-          path: csharp-specflow-api-tests/LivingDoc.html
+          name: living-doc-${{ github.run_number }}
+          path: ${{ env.PROJECT_PATH }}/LivingDoc.html
+          retention-days: 30
 
       - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
-          path: csharp-specflow-api-tests/TestResults.trx
+          name: test-results-${{ github.run_number }}
+          path: ${{ env.PROJECT_PATH }}/TestResults/
+          retention-days: 7
 
-  deploy_living_doc:
-    needs: build_and_test
+      - name: Upload Coverage Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports-${{ github.run_number }}
+          path: ${{ env.PROJECT_PATH }}/TestResults/**/coverage.cobertura.xml
+          retention-days: 7
+
+      # Publish test results to GitHub
+      - name: Publish Test Results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: SpecFlow Test Results
+          path: ${{ env.PROJECT_PATH }}/TestResults/TestResults.xml
+          reporter: java-junit
+          fail-on-error: true
+
+      # Comment on PR with test results
+      - name: Comment Test Results on PR
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = '${{ env.PROJECT_PATH }}/TestResults/TestResults.xml';
+            
+            if (fs.existsSync(path)) {
+              const testOutcome = '${{ steps.test.outcome }}';
+              const emoji = testOutcome === 'success' ? '✅' : '❌';
+              const status = testOutcome === 'success' ? 'PASSED' : 'FAILED';
+              
+              const comment = `## ${emoji} Test Results - ${status}
+              
+              **Build**: ${{ github.run_number }}
+              **Commit**: ${{ github.sha }}
+              **Test Outcome**: ${testOutcome}
+              
+              [View detailed results in the Actions tab](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+              `;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
+
+  # Job 2: Deploy Living Documentation
+  deploy-living-doc:
+    name: Deploy Living Documentation
+    needs: build-and-test
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request' # Only deploy on push/schedule/manual
+    timeout-minutes: 5
+    
+    # Only deploy on main branch and if tests passed
+    if: |
+      github.ref == 'refs/heads/main' && 
+      github.event_name != 'pull_request' &&
+      needs.build-and-test.outputs.test-success == 'true' &&
+      (github.event_name != 'workflow_dispatch' || github.event.inputs.deploy_docs == 'true')
+    
     permissions:
-      contents: write
+      contents: read
       pages: write
       id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Setup Pages
@@ -103,12 +256,43 @@ jobs:
       - name: Download LivingDoc artifact
         uses: actions/download-artifact@v4
         with:
-          name: living-doc
+          name: ${{ needs.build-and-test.outputs.artifact-name }}
 
       - name: Prepare artifact for GitHub Pages
-        run: mv LivingDoc.html index.html
+        run: |
+          mv LivingDoc.html index.html
+          
+          # Create a simple navigation page
+          cat > nav.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>API Test Documentation</title>
+              <style>
+                  body { font-family: Arial, sans-serif; margin: 40px; }
+                  .header { background: #f5f5f5; padding: 20px; border-radius: 5px; }
+                  .info { margin: 20px 0; }
+              </style>
+          </head>
+          <body>
+              <div class="header">
+                  <h1>🧪 SpecFlow API Test Documentation</h1>
+                  <p>Behavior-Driven Development (BDD) test specifications for the Restful Booker API</p>
+              </div>
+              <div class="info">
+                  <p><strong>Generated:</strong> $(date -u)</p>
+                  <p><strong>Build:</strong> ${{ github.run_number }}</p>
+                  <p><strong>Commit:</strong> ${{ github.sha }}</p>
+                  <p><strong>Repository:</strong> <a href="${{ github.server_url }}/${{ github.repository }}">${{ github.repository }}</a></p>
+              </div>
+              <p><a href="index.html">📋 View Test Documentation</a></p>
+          </body>
+          </html>
+          EOF
+          
+          echo "✅ GitHub Pages content prepared"
 
-      - name: Upload artifact for GitHub Pages
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
@@ -116,3 +300,47 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Notify deployment success
+        run: |
+          echo "🚀 Living Documentation deployed successfully!"
+          echo "📖 View at: ${{ steps.deployment.outputs.page_url }}"
+
+  # Job 3: Docker Build and Test (Optional)
+  docker-test:
+    name: Docker Build and Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    # Only run on main branch or manual trigger
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: |
+          cd ${{ env.PROJECT_PATH }}
+          docker build \
+            --target test \
+            --tag specflow-api-tests:latest \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            .
+
+      - name: Run tests in Docker
+        run: |
+          docker run \
+            --rm \
+            --name specflow-tests \
+            -e ApiSettings__Password=password123 \
+            specflow-api-tests:latest
+
+      - name: Clean up Docker resources
+        if: always()
+        run: |
+          docker system prune -f
+          echo "✅ Docker cleanup completed"
